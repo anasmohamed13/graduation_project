@@ -31,7 +31,7 @@ class SelectUser extends StatelessWidget {
                 children: [
                   UserLabel(image: AppAssets.patient, title: 'chiled'),
                   const SizedBox(width: 10),
-                  UserLabel(image: AppAssets.patient, title: 'chiled'),
+                  UserLabel(image: AppAssets.patient, title: 'parent'),
                 ],
               ),
               const SizedBox(
@@ -40,7 +40,7 @@ class SelectUser extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  UserLabel(image: AppAssets.patient, title: 'chiled'),
+                  UserLabel(image: AppAssets.patient, title: 'Doctor'),
                 ],
               ),
             ],

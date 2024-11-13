@@ -12,7 +12,7 @@ class UserLabel extends StatelessWidget {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xff7fa8b3),
+          color: const Color(0xff87a9af),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Stack(
