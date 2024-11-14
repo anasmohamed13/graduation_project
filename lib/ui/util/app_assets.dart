@@ -7,4 +7,8 @@ abstract class AppAssets {
   static const String patient = 'assets/patient.png';
   static const String parent = 'assets/parent.png';
   static const String doctor = 'assets/doctor.png';
+  static const String phone = 'assets/phone.png';
+  static const String gmail = 'assets/gmail.png';
+  static const String facebook = 'assets/facebook.jpg';
+  static const String appleID = 'assets/AppleID.png';
 }

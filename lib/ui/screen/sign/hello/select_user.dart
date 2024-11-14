@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/sign/login/doctor/doctor_login.dart';
+import 'package:garduationproject/ui/screen/sign/login/parent/parent_login.dart';
+import 'package:garduationproject/ui/screen/sign/login/patient/patient_login.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/widget/user_label.dart';
 
@@ -29,9 +32,17 @@ class SelectUser extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  UserLabel(image: AppAssets.patient, title: 'chiled'),
+                  InkWell(
+                    onTap: () =>
+                        Navigator.pushNamed(context, PatientLogin.routName),
+                    child: UserLabel(image: AppAssets.patient, title: 'chiled'),
+                  ),
                   const SizedBox(width: 10),
-                  UserLabel(image: AppAssets.patient, title: 'parent'),
+                  InkWell(
+                    onTap: () =>
+                        Navigator.pushNamed(context, ParentLogin.routName),
+                    child: UserLabel(image: AppAssets.parent, title: 'parent'),
+                  ),
                 ],
               ),
               const SizedBox(
@@ -40,7 +51,11 @@ class SelectUser extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  UserLabel(image: AppAssets.patient, title: 'Doctor'),
+                  InkWell(
+                      onTap: () =>
+                          Navigator.pushNamed(context, DoctorLogin.routName),
+                      child:
+                          UserLabel(image: AppAssets.doctor, title: 'Doctor')),
                 ],
               ),
             ],
