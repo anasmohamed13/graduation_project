@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/util/app_assets.dart';
+import 'package:garduationproject/ui/util/build_text_field.dart';
 import 'package:garduationproject/ui/widget/choosing_login.dart';
 import 'package:garduationproject/ui/widget/login_tabs.dart';
 
@@ -72,40 +74,86 @@ class _LoginPageState extends State<LoginPage> {
                 onToggle: toggleLoginSignUp,
               ),
               const SizedBox(height: 20),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'parentAgent@gmail.com',
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  suffixIcon: const Icon(Icons.close),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'password',
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  suffixIcon: const Icon(Icons.close),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                obscureText: true,
-              ),
-              if (!isLogin) ...[
-                const SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Phone Number',
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    suffixIcon: const Icon(Icons.close),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+              buildTextFiled(
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Image.asset(
+                      AppAssets.cancelIcon,
+                      width: 18,
+                      height: 18,
                     ),
                   ),
-                ),
+                  'eneter your email please'),
+              // TextField(
+              //   decoration: InputDecoration(
+              //     hintText: 'parentAgent@gmail.com',
+              //     hintStyle: const TextStyle(color: Colors.grey),
+              //     suffixIcon:  ,
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //   ),
+              // ),
+              const SizedBox(height: 10),
+              buildTextFiled(
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Container(
+                      width: 70,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Image.asset(
+                            AppAssets.eyelIcon,
+                            width: 22,
+                            height: 22,
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Image.asset(
+                            AppAssets.cancelIcon,
+                            width: 22,
+                            height: 22,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  'eneter password please '),
+              // TextField(
+              //   decoration: InputDecoration(
+              //     hintText: 'password',
+              //     hintStyle: const TextStyle(color: Colors.grey),
+              //     suffixIcon: const Icon(Icons.close),
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //   ),
+              //   obscureText: true,
+              // ),
+              if (!isLogin) ...[
+                const SizedBox(height: 10),
+                buildTextFiled(
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Image.asset(
+                        AppAssets.cancelIcon,
+                        width: 18,
+                        height: 18,
+                      ),
+                    ),
+                    'enter your phone Number'),
+                // TextField(
+                //   decoration: InputDecoration(
+                //     hintText: 'Phone Number',
+                //     hintStyle: const TextStyle(color: Colors.grey),
+                //     suffixIcon: const Icon(Icons.close),
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(10),
+                //     ),
+                //   ),
+                // ),
               ],
               const SizedBox(height: 10),
               Row(

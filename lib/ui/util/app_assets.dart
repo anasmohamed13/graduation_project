@@ -11,4 +11,6 @@ abstract class AppAssets {
   static const String gmail = 'assets/gmail.png';
   static const String facebook = 'assets/facebook.jpg';
   static const String appleID = 'assets/AppleID.png';
+  static const String cancelIcon = 'assets/cancelicon.png';
+  static const String eyelIcon = 'assets/eyeicon.png';
 }
