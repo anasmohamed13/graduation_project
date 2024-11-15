@@ -6,25 +6,37 @@ class ChoosingLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        CircleAvatar(
-          backgroundColor: Colors.white,
-          backgroundImage: AssetImage(AppAssets.phone),
+        InkWell(
+          onTap: () {},
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Image.asset(AppAssets.phone),
+          ),
         ),
-        CircleAvatar(
-          backgroundColor: Colors.white,
-          backgroundImage: AssetImage(AppAssets.appleID),
+        InkWell(
+          onTap: () {},
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Image.asset(AppAssets.appleID),
+          ),
         ),
-        CircleAvatar(
-          backgroundColor: Colors.white,
-          backgroundImage: AssetImage(AppAssets.gmail),
+        InkWell(
+          onTap: () {},
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Image.asset(AppAssets.gmail),
+          ),
         ),
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.white,
-          backgroundImage: AssetImage(AppAssets.facebook),
+        InkWell(
+          onTap: () {},
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.white,
+            child: Image.asset(AppAssets.facebook),
+          ),
         ),
       ],
     );

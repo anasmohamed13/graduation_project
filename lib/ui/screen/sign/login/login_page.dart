@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_text_field.dart';
@@ -28,13 +30,18 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_circle_left_rounded)),
-      ),
+          backgroundColor: Colors.transparent,
+          leading: Padding(
+            padding: const EdgeInsets.all(0),
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              child: Image.asset(
+                AppAssets.backIcon,
+                height: 30,
+                width: 30,
+              ),
+            ),
+          )),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -42,6 +49,18 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              CircleAvatar(
+                backgroundColor: const Color(0xff5977d3),
+                radius: 25,
+                child: Image.asset(
+                  color: Colors.white,
+                  widget.user == 'Doctor'
+                      ? AppAssets.doctorIcon
+                      : AppAssets.userTickIcon,
+                  width: 16,
+                  height: 16,
+                ),
+              ),
               const Text(
                 'Login or \nSign Up as a',
                 style: TextStyle(
@@ -59,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               const Text(
                 'Together to provide a safe and loving environment\nfor growth and support.\nSign in as part of your child\'s support team',
                 style: TextStyle(
@@ -68,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 14),
               LoginTabs(
                 isLogin: isLogin,
                 onToggle: toggleLoginSignUp,
@@ -84,16 +103,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   'eneter your email please'),
-              // TextField(
-              //   decoration: InputDecoration(
-              //     hintText: 'parentAgent@gmail.com',
-              //     hintStyle: const TextStyle(color: Colors.grey),
-              //     suffixIcon:  ,
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //   ),
-              // ),
               const SizedBox(height: 10),
               buildTextFiled(
                   Padding(
@@ -121,17 +130,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   'eneter password please '),
-              // TextField(
-              //   decoration: InputDecoration(
-              //     hintText: 'password',
-              //     hintStyle: const TextStyle(color: Colors.grey),
-              //     suffixIcon: const Icon(Icons.close),
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //   ),
-              //   obscureText: true,
-              // ),
               if (!isLogin) ...[
                 const SizedBox(height: 10),
                 buildTextFiled(
@@ -144,16 +142,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     'enter your phone Number'),
-                // TextField(
-                //   decoration: InputDecoration(
-                //     hintText: 'Phone Number',
-                //     hintStyle: const TextStyle(color: Colors.grey),
-                //     suffixIcon: const Icon(Icons.close),
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(10),
-                //     ),
-                //   ),
-                // ),
               ],
               const SizedBox(height: 10),
               Row(

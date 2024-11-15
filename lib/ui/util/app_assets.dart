@@ -13,4 +13,7 @@ abstract class AppAssets {
   static const String appleID = 'assets/AppleID.png';
   static const String cancelIcon = 'assets/cancelicon.png';
   static const String eyelIcon = 'assets/eyeicon.png';
+  static const String backIcon = 'assets/backicon.png';
+  static const String doctorIcon = 'assets/doctorIcon.png';
+  static const String userTickIcon = 'assets/userTickIcon.png';
 }

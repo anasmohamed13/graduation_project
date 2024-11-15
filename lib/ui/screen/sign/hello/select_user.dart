@@ -35,7 +35,7 @@ class SelectUser extends StatelessWidget {
                   InkWell(
                     onTap: () =>
                         Navigator.pushNamed(context, PatientLogin.routName),
-                    child: UserLabel(image: AppAssets.patient, title: 'chiled'),
+                    child: UserLabel(image: AppAssets.patient, title: 'child'),
                   ),
                   const SizedBox(width: 10),
                   InkWell(
@@ -52,10 +52,10 @@ class SelectUser extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                      onTap: () =>
-                          Navigator.pushNamed(context, DoctorLogin.routName),
-                      child:
-                          UserLabel(image: AppAssets.doctor, title: 'Doctor')),
+                    onTap: () =>
+                        Navigator.pushNamed(context, DoctorLogin.routName),
+                    child: UserLabel(image: AppAssets.doctor, title: 'Doctor'),
+                  ),
                 ],
               ),
             ],
