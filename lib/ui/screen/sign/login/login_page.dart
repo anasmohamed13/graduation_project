@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
@@ -13,7 +13,6 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.user, required this.color});
 
   @override
-  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -30,18 +29,19 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          leading: Padding(
-            padding: const EdgeInsets.all(0),
-            child: InkWell(
-              onTap: () => Navigator.pop(context),
-              child: Image.asset(
-                AppAssets.backIcon,
-                height: 30,
-                width: 30,
-              ),
+        backgroundColor: Colors.transparent,
+        leading: Padding(
+          padding: const EdgeInsets.all(0),
+          child: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Image.asset(
+              AppAssets.backIcon,
+              height: 30,
+              width: 30,
             ),
-          )),
+          ),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
