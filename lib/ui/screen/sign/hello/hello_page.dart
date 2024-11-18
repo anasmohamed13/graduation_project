@@ -85,7 +85,7 @@ class _HelloPageState extends State<HelloPage> {
           const SizedBox(
             height: 10,
           ),
-          Image.asset(AppAssets.cuteCat),
+          Image.asset(AppAssets.cuteKittyCat),
           const SizedBox(
             height: 40,
           ),

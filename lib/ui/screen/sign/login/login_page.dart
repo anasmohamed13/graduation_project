@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         leading: Padding(
           padding: const EdgeInsets.all(0),
           child: InkWell(
@@ -73,9 +73,10 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 widget.user,
                 style: TextStyle(
-                    color: widget.color,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                  color: widget.color,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
