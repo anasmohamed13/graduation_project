@@ -1,34 +1,57 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/provider/gender_provider.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
-import 'package:garduationproject/ui/util/build_app_bar.dart';
 import 'package:garduationproject/ui/widget/build_text_form_filed.dart';
+import 'package:provider/provider.dart';
 
-class SignUpPatient extends StatelessWidget {
+class SignUpPatient extends StatefulWidget {
   static const String routeName = 'signupPatient';
-  SignUpPatient({super.key});
+  const SignUpPatient({super.key});
+
+  @override
+  State<SignUpPatient> createState() => _SignUpPatientState();
+}
+
+class _SignUpPatientState extends State<SignUpPatient> {
   late GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   final firstNameController = TextEditingController();
+
   final genderController = TextEditingController();
+
   final ageController = TextEditingController();
+
   final emailController = TextEditingController();
+
   final descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
-      appBar: buildAppBar(context),
       body: Form(
         key: formKey,
         child: Padding(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(16),
           child: Stack(
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Image.asset(
+                        AppAssets.backPatientIcon,
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  ),
                   BuildTextFormFiled(
                     hintText: null,
                     text: 'First Name',
@@ -36,18 +59,12 @@ class SignUpPatient extends StatelessWidget {
                     controller: firstNameController,
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: BuildTextFormFiled(
-                          hintText: null,
-                          text: 'Gender',
-                          vlaidatorErorr: 'please enter your gender',
-                          controller: genderController,
-                        ),
-                      ),
+                      Expanded(child: buildGenderDropDown()),
                       const SizedBox(width: 50),
                       Expanded(
                         child: BuildTextFormFiled(
@@ -69,7 +86,7 @@ class SignUpPatient extends StatelessWidget {
                     controller: emailController,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   BuildTextFormFiled(
                     hintText:
@@ -113,4 +130,54 @@ class SignUpPatient extends StatelessWidget {
       bottomNavigationBar: Image.asset(AppAssets.groupCuteCat),
     );
   }
+
+  Widget buildGenderDropDown() => Consumer<GenderProvider>(
+        builder: (context, genderprvider, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'gender',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'inter',
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700),
+              ),
+              Material(
+                elevation: 2,
+                borderRadius: BorderRadius.circular(16),
+                child: DropdownButtonFormField(
+                  dropdownColor: Colors.grey.shade100,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                  ),
+                  value: genderprvider.localGender,
+                  isExpanded: true,
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'male',
+                      child: Text('Male'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'female',
+                      child: Text('Female'),
+                    ),
+                  ],
+                  onChanged: genderprvider.setGender,
+                ),
+              ),
+            ],
+          );
+        },
+      );
 }

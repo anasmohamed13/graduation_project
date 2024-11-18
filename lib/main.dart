@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/provider/gender_provider.dart';
 import 'package:garduationproject/ui/screen/sign/hello/hello_page.dart';
 import 'package:garduationproject/ui/screen/sign/login/doctor/doctor_login.dart';
 import 'package:garduationproject/ui/screen/sign/login/parent/parent_login.dart';
 import 'package:garduationproject/ui/screen/sign/login/patient/patient_login.dart';
 import 'package:garduationproject/ui/screen/sign/signup/sign_up_patient.dart';
 import 'package:garduationproject/ui/screen/splash/splash.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const GatoApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => GenderProvider(),
+      child: const GatoApp(),
+    ),
+  );
 }
 
 class GatoApp extends StatelessWidget {
@@ -24,7 +31,7 @@ class GatoApp extends StatelessWidget {
         ParentLogin.routName: (context) => const ParentLogin(),
         DoctorLogin.routName: (context) => const DoctorLogin(),
         PatientLogin.routName: (context) => const PatientLogin(),
-        SignUpPatient.routeName: (context) => SignUpPatient(),
+        SignUpPatient.routeName: (context) => const SignUpPatient(),
       },
     );
   }
