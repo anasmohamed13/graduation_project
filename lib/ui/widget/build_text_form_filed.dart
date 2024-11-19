@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-class BuildTextFormFiled extends StatelessWidget {
+class BuildTextFormFiledpatient extends StatelessWidget {
   late String? hintText;
   late String? text;
   late String? vlaidatorErorr;
   late int? maxline;
-  late TextEditingController controller;
+  late TextEditingController? controller;
   BorderSide borderSide;
   BorderRadius borderRadius;
 
-  BuildTextFormFiled(
+  BuildTextFormFiledpatient(
       {super.key,
       required this.hintText,
       required this.text,

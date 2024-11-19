@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/sign/signup/signup-doctor/sign_up_doctor.dart';
+import 'package:garduationproject/ui/screen/sign/signup/signup-parent/sign_up_parent.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/build_text_field.dart';
@@ -178,7 +179,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, SignUpDoctor.routeName);
+                  if (widget.user == 'Doctor') {
+                    Navigator.pushNamed(context, SignUpDoctor.routeName);
+                  } else {
+                    Navigator.pushNamed(context, SignUpParent.routeName);
+                  }
                 },
                 child: const Text(
                   'haven`t account?',
@@ -212,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               const ChoosingLogin(),
               const SizedBox(height: 20),
-              buildElevatedButton('login'),
+              buildElevatedButton('login', const Color(0xff5c7ad4), 40, 350),
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/sign/signup/sign_up_page.dart';
 
 class SignUpParent extends StatelessWidget {
   static const String routeName = 'SignUpParent';
@@ -6,6 +7,8 @@ class SignUpParent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const SignUpPage(
+      userType: 'Parent',
+    );
   }
 }

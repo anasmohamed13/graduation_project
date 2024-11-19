@@ -55,7 +55,7 @@ class _SignUpPatientState extends State<SignUpPatient> {
                   const SizedBox(
                     height: 25,
                   ),
-                  BuildTextFormFiled(
+                  BuildTextFormFiledpatient(
                     hintText: null,
                     text: 'First Name',
                     vlaidatorErorr: 'Enter your first name',
@@ -72,7 +72,7 @@ class _SignUpPatientState extends State<SignUpPatient> {
                       Expanded(child: buildGenderDropDown()),
                       const SizedBox(width: 50),
                       Expanded(
-                        child: BuildTextFormFiled(
+                        child: BuildTextFormFiledpatient(
                           hintText: null,
                           text: 'Age',
                           vlaidatorErorr: 'eneter your age',
@@ -86,7 +86,7 @@ class _SignUpPatientState extends State<SignUpPatient> {
                   const SizedBox(
                     height: 16,
                   ),
-                  BuildTextFormFiled(
+                  BuildTextFormFiledpatient(
                     hintText: null,
                     text: 'Parent Email',
                     vlaidatorErorr: 'eneter your parent email',
@@ -97,7 +97,7 @@ class _SignUpPatientState extends State<SignUpPatient> {
                   const SizedBox(
                     height: 20,
                   ),
-                  BuildTextFormFiled(
+                  BuildTextFormFiledpatient(
                     hintText:
                         '1-3 favorite things like... trucks, zoo animals, books, to include throughout.',
                     text: 'physical description',
