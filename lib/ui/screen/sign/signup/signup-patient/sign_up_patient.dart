@@ -52,11 +52,16 @@ class _SignUpPatientState extends State<SignUpPatient> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 25,
+                  ),
                   BuildTextFormFiled(
                     hintText: null,
                     text: 'First Name',
                     vlaidatorErorr: 'Enter your first name',
                     controller: firstNameController,
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
                   ),
                   const SizedBox(
                     height: 15,
@@ -72,6 +77,8 @@ class _SignUpPatientState extends State<SignUpPatient> {
                           text: 'Age',
                           vlaidatorErorr: 'eneter your age',
                           controller: ageController,
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ],
@@ -84,6 +91,8 @@ class _SignUpPatientState extends State<SignUpPatient> {
                     text: 'Parent Email',
                     vlaidatorErorr: 'eneter your parent email',
                     controller: emailController,
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
                   ),
                   const SizedBox(
                     height: 20,
@@ -95,6 +104,8 @@ class _SignUpPatientState extends State<SignUpPatient> {
                     vlaidatorErorr: null,
                     maxline: 4,
                     controller: descriptionController,
+                    borderRadius: BorderRadius.circular(18),
+                    borderSide: BorderSide.none,
                   ),
                   const SizedBox(
                     height: 10,

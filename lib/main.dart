@@ -4,7 +4,9 @@ import 'package:garduationproject/ui/screen/sign/hello/hello_page.dart';
 import 'package:garduationproject/ui/screen/sign/login/doctor/doctor_login.dart';
 import 'package:garduationproject/ui/screen/sign/login/parent/parent_login.dart';
 import 'package:garduationproject/ui/screen/sign/login/patient/patient_login.dart';
-import 'package:garduationproject/ui/screen/sign/signup/sign_up_patient.dart';
+import 'package:garduationproject/ui/screen/sign/signup/signup-doctor/sign_up_doctor.dart';
+import 'package:garduationproject/ui/screen/sign/signup/signup-parent/sign_up_parent.dart';
+import 'package:garduationproject/ui/screen/sign/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/screen/splash/splash.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +34,8 @@ class GatoApp extends StatelessWidget {
         DoctorLogin.routName: (context) => const DoctorLogin(),
         PatientLogin.routName: (context) => const PatientLogin(),
         SignUpPatient.routeName: (context) => const SignUpPatient(),
+        SignUpParent.routeName: (context) => const SignUpParent(),
+        SignUpDoctor.routeName: (context) => const SignUpDoctor(),
       },
     );
   }

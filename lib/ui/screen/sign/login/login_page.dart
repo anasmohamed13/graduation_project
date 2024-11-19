@@ -1,10 +1,11 @@
 // ignore_for_file: sized_box_for_whitespace, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/sign/signup/signup-doctor/sign_up_doctor.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
+import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/build_text_field.dart';
 import 'package:garduationproject/ui/widget/choosing_login.dart';
-import 'package:garduationproject/ui/widget/login_tabs.dart';
 
 class LoginPage extends StatefulWidget {
   final String user;
@@ -88,13 +89,51 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 14),
-              LoginTabs(
-                isLogin: isLogin,
-                onToggle: toggleLoginSignUp,
-              ),
               const SizedBox(height: 20),
               buildTextFiled(
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Image.asset(
+                    AppAssets.cancelIcon,
+                    width: 18,
+                    height: 18,
+                  ),
+                ),
+                'eneter your email please',
+                BorderRadius.circular(10),
+              ),
+              const SizedBox(height: 10),
+              buildTextFiled(
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Container(
+                    width: 70,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Image.asset(
+                          AppAssets.eyelIcon,
+                          width: 22,
+                          height: 22,
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Image.asset(
+                          AppAssets.cancelIcon,
+                          width: 22,
+                          height: 22,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                'eneter password please ',
+                BorderRadius.circular(10),
+              ),
+              if (!isLogin) ...[
+                const SizedBox(height: 10),
+                buildTextFiled(
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Image.asset(
@@ -103,46 +142,9 @@ class _LoginPageState extends State<LoginPage> {
                       height: 18,
                     ),
                   ),
-                  'eneter your email please'),
-              const SizedBox(height: 10),
-              buildTextFiled(
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Container(
-                      width: 70,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Image.asset(
-                            AppAssets.eyelIcon,
-                            width: 22,
-                            height: 22,
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Image.asset(
-                            AppAssets.cancelIcon,
-                            width: 22,
-                            height: 22,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  'eneter password please '),
-              if (!isLogin) ...[
-                const SizedBox(height: 10),
-                buildTextFiled(
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Image.asset(
-                        AppAssets.cancelIcon,
-                        width: 18,
-                        height: 18,
-                      ),
-                    ),
-                    'enter your phone Number'),
+                  'enter your phone Number',
+                  BorderRadius.circular(10),
+                ),
               ],
               const SizedBox(height: 10),
               Row(
@@ -174,6 +176,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, SignUpDoctor.routeName);
+                },
+                child: const Text(
+                  'haven`t account?',
+                  style: TextStyle(
+                    color: Color(0xffa7a6a6),
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -199,14 +212,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               const ChoosingLogin(),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: Text(isLogin ? 'Log in' : 'Sign up'),
-              ),
+              buildElevatedButton('login'),
             ],
           ),
         ),

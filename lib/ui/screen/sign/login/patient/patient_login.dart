@@ -1,7 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/sign/signup/sign_up_patient.dart';
+import 'package:garduationproject/ui/screen/sign/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_app_bar.dart';
 

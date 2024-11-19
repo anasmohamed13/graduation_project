@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 class BuildTextFormFiled extends StatelessWidget {
   late String? hintText;
-  late String text;
+  late String? text;
   late String? vlaidatorErorr;
   late int? maxline;
   late TextEditingController controller;
+  BorderSide borderSide;
+  BorderRadius borderRadius;
 
   BuildTextFormFiled(
       {super.key,
@@ -15,7 +17,9 @@ class BuildTextFormFiled extends StatelessWidget {
       required this.text,
       required this.vlaidatorErorr,
       this.maxline,
-      required this.controller});
+      required this.controller,
+      required this.borderSide,
+      required this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class BuildTextFormFiled extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          text,
+          text ?? '',
           style: const TextStyle(
               fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'inter'),
           textAlign: TextAlign.center,
@@ -40,8 +44,8 @@ class BuildTextFormFiled extends StatelessWidget {
                 hintText: hintText,
                 hintStyle: const TextStyle(fontSize: 18, color: Colors.grey),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(18),
+                  borderSide: borderSide,
+                  borderRadius: borderRadius,
                 ),
                 filled: true,
                 fillColor: Colors.grey.shade100),
