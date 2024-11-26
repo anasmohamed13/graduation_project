@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/widget/text_form_field_sign.dart';
 
@@ -13,6 +15,18 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  void navigateToProfile() {
+    if (widget.userType == 'Doctor') {
+      Navigator.pushNamed(context, ProfileDoctor.routeName);
+    } else if (widget.userType == 'Parent') {
+      Navigator.pushNamed(context, ProfileParent.routeName);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid user type')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,8 +156,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 const Spacer(
                   flex: 7,
                 ),
-                buildElevatedButton(() {}, 'Sign Up', const Color(0xffec5e4c),
-                    60, 170, 20, Colors.white),
+                buildElevatedButton(navigateToProfile, 'Sign Up',
+                    const Color(0xffec5e4c), 60, 170, 20, Colors.white),
                 const Spacer(
                   flex: 3,
                 ),

@@ -28,7 +28,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: ProfileParent.routeName,
+      initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (context) => const Splash(),
         HelloPage.routeName: (context) => const HelloPage(),
