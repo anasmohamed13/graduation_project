@@ -17,22 +17,27 @@ class BuildTextFormFiled extends StatelessWidget {
   double? blurRadius;
   Offset? offset;
   Widget? suffixIcon;
-  BuildTextFormFiled(
-      {super.key,
-      required this.hintText,
-      required this.text,
-      required this.vlaidatorErorr,
-      this.maxline,
-      required this.controller,
-      required this.borderSide,
-      required this.borderRadius,
-      required this.height,
-      required this.width,
-      required this.fontsize,
-      required this.fontWeight,
-      required this.blurRadius,
-      required this.offset,
-      this.suffixIcon});
+  Widget? prefixIcon;
+  Color? fillColor;
+  BuildTextFormFiled({
+    super.key,
+    required this.hintText,
+    required this.text,
+    required this.vlaidatorErorr,
+    this.maxline,
+    required this.controller,
+    required this.borderSide,
+    required this.borderRadius,
+    required this.height,
+    required this.width,
+    required this.fontsize,
+    required this.fontWeight,
+    required this.blurRadius,
+    required this.offset,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.fillColor,
+  });
 
   @override
   Widget build(
@@ -70,6 +75,7 @@ class BuildTextFormFiled extends StatelessWidget {
             controller: controller,
             maxLines: maxline,
             decoration: InputDecoration(
+                prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
                 hintText: hintText,
                 hintStyle: const TextStyle(fontSize: 18, color: Colors.grey),
@@ -78,7 +84,7 @@ class BuildTextFormFiled extends StatelessWidget {
                   borderRadius: borderRadius ?? BorderRadius.circular(18),
                 ),
                 filled: true,
-                fillColor: Colors.grey.shade100),
+                fillColor: fillColor ?? Colors.grey.shade100),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return vlaidatorErorr;
