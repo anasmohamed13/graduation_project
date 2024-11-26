@@ -53,59 +53,89 @@ class _SignUpPatientState extends State<SignUpPatient> {
                     ),
                   ),
                   const SizedBox(
-                    height: 25,
+                    height: 5,
                   ),
-                  BuildTextFormFiledpatient(
+                  BuildTextFormFiled(
+                    fontWeight: FontWeight.w700,
+                    height: 45,
+                    width: double.infinity,
+                    fontsize: 16,
                     hintText: null,
                     text: 'First Name',
                     vlaidatorErorr: 'Enter your first name',
                     controller: firstNameController,
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(14),
                     borderSide: BorderSide.none,
+                    blurRadius: 1,
+                    offset: const Offset(0, 4),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 25,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(child: buildGenderDropDown()),
+                      Expanded(child: buildDropDown()),
                       const SizedBox(width: 50),
                       Expanded(
-                        child: BuildTextFormFiledpatient(
+                        child: BuildTextFormFiled(
+                          fontWeight: FontWeight.w700,
+                          height: 50,
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          fontsize: 16,
                           hintText: null,
                           text: 'Age',
                           vlaidatorErorr: 'eneter your age',
                           controller: ageController,
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.circular(14),
                           borderSide: BorderSide.none,
+                          blurRadius: 1,
+                          offset: const Offset(0, 4),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 15,
                   ),
-                  BuildTextFormFiledpatient(
-                    hintText: null,
-                    text: 'Parent Email',
-                    vlaidatorErorr: 'eneter your parent email',
-                    controller: emailController,
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide.none,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: BuildTextFormFiled(
+                      fontWeight: FontWeight.w700,
+                      height: 44,
+                      width: double.infinity,
+                      fontsize: 16,
+                      hintText: null,
+                      text: 'Parent Email',
+                      vlaidatorErorr: 'eneter your parent email',
+                      controller: emailController,
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                      blurRadius: 1,
+                      offset: const Offset(0, 4),
+                    ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
-                  BuildTextFormFiledpatient(
-                    hintText:
-                        '1-3 favorite things like... trucks, zoo animals, books, to include throughout.',
-                    text: 'physical description',
-                    vlaidatorErorr: null,
-                    maxline: 4,
-                    controller: descriptionController,
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide.none,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: BuildTextFormFiled(
+                      height: MediaQuery.of(context).size.height * 0.16,
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      fontsize: 16,
+                      hintText:
+                          '1-3 favorite things like... trucks, zoo animals, books, to include throughout.',
+                      text: 'physical description',
+                      vlaidatorErorr: null,
+                      maxline: 4,
+                      controller: descriptionController,
+                      borderRadius: BorderRadius.circular(18),
+                      borderSide: BorderSide.none,
+                      fontWeight: FontWeight.w700,
+                      blurRadius: 1,
+                      offset: const Offset(0, 4),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -142,18 +172,21 @@ class _SignUpPatientState extends State<SignUpPatient> {
     );
   }
 
-  Widget buildGenderDropDown() => Consumer<GenderProvider>(
+  Widget buildDropDown() => Consumer<GenderProvider>(
         builder: (context, genderprvider, child) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'gender',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'inter',
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700),
+              const Padding(
+                padding: EdgeInsets.all(7.0),
+                child: Text(
+                  'Gender',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                ),
               ),
               Material(
                 elevation: 2,

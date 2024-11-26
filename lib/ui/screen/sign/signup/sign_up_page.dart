@@ -142,8 +142,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 const Spacer(
                   flex: 7,
                 ),
-                buildElevatedButton(
-                    'Sign Up', const Color(0xffec5e4c), 60, 170),
+                buildElevatedButton(() {}, 'Sign Up', const Color(0xffec5e4c),
+                    60, 170, 20, Colors.white),
                 const Spacer(
                   flex: 3,
                 ),

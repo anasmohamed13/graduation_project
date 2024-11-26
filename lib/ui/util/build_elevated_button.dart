@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
-buildElevatedButton(String text, Color color, double width, double height) {
+buildElevatedButton(void Function()? onPressed, String text, Color color,
+    double width, double height, double size, Color textColor) {
   return ElevatedButton(
-    onPressed: () {},
+    onPressed: onPressed,
     style: ElevatedButton.styleFrom(
         backgroundColor: color, fixedSize: Size(height, width)),
     child: Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
           fontFamily: 'inter',
-          fontSize: 21,
-          color: Colors.white,
+          fontSize: size,
+          color: textColor,
           fontWeight: FontWeight.w600),
     ),
   );

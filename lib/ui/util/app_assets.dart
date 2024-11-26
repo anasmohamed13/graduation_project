@@ -19,5 +19,8 @@ abstract class AppAssets {
   static const String backPatientIcon = 'assets/image/backpatienticon.png';
   static const String cuteCat = 'assets/image/cuteCat.gif';
   static const String groupCuteCat = 'assets/image/groupcutecate.webp';
-  static const String fuunyCat = 'assets/image/funnycat.webp';
+  static const String dropDownIcon = 'assets/image/drop-down-Icon.png';
+  static const String profileImageDoctor =
+      'assets/image/profileimageDocotr.png';
+  static const String calendarIcon = 'assets/image/calendarIcon.png';
 }

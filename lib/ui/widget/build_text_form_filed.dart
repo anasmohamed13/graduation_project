@@ -2,16 +2,22 @@
 
 import 'package:flutter/material.dart';
 
-class BuildTextFormFiledpatient extends StatelessWidget {
+class BuildTextFormFiled extends StatelessWidget {
   late String? hintText;
   late String? text;
   late String? vlaidatorErorr;
   late int? maxline;
   late TextEditingController? controller;
-  BorderSide borderSide;
-  BorderRadius borderRadius;
-
-  BuildTextFormFiledpatient(
+  BorderSide? borderSide;
+  BorderRadius? borderRadius;
+  double? height;
+  double? width;
+  double? fontsize;
+  FontWeight? fontWeight;
+  double? blurRadius;
+  Offset? offset;
+  Widget? suffixIcon;
+  BuildTextFormFiled(
       {super.key,
       required this.hintText,
       required this.text,
@@ -19,33 +25,57 @@ class BuildTextFormFiledpatient extends StatelessWidget {
       this.maxline,
       required this.controller,
       required this.borderSide,
-      required this.borderRadius});
+      required this.borderRadius,
+      required this.height,
+      required this.width,
+      required this.fontsize,
+      required this.fontWeight,
+      required this.blurRadius,
+      required this.offset,
+      this.suffixIcon});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          text ?? '',
-          style: const TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'inter'),
-          textAlign: TextAlign.center,
+        Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+            text ?? '',
+            style: TextStyle(
+                fontSize: fontsize,
+                fontWeight: fontWeight,
+                fontFamily: 'inter'),
+            textAlign: TextAlign.center,
+          ),
         ),
-        const SizedBox(height: 1),
-        Material(
-          elevation: 2.5,
-          borderRadius: BorderRadius.circular(16),
+        Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            borderRadius: borderRadius ?? BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: blurRadius ?? 1,
+                offset: offset ?? const Offset(0, 4),
+              ),
+            ],
+          ),
           child: TextFormField(
             controller: controller,
             maxLines: maxline,
             decoration: InputDecoration(
+                suffixIcon: suffixIcon,
                 hintText: hintText,
                 hintStyle: const TextStyle(fontSize: 18, color: Colors.grey),
                 border: OutlineInputBorder(
-                  borderSide: borderSide,
-                  borderRadius: borderRadius,
+                  borderSide: borderSide ?? BorderSide.none,
+                  borderRadius: borderRadius ?? BorderRadius.circular(18),
                 ),
                 filled: true,
                 fillColor: Colors.grey.shade100),

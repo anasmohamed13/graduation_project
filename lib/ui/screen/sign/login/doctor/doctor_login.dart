@@ -9,7 +9,7 @@ class DoctorLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return const LoginPage(
       user: 'Doctor',
-      color: Colors.green,
+      color: Color(0xff37908a),
     );
   }
 }

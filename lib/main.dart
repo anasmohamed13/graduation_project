@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/provider/gender_provider.dart';
+import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/sign/hello/hello_page.dart';
 import 'package:garduationproject/ui/screen/sign/login/doctor/doctor_login.dart';
 import 'package:garduationproject/ui/screen/sign/login/parent/parent_login.dart';
@@ -26,7 +27,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Splash.routeName,
+      initialRoute: ProfileDoctor.routeName,
       routes: {
         Splash.routeName: (context) => const Splash(),
         HelloPage.routeName: (context) => const HelloPage(),
@@ -36,6 +37,7 @@ class GatoApp extends StatelessWidget {
         SignUpPatient.routeName: (context) => const SignUpPatient(),
         SignUpParent.routeName: (context) => const SignUpParent(),
         SignUpDoctor.routeName: (context) => const SignUpDoctor(),
+        ProfileDoctor.routeName: (context) => const ProfileDoctor(),
       },
     );
   }

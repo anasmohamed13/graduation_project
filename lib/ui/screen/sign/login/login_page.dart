@@ -29,6 +29,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color buttonColor = widget.user == 'Doctor'
+        ? const Color(0xff37908a)
+        : const Color(0xff5c7ad4);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -217,7 +220,8 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               const ChoosingLogin(),
               const SizedBox(height: 20),
-              buildElevatedButton('login', const Color(0xff5c7ad4), 40, 350),
+              buildElevatedButton(
+                  () {}, 'login', buttonColor, 40, 350, 17, Colors.white),
             ],
           ),
         ),
