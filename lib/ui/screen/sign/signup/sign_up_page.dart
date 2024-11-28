@@ -15,18 +15,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  void navigateToProfile() {
-    if (widget.userType == 'Doctor') {
-      Navigator.pushNamed(context, ProfileDoctor.routeName);
-    } else if (widget.userType == 'Parent') {
-      Navigator.pushNamed(context, ProfileParent.routeName);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid user type')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,5 +155,13 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  void navigateToProfile() {
+    if (widget.userType == 'Doctor') {
+      Navigator.pushNamed(context, ProfileDoctor.routeName);
+    } else if (widget.userType == 'Parent') {
+      Navigator.pushNamed(context, ProfileParent.routeName);
+    }
   }
 }

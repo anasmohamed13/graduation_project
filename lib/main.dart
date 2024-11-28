@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/provider/gender_provider.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
@@ -12,7 +14,11 @@ import 'package:garduationproject/ui/screen/sign/signup/signup-patient/sign_up_p
 import 'package:garduationproject/ui/screen/splash/splash.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     ChangeNotifierProvider(
       create: (_) => GenderProvider(),
