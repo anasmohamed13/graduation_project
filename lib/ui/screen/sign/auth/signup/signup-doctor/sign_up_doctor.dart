@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/sign/signup/sign_up_page.dart';
+import 'package:garduationproject/ui/screen/sign/auth/signup/sign_up_page.dart';
 
 class SignUpDoctor extends StatelessWidget {
   static const String routeName = 'SignUpDoctor';

@@ -1,11 +1,13 @@
 // ignore_for_file: sized_box_for_whitespace, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/sign/signup/signup-doctor/sign_up_doctor.dart';
-import 'package:garduationproject/ui/screen/sign/signup/signup-parent/sign_up_parent.dart';
+import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
+import 'package:garduationproject/ui/screen/sign/auth/signup/signup-doctor/sign_up_doctor.dart';
+import 'package:garduationproject/ui/screen/sign/auth/signup/signup-parent/sign_up_parent.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
-import 'package:garduationproject/ui/util/build_text_field.dart';
+import 'package:garduationproject/ui/util/build_text_form_field_login.dart';
 import 'package:garduationproject/ui/widget/choosing_login.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,7 +22,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isLogin = true;
-
   void toggleLoginSignUp(bool isLoginSelected) {
     setState(() {
       isLogin = isLoginSelected;
@@ -112,7 +113,15 @@ class _LoginPageState extends State<LoginPage> {
                       height: 18,
                     ),
                   ),
-                  validator: (value) {},
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter an email';
+                    } else if (!RegExp(r"^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 10),
                 buildTextFormFiledLogin(
@@ -143,7 +152,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  validator: (value) {},
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    } else if (value.length < 6) {
+                      return 'Password should be at least 6 characters';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -216,7 +232,24 @@ class _LoginPageState extends State<LoginPage> {
                 const ChoosingLogin(),
                 const SizedBox(height: 20),
                 buildElevatedButton(
-                    () {}, 'login', buttonColor, 40, 350, 17, Colors.white),
+                  () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      if (widget.user == 'Doctor') {
+                        Navigator.pushReplacementNamed(
+                            context, ProfileDoctor.routeName);
+                      } else if (widget.user == 'Parent') {
+                        Navigator.pushReplacementNamed(
+                            context, ProfileParent.routeName);
+                      }
+                    }
+                  },
+                  'login',
+                  buttonColor,
+                  40,
+                  350,
+                  17,
+                  Colors.white,
+                ),
               ],
             ),
           ),

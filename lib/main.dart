@@ -5,12 +5,12 @@ import 'package:garduationproject/ui/provider/gender_provider.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/screen/sign/hello/hello_page.dart';
-import 'package:garduationproject/ui/screen/sign/login/doctor/doctor_login.dart';
-import 'package:garduationproject/ui/screen/sign/login/parent/parent_login.dart';
-import 'package:garduationproject/ui/screen/sign/login/patient/patient_login.dart';
-import 'package:garduationproject/ui/screen/sign/signup/signup-doctor/sign_up_doctor.dart';
-import 'package:garduationproject/ui/screen/sign/signup/signup-parent/sign_up_parent.dart';
-import 'package:garduationproject/ui/screen/sign/signup/signup-patient/sign_up_patient.dart';
+import 'package:garduationproject/ui/screen/sign/auth/login/doctor/doctor_login.dart';
+import 'package:garduationproject/ui/screen/sign/auth/login/parent/parent_login.dart';
+import 'package:garduationproject/ui/screen/sign/auth/login/patient/patient_login.dart';
+import 'package:garduationproject/ui/screen/sign/auth/signup/signup-doctor/sign_up_doctor.dart';
+import 'package:garduationproject/ui/screen/sign/auth/signup/signup-parent/sign_up_parent.dart';
+import 'package:garduationproject/ui/screen/sign/auth/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/screen/splash/splash.dart';
 import 'package:provider/provider.dart';
 
