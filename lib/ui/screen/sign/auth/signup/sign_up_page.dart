@@ -30,148 +30,150 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildAppBarSignUp(context),
-      body: Form(
-        key: formKey,
-        child: Center(
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  const Text(
-                    'Start now, and share your\n medical expertise with the\n world!',
-                    style: TextStyle(
-                      fontFamily: 'inter',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
+      body: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          child: Center(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 12,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormFieldSign(
-                    hintText: 'Full name',
-                    vlaidatorErorr: '',
-                    controller: null,
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(30),
-                    validator: (p0) {},
-                    onChanged: (text) {
-                      fullName = text;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormFieldSign(
-                    hintText: 'Email',
-                    vlaidatorErorr: '',
-                    controller: null,
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(30),
-                    validator: (value) {},
-                    onChanged: (text) {
-                      email = text;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormFieldSign(
-                    hintText: 'Phone number',
-                    vlaidatorErorr: '',
-                    controller: null,
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(30),
-                    validator: (p0) {},
-                    onChanged: (text) {
-                      phoneNumber = text;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  if (widget.userType == 'Doctor') ...[
-                    TextFormFieldSign(
-                      hintText: 'Medical Specializatin',
-                      vlaidatorErorr: '',
-                      controller: null,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(30),
-                      validator: (p0) {},
+                    const Text(
+                      'Start now, and share your\n medical expertise with the\n world!',
+                      style: TextStyle(
+                        fontFamily: 'inter',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 20,
                     ),
                     TextFormFieldSign(
-                      hintText: 'Medical License Number',
+                      hintText: 'Full name',
                       vlaidatorErorr: '',
                       controller: null,
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(30),
                       validator: (p0) {},
                       onChanged: (text) {
-                        medicalLicenseNumber = text;
+                        fullName = text;
                       },
                     ),
-                  ],
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextFormFieldSign(
-                    hintText: 'Password',
-                    vlaidatorErorr: '',
-                    controller: null,
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(30),
-                    validator: (p0) {},
-                    onChanged: (text) {
-                      password = text;
-                    },
-                  ),
-                  const Align(
-                    alignment: Alignment(-0.3, 2),
-                    child: Text(
-                      '• Minimum 8 characters\n• Contains numbers, letters and symbols',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                          fontFamily: 'inter',
-                          fontWeight: FontWeight.w500),
-                      textAlign: TextAlign.start,
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextFormFieldSign(
-                    hintText: 'Confirm password',
-                    vlaidatorErorr: '',
-                    controller: null,
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(30),
-                    validator: (p0) {},
-                    onChanged: (text) {
-                      confirmPassword = text;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Spacer(
-                    flex: 7,
-                  ),
-                  buildElevatedButton(createAccout, 'Sign Up',
-                      const Color(0xffec5e4c), 60, 170, 20, Colors.white),
-                  const Spacer(
-                    flex: 3,
-                  ),
-                ],
-              ),
-            ],
+                    TextFormFieldSign(
+                      hintText: 'Email',
+                      vlaidatorErorr: '',
+                      controller: null,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(30),
+                      validator: (value) {},
+                      onChanged: (text) {
+                        email = text;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormFieldSign(
+                      hintText: 'Phone number',
+                      vlaidatorErorr: '',
+                      controller: null,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(30),
+                      validator: (p0) {},
+                      onChanged: (text) {
+                        phoneNumber = text;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    if (widget.userType == 'Doctor') ...[
+                      TextFormFieldSign(
+                        hintText: 'Medical Specializatin',
+                        vlaidatorErorr: '',
+                        controller: null,
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(30),
+                        validator: (p0) {},
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      TextFormFieldSign(
+                        hintText: 'Medical License Number',
+                        vlaidatorErorr: '',
+                        controller: null,
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(30),
+                        validator: (p0) {},
+                        onChanged: (text) {
+                          medicalLicenseNumber = text;
+                        },
+                      ),
+                    ],
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormFieldSign(
+                      hintText: 'Password',
+                      vlaidatorErorr: '',
+                      controller: null,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(30),
+                      validator: (p0) {},
+                      onChanged: (text) {
+                        password = text;
+                      },
+                    ),
+                    const Align(
+                      alignment: Alignment(-0.3, 2),
+                      child: Text(
+                        '• Minimum 8 characters\n• Contains numbers, letters and symbols',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontFamily: 'inter',
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormFieldSign(
+                      hintText: 'Confirm password',
+                      vlaidatorErorr: '',
+                      controller: null,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(30),
+                      validator: (vlaue) {},
+                      onChanged: (text) {
+                        confirmPassword = text;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Spacer(
+                      flex: 7,
+                    ),
+                    buildElevatedButton(createAccout, 'Sign Up',
+                        const Color(0xffec5e4c), 60, 170, 20, Colors.white),
+                    const Spacer(
+                      flex: 3,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -208,9 +210,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void navigateToProfile() {
     if (widget.userType == 'Doctor') {
-      Navigator.pushNamed(context, ProfileDoctor.routeName);
+      Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
     } else if (widget.userType == 'Parent') {
-      Navigator.pushNamed(context, ProfileParent.routeName);
+      Navigator.pushReplacementNamed(context, ProfileParent.routeName);
     }
   }
 
@@ -219,7 +221,7 @@ class _SignUpPageState extends State<SignUpPage> {
       showLoading(context);
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-      // comment to explain this part of code ---->
+      // comment to explain this part of code ---->(to Gana)
       // to check the user in app & he not close app we use mounted
       if (context.mounted) {
         hideLoading(context);
@@ -235,7 +237,9 @@ class _SignUpPageState extends State<SignUpPage> {
       }
       if (context.mounted) {
         showMessage(context,
-            title: 'Error!', body: message, posButtonTitle: 'Ok');
+            title: 'Error!',
+            body: 'youe error is =$message',
+            posButtonTitle: 'Ok');
       }
     } catch (e) {
       hideLoading(context);

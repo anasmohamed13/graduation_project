@@ -45,7 +45,7 @@ class ProfileDoctor extends StatelessWidget {
                   160, 20, Colors.black),
             ],
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 15),
           const Divider(
             thickness: 2,
             height: 3,

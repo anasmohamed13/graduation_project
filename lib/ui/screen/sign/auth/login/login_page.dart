@@ -1,5 +1,6 @@
-// ignore_for_file: sized_box_for_whitespace, library_private_types_in_public_api
+// ignore_for_file: sized_box_for_whitespace, library_private_types_in_public_api, use_build_context_synchronously, unused_local_variable
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
@@ -8,6 +9,7 @@ import 'package:garduationproject/ui/screen/sign/auth/signup/signup-parent/sign_
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/build_text_form_field_login.dart';
+import 'package:garduationproject/ui/util/dialog.dart';
 import 'package:garduationproject/ui/widget/choosing_login.dart';
 
 class LoginPage extends StatefulWidget {
@@ -241,15 +243,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
                 buildElevatedButton(
                   () {
-                    if (formKey.currentState?.validate() ?? false) {
-                      if (widget.user == 'Doctor') {
-                        Navigator.pushReplacementNamed(
-                            context, ProfileDoctor.routeName);
-                      } else if (widget.user == 'Parent') {
-                        Navigator.pushReplacementNamed(
-                            context, ProfileParent.routeName);
-                      }
-                    }
+                    signIn();
                   },
                   'login',
                   buttonColor,
@@ -264,5 +258,50 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void navigateToProfile() {
+    if (widget.user == 'Doctor') {
+      Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
+    } else if (widget.user == 'Parent') {
+      Navigator.pushReplacementNamed(context, ProfileParent.routeName);
+    }
+  }
+
+  Future<void> signIn() async {
+    // to check validate aboute email or password before firebase auth--->(read this Gana)
+    if (!formKey.currentState!.validate()) return;
+
+    try {
+      showLoading(context);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      // comment to explain this part of code ----> (to Gana)
+      // to check the user in app & he not close app we use mounted
+      if (context.mounted) {
+        hideLoading(context);
+        navigateToProfile();
+      }
+    } on FirebaseAuthException catch (e) {
+      hideLoading(context);
+
+      String message = '';
+      if (e.code == 'user-not-found') {
+        message = "No user found for that email.";
+      } else if (e.code == 'wrong-password') {
+        message = 'wrong pass';
+      }
+      if (context.mounted) {
+        showMessage(context,
+            title: 'Error!',
+            body: 'youe error is =$message',
+            posButtonTitle: 'Ok');
+      }
+    } catch (e) {
+      hideLoading(context);
+      showMessage(context,
+          title: 'Error!', body: 'some thing is wrong try later..');
+    }
   }
 }
