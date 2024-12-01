@@ -1,36 +1,59 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-abstract class DialogUtils {
-  static showLoading(BuildContext context) => showDialog(
+// display dialog when loading
+Future<void> showLoading(BuildContext context) async {
+  showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
         return const CupertinoAlertDialog(
           content: Row(
             children: [
-              Text("Loading... "),
+              Text("Loading..."),
               Spacer(),
               CircularProgressIndicator(),
             ],
           ),
         );
       });
+}
 
-  static hideLoading(BuildContext context) => Navigator.pop(context);
+void hideLoading(BuildContext context) {
+  Navigator.pop(context);
+}
 
-  static showError(BuildContext context, String message) => showDialog(
+//explain posButton& negButton
+//posButton uses to display the words like 'ok , yes , ets..'
+//negbutton used to display the word like 'no'
+Future<void> showMessage(BuildContext context,
+    {String? title,
+    String? body,
+    String? posButtonTitle,
+    String? negButtonTitle,
+    Function? onPosButtonClick,
+    Function? onNegButtonClick}) async {
+  showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
+      builder: (_) {
+        return CupertinoAlertDialog(
+          title: title != null ? Text(title) : null,
+          content: body != null ? Text(body) : null,
           actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("OK"))
+            if (posButtonTitle != null)
+              TextButton(
+                  onPressed: () {
+                    onPosButtonClick?.call();
+                    Navigator.pop(context);
+                  },
+                  child: Text(posButtonTitle)),
+            if (negButtonTitle != null)
+              TextButton(
+                  onPressed: () {
+                    onNegButtonClick?.call();
+                    Navigator.pop(context);
+                  },
+                  child: Text(negButtonTitle)),
           ],
         );
       });

@@ -31,6 +31,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  String email = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                     }
                     return null;
                   },
+                  onChanged: (text) {
+                    email = text;
+                  },
                 ),
                 const SizedBox(height: 10),
                 buildTextFormFiledLogin(
@@ -159,6 +164,9 @@ class _LoginPageState extends State<LoginPage> {
                       return 'Password should be at least 6 characters';
                     }
                     return null;
+                  },
+                  onChanged: (text) {
+                    password = text;
                   },
                 ),
                 const SizedBox(height: 10),

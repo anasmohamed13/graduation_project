@@ -5,8 +5,10 @@ buildTextFormFiledLogin(
     String? hintText,
     BorderRadius? borderRadius,
     TextEditingController? controller,
-    String? Function(String?)? validator}) {
+    String? Function(String?)? validator,
+    void Function(String)? onChanged}) {
   return TextFormField(
+    onChanged: onChanged,
     controller: controller,
     validator: validator,
     decoration: InputDecoration(
