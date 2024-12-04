@@ -2,10 +2,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_doctor.dart';
+import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
-import 'package:garduationproject/ui/screen/sign/auth/signup/signup-doctor/sign_up_doctor.dart';
-import 'package:garduationproject/ui/screen/sign/auth/signup/signup-parent/sign_up_parent.dart';
+
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/build_text_form_field_login.dart';

@@ -128,7 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: null,
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(30),
-                      validator: (p0) {},
+                      validator: (value) {},
                       onChanged: (text) {
                         password = text;
                       },
@@ -154,22 +154,21 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: null,
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(30),
-                      validator: (vlaue) {},
+                      validator: (value) {
+                        if (value != password) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
+                      },
                       onChanged: (text) {
                         confirmPassword = text;
                       },
                     ),
                     const SizedBox(
-                      height: 10,
-                    ),
-                    const Spacer(
-                      flex: 7,
+                      height: 40,
                     ),
                     buildElevatedButton(createAccout, 'Sign Up',
                         const Color(0xffec5e4c), 60, 170, 20, Colors.white),
-                    const Spacer(
-                      flex: 3,
-                    ),
                   ],
                 ),
               ],
@@ -217,6 +216,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> createAccout() async {
+    // to check validate aboute email or password before firebase auth--->(read this Gana)
+    if (!formKey.currentState!.validate()) return;
     try {
       showLoading(context);
       UserCredential userCredential = await FirebaseAuth.instance

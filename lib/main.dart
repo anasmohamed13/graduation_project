@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/provider/gender_provider.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/hello/hello_page.dart';
+import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
-import 'package:garduationproject/ui/screen/sign/hello/hello_page.dart';
-import 'package:garduationproject/ui/screen/sign/auth/login/doctor/doctor_login.dart';
-import 'package:garduationproject/ui/screen/sign/auth/login/parent/parent_login.dart';
-import 'package:garduationproject/ui/screen/sign/auth/login/patient/patient_login.dart';
-import 'package:garduationproject/ui/screen/sign/auth/signup/signup-doctor/sign_up_doctor.dart';
-import 'package:garduationproject/ui/screen/sign/auth/signup/signup-parent/sign_up_parent.dart';
-import 'package:garduationproject/ui/screen/sign/auth/signup/signup-patient/sign_up_patient.dart';
+
+import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
+import 'package:garduationproject/ui/screen/auth/login/parent/parent_login.dart';
+import 'package:garduationproject/ui/screen/auth/login/patient/patient_login.dart';
+import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_doctor.dart';
+import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
+import 'package:garduationproject/ui/screen/auth/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/screen/splash/splash.dart';
 import 'package:provider/provider.dart';
 
@@ -36,16 +38,17 @@ class GatoApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: Splash.routeName,
       routes: {
-        Splash.routeName: (context) => const Splash(),
-        HelloPage.routeName: (context) => const HelloPage(),
-        ParentLogin.routName: (context) => const ParentLogin(),
-        DoctorLogin.routName: (context) => const DoctorLogin(),
-        PatientLogin.routName: (context) => const PatientLogin(),
-        SignUpPatient.routeName: (context) => const SignUpPatient(),
-        SignUpParent.routeName: (context) => const SignUpParent(),
-        SignUpDoctor.routeName: (context) => const SignUpDoctor(),
-        ProfileDoctor.routeName: (context) => const ProfileDoctor(),
-        ProfileParent.routeName: (context) => const ProfileParent(),
+        Splash.routeName: (_) => const Splash(),
+        HelloPage.routeName: (_) => const HelloPage(),
+        ParentLogin.routName: (_) => const ParentLogin(),
+        DoctorLogin.routName: (_) => const DoctorLogin(),
+        PatientLogin.routName: (_) => const PatientLogin(),
+        SignUpPatient.routeName: (_) => const SignUpPatient(),
+        SignUpParent.routeName: (_) => const SignUpParent(),
+        SignUpDoctor.routeName: (_) => const SignUpDoctor(),
+        ProfileDoctor.routeName: (_) => const ProfileDoctor(),
+        ProfileParent.routeName: (_) => const ProfileParent(),
+        HomeParent.routeName: (_) => const HomeParent(),
       },
     );
   }

@@ -1,8 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/sign/auth/login/doctor/doctor_login.dart';
-import 'package:garduationproject/ui/screen/sign/auth/login/parent/parent_login.dart';
-import 'package:garduationproject/ui/screen/sign/auth/login/patient/patient_login.dart';
+import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
+import 'package:garduationproject/ui/screen/auth/login/parent/parent_login.dart';
+import 'package:garduationproject/ui/screen/auth/login/patient/patient_login.dart';
+
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/widget/user_label.dart';
 
