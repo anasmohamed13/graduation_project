@@ -10,11 +10,13 @@ class HomeParent extends StatefulWidget {
 }
 
 class _HomeParentState extends State<HomeParent> {
+  bool isChildProgressSelected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBarHomeParent(),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
             height: 20,
@@ -45,10 +47,30 @@ class _HomeParentState extends State<HomeParent> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildServices(text: 'Child Progress'),
-              buildServices(text: 'GATO Chat'),
-              buildServices(text: 'Ask Doctor'),
+              buildServices(
+                text: 'Child Progress',
+                isSelected: isChildProgressSelected,
+                onTap: () {
+                  isChildProgressSelected = !isChildProgressSelected;
+                  setState(() {});
+                },
+              ),
+              buildServices(text: 'GATO Chat', onTap: () {}),
+              buildServices(text: 'Ask Doctor', onTap: () {}),
             ],
+          ),
+          const SizedBox(
+            height: 22,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 18),
+            child: Text(
+              'Notfications',
+              style: TextStyle(
+                  fontFamily: 'inter',
+                  fontSize: 19,
+                  fontWeight: FontWeight.w700),
+            ),
           )
         ],
       ),
@@ -97,16 +119,32 @@ class _HomeParentState extends State<HomeParent> {
 
   Widget buildServices({
     required String text,
+    required void Function()? onTap,
+    bool? isSelected = false,
   }) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return InkWell(
+      onTap: onTap,
       child: Container(
         height: height * 0.05,
         width: width * 0.3,
         decoration: BoxDecoration(
-          color: Colors.black,
+          gradient: (text == 'Child Progress' && isSelected!)
+              ? const LinearGradient(
+                  colors: [
+                    Color(0xff87b5f0),
+                    Color(0xff9dade4),
+                    Color(0xff9dabe4)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )
+              : null,
+          color: (text == 'Child Progress' && isSelected!)
+              ? null
+              : const Color(0xffaac3e8),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
