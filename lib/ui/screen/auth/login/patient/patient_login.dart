@@ -3,17 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
-import 'package:garduationproject/ui/util/build_app_bar.dart';
 
-class PatientLogin extends StatelessWidget {
+class PatientLogin extends StatefulWidget {
   static const String routName = 'patient';
   const PatientLogin({super.key});
 
   @override
+  State<PatientLogin> createState() => _PatientLoginState();
+}
+
+class _PatientLoginState extends State<PatientLogin> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: buildAppBar(context),
+      appBar: buildAppBarPatient(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -59,6 +63,23 @@ class PatientLogin extends StatelessWidget {
               flex: 2,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  AppBar buildAppBarPatient() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      leading: Padding(
+        padding: const EdgeInsets.all(0),
+        child: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Image.asset(
+            AppAssets.backPatientIcon,
+            height: 30,
+            width: 30,
+          ),
         ),
       ),
     );

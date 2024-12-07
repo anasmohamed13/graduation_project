@@ -21,7 +21,10 @@ class _ProfileParentState extends State<ProfileParent> {
       appBar: buildAppBarrParentProfile(),
       body: Column(
         children: [
-          buildCircleAvatar(),
+          buildCircleAvatar(
+              borderRadius: BorderRadius.circular(75),
+              radius: 75,
+              elevation: 10),
           const SizedBox(
             height: 18,
           ),
@@ -57,20 +60,6 @@ class _ProfileParentState extends State<ProfileParent> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Material buildCircleAvatar() {
-    return Material(
-      shadowColor: const Color(0xffe1eeff),
-      color: const Color(0xffe1eeff),
-      borderRadius: BorderRadius.circular(75),
-      elevation: 10,
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 75,
-        child: Image.asset(AppAssets.girlMoji),
       ),
     );
   }
@@ -194,4 +183,21 @@ class _ProfileParentState extends State<ProfileParent> {
       ),
     );
   }
+}
+
+Material buildCircleAvatar(
+    {required BorderRadiusGeometry? borderRadius,
+    required double? radius,
+    required double? elevation}) {
+  return Material(
+    shadowColor: const Color(0xffe1eeff),
+    color: const Color(0xffe1eeff),
+    borderRadius: borderRadius,
+    elevation: elevation ?? 10,
+    child: CircleAvatar(
+      backgroundColor: Colors.transparent,
+      radius: radius,
+      child: Image.asset(AppAssets.girlMoji),
+    ),
+  );
 }
