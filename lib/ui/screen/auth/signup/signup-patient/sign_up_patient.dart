@@ -119,9 +119,9 @@ class _SignUpPatientState extends State<SignUpPatient> {
                     height: 15,
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(10),
                     child: BuildTextFormFiled(
-                      height: MediaQuery.of(context).size.height * 0.16,
+                      height: MediaQuery.of(context).size.height * 0.15,
                       width: MediaQuery.of(context).size.width * 0.85,
                       fontsize: 16,
                       hintText:
@@ -133,8 +133,8 @@ class _SignUpPatientState extends State<SignUpPatient> {
                       borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
                       fontWeight: FontWeight.w700,
-                      blurRadius: 1,
-                      offset: const Offset(0, 4),
+                      blurRadius: 0,
+                      offset: const Offset(4, 4),
                     ),
                   ),
                   const SizedBox(

@@ -1,7 +1,10 @@
-// ignore_for_file: body_might_complete_normally_nullable, use_build_context_synchronously, unused_local_variable
+// ignore_for_file: body_might_complete_normally_nullable, use_build_context_synchronously, unused_local_variable, non_constant_identifier_names
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:garduationproject/model/services/auth_service.dart';
+import 'package:garduationproject/model/services/firebase_service.dart';
+import 'package:garduationproject/model/user_model/user_model.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
@@ -23,7 +26,10 @@ class _SignUpPageState extends State<SignUpPage> {
   String password = '';
   String confirmPassword = '';
   String medicalLicenseNumber = '';
+  String MedicalSpecializatin = '';
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final AuthService authService = AuthService();
+  final DatabaseService databaseService = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +109,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(30),
                         validator: (p0) {},
+                        onChanged: (text) {
+                          MedicalSpecializatin = text;
+                        },
                       ),
                       const SizedBox(
                         height: 16,
@@ -220,14 +229,20 @@ class _SignUpPageState extends State<SignUpPage> {
     if (!formKey.currentState!.validate()) return;
     try {
       showLoading(context);
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      // comment to explain this part of code ---->(to Gana)
-      // to check the user in app & he not close app we use mounted
-      if (context.mounted) {
+      User? user = await authService.signUp(email, password);
+      if (user != null) {
+        UserModel userModel = UserModel(
+          fullName: fullName,
+          email: email,
+          phoneNumber: phoneNumber,
+          userType: widget.userType,
+          medicalLicenseNumber:
+              widget.userType == 'Doctor' ? medicalLicenseNumber : null,
+        );
+        await databaseService.saveUser(userModel);
         hideLoading(context);
+        navigateToProfile();
       }
-      navigateToProfile();
     } on FirebaseAuthException catch (e) {
       hideLoading(context);
       String message = '';
