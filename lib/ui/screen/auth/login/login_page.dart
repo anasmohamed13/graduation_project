@@ -264,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
   void navigateToProfile() {
     if (widget.user == 'Doctor') {
       Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
-    } else if (widget.user == 'Parent') {
+    } else if (widget.user == 'parent') {
       Navigator.pushReplacementNamed(context, ProfileParent.routeName);
     }
   }

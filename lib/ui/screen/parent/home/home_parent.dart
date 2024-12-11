@@ -135,8 +135,9 @@ class _HomeParentState extends State<HomeParent> {
               ? const LinearGradient(
                   colors: [
                     Color(0xff87b5f0),
-                    Color(0xff9dade4),
-                    Color(0xff9dabe4)
+                    Color(0xff87b5f0),
+                    // Color(0xff9dade4),
+                    Color(0xff9dabe4),
                   ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
