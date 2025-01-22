@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 class UserModel {
-  static const collectionParent = "Parent";
-  static const collectionDoctor = "Doctor";
+  static String collectionParent = "Parent";
+  static String collectionDoctor = "Doctor";
   final String fullName;
   final String email;
   final String phoneNumber;
