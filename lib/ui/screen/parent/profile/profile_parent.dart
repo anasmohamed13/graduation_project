@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/model/services/firebase_service.dart';
+import 'package:garduationproject/model/user_model/user_model.dart';
+
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/widget/build_text_form_filed.dart';
@@ -12,6 +15,22 @@ class ProfileParent extends StatefulWidget {
 }
 
 class _ProfileParentState extends State<ProfileParent> {
+  final FirebaseService firebaseService = FirebaseService();
+  UserModel? userData;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    final data = await firebaseService.fetchUserData();
+    setState(() {
+      userData = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -39,6 +58,9 @@ class _ProfileParentState extends State<ProfileParent> {
               buildElevatedButton(() {}, 'Save', const Color(0xff8ebff6),
                   height * 0.065, width * 0.4, 16, Colors.white),
             ],
+          ),
+          const SizedBox(
+            height: 10,
           ),
           Expanded(
             child: Stack(
@@ -86,18 +108,18 @@ class _ProfileParentState extends State<ProfileParent> {
           ],
         ),
         const SizedBox(
-          height: 30,
+          height: 20,
         ),
         BuildTextFormFiled(
           prefixIcon: Image.asset(AppAssets.userEdit),
           fillColor: Colors.white,
-          hintText: '',
+          hintText: userData?.fullName ?? 'Loading...',
           text: "Full Name",
           vlaidatorErorr: null,
           controller: null,
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(10),
-          height: MediaQuery.of(context).size.height * 0.043,
+          height: MediaQuery.of(context).size.height * 0.060,
           width: MediaQuery.of(context).size.width * 0.78,
           fontsize: 16,
           fontWeight: FontWeight.w600,
@@ -105,36 +127,36 @@ class _ProfileParentState extends State<ProfileParent> {
           offset: const Offset(0, 0),
         ),
         const SizedBox(
-          height: 30,
+          height: 20,
         ),
         BuildTextFormFiled(
             prefixIcon: Image.asset(AppAssets.userEdit),
             fillColor: Colors.white,
-            hintText: '',
+            hintText: userData?.email ?? 'Loading...',
             text: "Email address",
             vlaidatorErorr: null,
             controller: null,
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(10),
-            height: MediaQuery.of(context).size.height * 0.043,
+            height: MediaQuery.of(context).size.height * 0.060,
             width: MediaQuery.of(context).size.width * 0.78,
             fontsize: 16,
             fontWeight: FontWeight.w600,
             blurRadius: 0,
             offset: const Offset(0, 0)),
         const SizedBox(
-          height: 30,
+          height: 20,
         ),
         BuildTextFormFiled(
             prefixIcon: Image.asset(AppAssets.userEdit),
             fillColor: Colors.white,
-            hintText: '',
-            text: "Mobile number",
+            hintText: userData?.phoneNumber ?? 'Loading...',
+            text: " phone number",
             vlaidatorErorr: null,
             controller: null,
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(10),
-            height: MediaQuery.of(context).size.height * 0.043,
+            height: MediaQuery.of(context).size.height * 0.060,
             width: MediaQuery.of(context).size.width * 0.78,
             fontsize: 16,
             fontWeight: FontWeight.w600,

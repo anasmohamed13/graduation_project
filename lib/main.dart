@@ -6,7 +6,6 @@ import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/hello/hello_page.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
-
 import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
 import 'package:garduationproject/ui/screen/auth/login/parent/parent_login.dart';
 import 'package:garduationproject/ui/screen/auth/login/patient/patient_login.dart';

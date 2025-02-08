@@ -29,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String MedicalSpecializatin = '';
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final AuthService authService = AuthService();
-  final DatabaseService databaseService = DatabaseService();
+  final FirebaseService databaseService = FirebaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +225,6 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> createAccout() async {
-    // to check validate aboute email or password before firebase auth--->(read this Gana)
     if (!formKey.currentState!.validate()) return;
     try {
       showLoading(context);
@@ -236,8 +235,9 @@ class _SignUpPageState extends State<SignUpPage> {
           email: email,
           phoneNumber: phoneNumber,
           userType: widget.userType,
-          medicalLicenseNumber:
-              widget.userType == 'Doctor' ? medicalLicenseNumber : null,
+          medicalLicenseNumber: widget.userType == 'Doctor'
+              ? medicalLicenseNumber
+              : medicalLicenseNumber,
         );
         await databaseService.saveUser(userModel);
         hideLoading(context);
