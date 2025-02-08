@@ -3,12 +3,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 //comment to Gana this code to save user data in firestore
 //but the doctor have collection and parent have another collection
 class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  UserModel? userData;
 
   Future<void> saveUser(UserModel user) async {
     String collection = user.userType == 'Doctor' ? 'Doctors' : 'Parents';
@@ -58,6 +60,70 @@ class FirebaseService {
     } catch (e) {
       print('Error determining user collection: $e');
     }
-    return ''; // if the user not found in collection
+    return ''; // if the user not found in any collection
+  }
+//------->fixed another time(to Ganna)<-----------------
+  // Future<UserCredential?> signInWithFacebook() async {
+  //   final LoginResult result = await FacebookAuth.instance.login();
+  //   if (result.status == LoginStatus.success) {
+  //     // Create a credential from the access token
+  //     final OAuthCredential credential =
+  //         FacebookAuthProvider.credential(result.accessToken!.tokenString);
+  //     // Once signed in, return the UserCredential
+  //     return await FirebaseAuth.instance.signInWithCredential(credential);
+  //   }
+  //   return null;
+  // }
+  // Future<void> signInWithFacebook() async {
+  //   final LoginResult result = await FacebookAuth.instance.login();
+  //   try {
+  //     // Check if the login was successful
+  //     if (result.status == LoginStatus.success) {
+  //       // Get the access token
+  //       final AccessToken accessToken = result.accessToken!;
+
+  //       // Create a credential from the access token
+  //       final OAuthCredential credential =
+  //           FacebookAuthProvider.credential(accessToken.tokenString);
+
+  //       // Sign in to Firebase with the credential
+  //       final UserCredential userCredential =
+  //           await auth.signInWithCredential(credential);
+
+  //       // Get the user data from Facebook
+  //       final Map<String, dynamic> userData =
+  //           await FacebookAuth.instance.getUserData();
+
+  //       // Create a UserModel object
+  //       UserModel user = UserModel(
+  //         email: userCredential.user!.email ?? '',
+  //         fullName: userData['name'] ?? '',
+  //         userType: 'Parent',
+  //         phoneNumber: '', // Default to 'Parent' or adjust as needed
+  //       );
+
+  //       // Save the user data to Firestore
+  //       await saveUser(user);
+
+  //       //   // Successfully signed in
+  //       //   print('Signed in: ${userCredential.user!.displayName}');
+  //       // } else {
+  //       //   print('Facebook login failed: ${result.status}');
+  //       // }
+  //     }
+  //   } catch (e) {
+  //     print('Error signing in with Facebook: $e');
+  //   }
+  // }
+  signInWithGoogle() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
