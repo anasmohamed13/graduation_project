@@ -20,32 +20,12 @@ class ChoosingLogin extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: () {},
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            child: Image.asset(AppAssets.appleID),
-          ),
-        ),
-        InkWell(
           onTap: () {
             firebaseService.signInWithGoogle();
           },
           child: CircleAvatar(
             backgroundColor: Colors.white,
             child: Image.asset(AppAssets.gmail),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            // await FirebaseService().signInWithFacebook();
-            // if (context.mounted) {
-            //   Navigator.pushNamed(context, ProfileParent.routeName);
-            // }
-          },
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.white,
-            child: Image.asset(AppAssets.facebook),
           ),
         ),
       ],
