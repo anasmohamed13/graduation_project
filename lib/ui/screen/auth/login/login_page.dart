@@ -11,7 +11,6 @@ import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/build_text_form_field_login.dart';
 import 'package:garduationproject/ui/util/dialog.dart';
-import 'package:garduationproject/ui/widget/choosing_login.dart';
 
 class LoginPage extends StatefulWidget {
   final String user;
@@ -239,8 +238,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                ChoosingLogin(),
                 const SizedBox(height: 20),
                 buildElevatedButton(
                   () {

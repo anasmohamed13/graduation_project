@@ -1,8 +1,11 @@
-// ignore_for_file: avoid_print, unused_local_variable
+// ignore_for_file: avoid_print, unused_local_variable, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
+import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 //comment to Gana this code to save user data in firestore
@@ -11,10 +14,30 @@ class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   UserModel? userData;
+  //-------------- to Ganna its not complete and have a Bug---------------//
+  // Future<void> updateUserField(String field, String value) async {
+  //   try {
+  //     String? userId = FirebaseAuth.instance.currentUser?.uid;
+  //     if (userId != null) {
+  //       await FirebaseFirestore.instance
+  //           .collection('Parents')
+  //           .doc(userId)
+  //           .update({field: value});
+  //       print("$field updated to $value");
+  //     }
+  //   } catch (e) {
+  //     print("Error updating $field: $e");
+  //     throw Exception("Failed to update $field: $e");
+  //   }
+  // }
 
   Future<void> saveUser(UserModel user) async {
     String collection = user.userType == 'Doctor' ? 'Doctors' : 'Parents';
     await firestore.collection(collection).doc(user.email).set(user.toJson());
+  }
+
+  Future<void> signOut() async {
+    await auth.signOut();
   }
 
   Future<UserModel?> fetchUserData() async {
@@ -63,15 +86,57 @@ class FirebaseService {
     return ''; // if the user not found in any collection
   }
 
-  signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+//------------->will deleted or fixed <------------
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return; // when User canceled sign-in (to Ganna)
+      GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
 
-    AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+      AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      User? firebaseUser = userCredential.user;
+      if (firebaseUser != null) {
+        // Fetch user data from Firestore
+        UserModel? userModel = await fetchUserData();
+
+        if (userModel != null) {
+          // Navigate to the correct profile based on userType
+          navigateToProfile(context, userModel.userType);
+        } else {
+          UserModel newUser = UserModel(
+            fullName: firebaseUser.displayName ?? '',
+            email: firebaseUser.email ?? '',
+            phoneNumber: firebaseUser.phoneNumber ?? '',
+            userType: 'Parent',
+            medicalLicenseNumber: null,
+            MedicalSpecializatin: null,
+          );
+          await saveUser(newUser);
+
+          navigateToProfile(context, newUser.userType);
+        }
+      }
+
+      // complete this method to save user and navigate to profile
+      // create method to sign in via phone}
+    } catch (e) {
+      print('Error signing in with Google: $e');
+    }
+  }
+}
+
+//will deleted
+void navigateToProfile(BuildContext context, String userType) {
+  if (userType == UserModel.collectionDoctor) {
+    Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
+  } else if (userType == UserModel.collectionParent) {
+    Navigator.pushReplacementNamed(context, ProfileParent.routeName);
+  } else {
+    print('Unknown user type: $userType');
   }
 }
