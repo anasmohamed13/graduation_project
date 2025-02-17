@@ -25,4 +25,6 @@ abstract class AppAssets {
   static const String calendarIcon = 'assets/image/calendarIcon.png';
   static const String girlMoji = 'assets/image/girlmoji.png';
   static const String userEdit = 'assets/image/user_edit.png';
+  static const String doctorChat = 'assets/image/doctorChat.png';
+  static const String microphone = 'assets/image/Microphone.png';
 }
