@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/hello/hello_page.dart';
+import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
 

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:garduationproject/model/services/firebase_service.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
-import 'package:garduationproject/ui/screen/hello/hello_page.dart';
+import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
@@ -158,8 +158,8 @@ class _ProfileParentState extends State<ProfileParent> {
           controller: nameController,
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(10),
-          height: MediaQuery.of(context).size.height * 0.060,
-          width: MediaQuery.of(context).size.width * 0.78,
+          height: height * 0.060,
+          width: width * 0.78,
           fontsize: 16,
           fontWeight: FontWeight.w600,
           blurRadius: 0,

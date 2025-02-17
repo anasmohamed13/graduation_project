@@ -2,11 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
-import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
-import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 //comment to Gana this code to save user data in firestore
 //but the doctor have collection and parent have another collection
@@ -14,6 +10,7 @@ class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   UserModel? userData;
+
   //-------------- to Ganna its not complete and have a Bug---------------//
   // Future<void> updateUserField(String field, String value) async {
   //   try {
@@ -87,56 +84,56 @@ class FirebaseService {
   }
 
 //------------->will deleted or fixed <------------
-  Future<void> signInWithGoogle(BuildContext context) async {
-    try {
-      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return; // when User canceled sign-in (to Ganna)
-      GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
+  // Future<void> signInWithGoogle(BuildContext context) async {
+  //   try {
+  //     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //     if (googleUser == null) return; // when User canceled sign-in (to Ganna)
+  //     GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
 
-      AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      User? firebaseUser = userCredential.user;
-      if (firebaseUser != null) {
-        // Fetch user data from Firestore
-        UserModel? userModel = await fetchUserData();
+  //     AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleAuth.accessToken,
+  //       idToken: googleAuth.idToken,
+  //     );
+  //     UserCredential userCredential =
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+  //     User? firebaseUser = userCredential.user;
+  //     if (firebaseUser != null) {
+  //       // Fetch user data from Firestore
+  //       UserModel? userModel = await fetchUserData();
 
-        if (userModel != null) {
-          // Navigate to the correct profile based on userType
-          navigateToProfile(context, userModel.userType);
-        } else {
-          UserModel newUser = UserModel(
-            fullName: firebaseUser.displayName ?? '',
-            email: firebaseUser.email ?? '',
-            phoneNumber: firebaseUser.phoneNumber ?? '',
-            userType: 'Parent',
-            medicalLicenseNumber: null,
-            MedicalSpecializatin: null,
-          );
-          await saveUser(newUser);
+  //       if (userModel != null) {
+  //         // Navigate to the correct profile based on userType
+  //         navigateToProfile(context, userModel.userType);
+  //       } else {
+  //         UserModel newUser = UserModel(
+  //           fullName: firebaseUser.displayName ?? '',
+  //           email: firebaseUser.email ?? '',
+  //           phoneNumber: firebaseUser.phoneNumber ?? '',
+  //           userType: 'Parent',
+  //           medicalLicenseNumber: null,
+  //           MedicalSpecializatin: null,
+  //         );
+  //         await saveUser(newUser);
 
-          navigateToProfile(context, newUser.userType);
-        }
-      }
+  //         navigateToProfile(context, newUser.userType);
+  //       }
+  //     }
 
-      // complete this method to save user and navigate to profile
-      // create method to sign in via phone}
-    } catch (e) {
-      print('Error signing in with Google: $e');
-    }
-  }
+  //     // complete this method to save user and navigate to profile
+  //     // create method to sign in via phone}
+  //   } catch (e) {
+  //     print('Error signing in with Google: $e');
+  //   }
+  // }
 }
 
 //will deleted
-void navigateToProfile(BuildContext context, String userType) {
-  if (userType == UserModel.collectionDoctor) {
-    Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
-  } else if (userType == UserModel.collectionParent) {
-    Navigator.pushReplacementNamed(context, ProfileParent.routeName);
-  } else {
-    print('Unknown user type: $userType');
-  }
-}
+// void navigateToProfile(BuildContext context, String userType) {
+//   if (userType == UserModel.collectionDoctor) {
+//     Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
+//   } else if (userType == UserModel.collectionParent) {
+//     Navigator.pushReplacementNamed(context, ProfileParent.routeName);
+//   } else {
+//     print('Unknown user type: $userType');
+//   }
+// }
