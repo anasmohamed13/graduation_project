@@ -2,8 +2,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:garduationproject/model/services/auth_service.dart';
-import 'package:garduationproject/model/services/firebase_service.dart';
+import 'package:garduationproject/model/firebase/auth_service.dart';
+import 'package:garduationproject/model/firebase/firebase_service.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';

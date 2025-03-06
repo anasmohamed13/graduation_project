@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:garduationproject/model/services/firebase_service.dart';
+import 'package:garduationproject/model/firebase/firebase_service.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 
