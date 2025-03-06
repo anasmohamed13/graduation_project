@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/provider/gender_provider.dart';
+import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
@@ -36,7 +37,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: ChatPage.routeName,
+      initialRoute: AiChat.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -50,6 +51,7 @@ class GatoApp extends StatelessWidget {
         ProfileParent.routeName: (_) => const ProfileParent(),
         ChatPage.routeName: (_) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
+        AiChat.routeName: (_) => const AiChat(),
       },
     );
   }

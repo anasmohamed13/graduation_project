@@ -19,8 +19,9 @@ class _ChatPageState extends State<ChatPage> {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   void sendMessage() {
-    if (messageController.text.trim().isEmpty)
+    if (messageController.text.trim().isEmpty) {
       return; //---> to Ganna this condition to check the message have text or not
+    }
     String messageText = messageController.text.trim();
 
     firestore.collection('messages').add({
