@@ -31,4 +31,16 @@ class SupportRecommendations {
       overwhelmed: json['overwhelmed'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'happy': happy,
+      'sad': sad,
+      'angry': angry,
+      'nervous': nervous,
+      'excited': excited,
+      'bored': bored,
+      'frustrated': frustrated,
+      'overwhelmed': overwhelmed,
+    };
+  }
 }

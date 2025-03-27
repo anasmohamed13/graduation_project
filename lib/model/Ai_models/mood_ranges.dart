@@ -17,4 +17,7 @@ class MoodRanges {
       },
     );
   }
+  Map<String, dynamic> toJson() {
+    return ranges;
+  }
 }

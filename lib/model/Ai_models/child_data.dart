@@ -28,4 +28,13 @@ class ChildData {
           SupportRecommendations.fromJson(json['support_recommendations']),
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'mood': mood,
+      'mood_ranges': moodRanges.toJson(),
+      'activities': activities.toJson(),
+      'progress': progress.toJson(),
+      'support_recommendations': supportRecommendations.toJson(),
+    };
+  }
 }

@@ -20,4 +20,11 @@ class Activities {
       emotional: Map<String, double>.from(json['emotional']),
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'educational': educational,
+      'social': social,
+      'emotional': emotional,
+    };
+  }
 }
