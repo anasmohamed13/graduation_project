@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
-import 'package:garduationproject/ui/provider/gender_provider.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
@@ -15,7 +14,6 @@ import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_do
 import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/screen/home/splash/splash.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +21,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => GenderProvider(),
-      child: const GatoApp(),
-    ),
+    const GatoApp(),
   );
 }
 
@@ -51,7 +46,7 @@ class GatoApp extends StatelessWidget {
         ProfileParent.routeName: (_) => const ProfileParent(),
         ChatPage.routeName: (_) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
-        AiChat.routeName: (_) => const AiChat(),
+        AiChat.routeName: (_) => AiChat(),
       },
     );
   }
