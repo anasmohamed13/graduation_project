@@ -46,7 +46,7 @@ class GatoApp extends StatelessWidget {
         ProfileParent.routeName: (_) => const ProfileParent(),
         ChatPage.routeName: (_) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
-        AiChat.routeName: (_) => AiChat(),
+        AiChat.routeName: (_) => const AiChat(),
       },
     );
   }

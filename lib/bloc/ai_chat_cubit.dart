@@ -12,10 +12,10 @@ class AiChatInitial extends AiChatState {}
 
 class AiChatLoading extends AiChatState {}
 
-class AiChatLoaded extends AiChatState {
+class AiChatsuccsess extends AiChatState {
   final List<QueryDocumentSnapshot> messages;
 
-  AiChatLoaded(this.messages);
+  AiChatsuccsess(this.messages);
 }
 
 class AiChatError extends AiChatState {
@@ -48,7 +48,7 @@ class AiChatCubit extends Cubit<AiChatState> {
           .orderBy('timestamp', descending: true)
           .snapshots()
           .listen((snapshot) {
-        emit(AiChatLoaded(snapshot.docs));
+        emit(AiChatsuccsess(snapshot.docs));
       }, onError: (error) {
         emit(AiChatError("Failed to load messages: $error"));
       });
@@ -71,7 +71,7 @@ class AiChatCubit extends Cubit<AiChatState> {
       // Get AI response
       String aiResponse = await ApiService.sendMessage(message, childData);
 
-      // Add AI response to Firestore
+      // Add AI response to Firestore(explain to Ganna)
       await firestore.collection('Aichat').add({
         'message': aiResponse,
         'sender': 'ai',
