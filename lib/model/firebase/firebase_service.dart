@@ -9,6 +9,7 @@ import 'package:garduationproject/model/user_model/user_model.dart';
 class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+
   UserModel? userData;
 
   //-------------- to Ganna its not complete and have a Bug---------------//

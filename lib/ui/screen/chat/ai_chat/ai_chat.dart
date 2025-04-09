@@ -65,7 +65,7 @@ class _AiChatState extends State<AiChat> {
             body: Column(
               children: [
                 Expanded(
-                  child: state is AiChatLoaded
+                  child: state is AiChatsuccsess
                       ? messagesListFromState(state.messages)
                       : const Center(child: CircularProgressIndicator()),
                 ),
@@ -118,7 +118,7 @@ class _AiChatState extends State<AiChat> {
         bool isUser = messageData['sender'] == 'user';
 
         return Align(
-          alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+          alignment: isUser ? Alignment.centerLeft : Alignment.centerRight,
           child: BubbleSpecialThree(
             text: messageData['message'],
             color: isUser ? Colors.white : Colors.blue,

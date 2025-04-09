@@ -4,9 +4,12 @@ import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  final bool isDoctor;
+
+  const ChatPage({super.key, this.isDoctor = false});
   static const String routeName = 'chatPage';
   static bool isTyping = false;
 
@@ -16,18 +19,29 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController messageController = TextEditingController();
-
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  late bool isDoctor;
+
+  @override
+  void initState() {
+    super.initState();
+    isDoctor = widget.isDoctor;
+  }
+
   void sendMessage() {
     if (messageController.text.trim().isEmpty) {
-      return; //---> to Ganna this condition to check the message have text or not
+      return;
     }
     String messageText = messageController.text.trim();
+    // String senderId = auth.currentUser?.uid ?? 'anonymous';
+    String senderType = isDoctor ? 'doctor' : 'parent';
 
     firestore.collection('messages').add({
       'text': messageText,
       'timestamp': FieldValue.serverTimestamp(),
       'status': 'sent',
+      'senderType': senderType,
     });
 
     messageController.clear();
@@ -36,6 +50,13 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+    if (arguments != null && arguments.containsKey('isDoctor')) {
+      isDoctor = arguments['isDoctor'];
+    }
+
     return Scaffold(
       body: buildBodyChatPage(),
     );
@@ -65,42 +86,62 @@ class _ChatPageState extends State<ChatPage> {
               Image.asset(AppAssets.doctorChat),
             ],
           ),
-          const Text(
-            'Dr. Sam denis',
-            style: TextStyle(
+          Text(
+            isDoctor ? 'Patient Conversation' : 'Dr. Sam denis',
+            style: const TextStyle(
                 fontFamily: 'inter', fontSize: 25, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 52),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: firestore
-                  .collection('messages')
-                  .orderBy('timestamp', descending: false)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                List<QueryDocumentSnapshot<Object?>> messages =
-                    snapshot.data!.docs;
-                return ListView.builder(
+          StreamBuilder<QuerySnapshot>(
+            stream: firestore
+                .collection('messages')
+                .orderBy('timestamp', descending: false)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              List<QueryDocumentSnapshot<Object?>> messages =
+                  snapshot.data!.docs;
+              return SizedBox(
+                height: 470,
+                child: ListView.builder(
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     QueryDocumentSnapshot<Object?> message = messages[index];
+
+                    String senderType = 'parent';
+                    try {
+                      Map<String, dynamic> data =
+                          message.data() as Map<String, dynamic>;
+                      if (data.containsKey('senderType')) {
+                        senderType = data['senderType'];
+                      }
+                    } catch (e) {
+                      print('Error accessing senderType: $e');
+                    }
+
+                    bool isSender = (senderType == 'doctor' && isDoctor) ||
+                        (senderType == 'parent' && !isDoctor);
+
                     return BubbleSpecialThree(
                       text: message['text'],
-                      color: const Color(0xFF8fb2eb),
-                      tail: false,
-                      isSender: false,
-                      textStyle: const TextStyle(
-                          color: Color(0xff55688b),
+                      color: isSender
+                          ? const Color(0xFF8fb2eb)
+                          : const Color(0xFFE8E8EE),
+                      tail: true,
+                      isSender: isSender,
+                      textStyle: TextStyle(
+                          color: isSender
+                              ? const Color(0xff55688b)
+                              : Colors.black87,
                           fontSize: 20,
                           fontFamily: 'inter'),
                     );
                   },
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
           const Spacer(
             flex: 10,
@@ -144,7 +185,7 @@ class _ChatPageState extends State<ChatPage> {
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
-                hintText: "Type Here",
+                hintText: isDoctor ? "Reply to patient..." : "Type Here",
                 hintStyle: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 16,
@@ -171,7 +212,7 @@ class _ChatPageState extends State<ChatPage> {
                 if (isTyping) {
                   sendMessage();
                 } else {
-                  // Implement voice recording logic here
+                  // will add Voice message functionality
                 }
               },
             ),
