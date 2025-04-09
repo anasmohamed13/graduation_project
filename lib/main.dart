@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
-import 'package:garduationproject/ui/provider/gender_provider.dart';
-import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
-import 'package:garduationproject/ui/screen/hello/hello_page.dart';
+import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
+import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
+import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
@@ -12,8 +14,7 @@ import 'package:garduationproject/ui/screen/auth/login/patient/patient_login.dar
 import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_doctor.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-patient/sign_up_patient.dart';
-import 'package:garduationproject/ui/screen/splash/splash.dart';
-import 'package:provider/provider.dart';
+import 'package:garduationproject/ui/screen/home/splash/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +22,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => GenderProvider(),
-      child: const GatoApp(),
-    ),
+    const GatoApp(),
   );
 }
 
@@ -47,7 +45,10 @@ class GatoApp extends StatelessWidget {
         SignUpDoctor.routeName: (_) => const SignUpDoctor(),
         ProfileDoctor.routeName: (_) => const ProfileDoctor(),
         ProfileParent.routeName: (_) => const ProfileParent(),
+        ChatPage.routeName: (_) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
+        AiChat.routeName: (_) => const AiChat(),
+        // ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
       },
     );
   }
