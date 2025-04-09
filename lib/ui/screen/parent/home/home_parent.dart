@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
+import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
+// ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
+import 'package:garduationproject/ui/util/app_assets.dart';
 
 class HomeParent extends StatefulWidget {
   static const String routeName = 'parentHome';
@@ -11,68 +16,37 @@ class HomeParent extends StatefulWidget {
 
 class _HomeParentState extends State<HomeParent> {
   bool isChildProgressSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarHomeParent(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 20,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue.shade200, Colors.purple.shade200],
           ),
-          Row(
-            children: [
-              SizedBox(width: MediaQuery.of(context).size.width * .04),
-              const Text(
-                'services',
-                style: TextStyle(
-                    fontFamily: 'inter',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700),
-              ),
-              SizedBox(width: MediaQuery.of(context).size.width * .55),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'View All',
-                  style: TextStyle(
-                      fontFamily: 'inter',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              buildServices(
-                text: 'Child Progress',
-                isSelected: isChildProgressSelected,
-                onTap: () {
-                  isChildProgressSelected = !isChildProgressSelected;
-                  setState(() {});
-                },
-              ),
-              buildServices(text: 'GATO Chat', onTap: () {}),
-              buildServices(text: 'Ask Doctor', onTap: () {}),
-            ],
-          ),
-          const SizedBox(
-            height: 22,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 18),
-            child: Text(
-              'Notfications',
-              style: TextStyle(
-                  fontFamily: 'inter',
-                  fontSize: 19,
-                  fontWeight: FontWeight.w700),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildAppBarHomeParent(),
+                const SizedBox(height: 20),
+                buildServicesRow(),
+                const SizedBox(height: 20),
+                buildNotifications(),
+                const SizedBox(height: 20),
+                buildRecentChats(),
+                const Spacer(),
+                buildBottomButtons(),
+              ],
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -81,85 +55,169 @@ class _HomeParentState extends State<HomeParent> {
     return AppBar(
       toolbarHeight: 80,
       title: const Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Good Morning !',
+            'Good Morning!',
             style: TextStyle(
-              fontSize: 35,
-              fontFamily: 'inter',
-              fontWeight: FontWeight.w700,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
-            height: 8,
-          ),
           Text(
-            'Alex wellson',
+            'Alex Willson',
             style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'inter',
-              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
       ),
-      actions: [
+      actions: const [
         Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: buildCircleAvatar(
-              borderRadius: BorderRadius.circular(35),
-              radius: 35,
-              elevation: 4),
-        )
+          padding: EdgeInsets.only(right: 20),
+          child: CircleAvatar(
+            radius: 30,
+            backgroundImage: AssetImage(AppAssets.girlMoji),
+          ),
+        ),
       ],
     );
   }
 
-  Widget buildServices({
-    required String text,
-    required void Function()? onTap,
-    bool? isSelected = false,
-  }) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+  Widget buildServicesRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        buildServiceButton('Child Progress',
+            isSelected: isChildProgressSelected, onTap: () {
+          // Navigator.pushNamed(context, ChildProgressScreen.routeName);
+        }),
+        buildServiceButton('GATO Chat', onTap: () {
+          Navigator.pushNamed(context, AiChat.routeName);
+        }),
+        buildServiceButton('Ask Doctor', onTap: () {
+          Navigator.pushNamed(context, ChatPage.routeName);
+        }),
+      ],
+    );
+  }
 
-    return InkWell(
+  Widget buildServiceButton(String text,
+      {required void Function() onTap, bool isSelected = false}) {
+    return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: height * 0.05,
-        width: width * 0.3,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
-          gradient: (text == 'Child Progress' && isSelected!)
-              ? const LinearGradient(
-                  colors: [
-                    Color(0xff87b5f0),
-                    Color(0xff87b5f0),
-                    // Color(0xff9dade4),
-                    Color(0xff9dabe4),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                )
-              : null,
-          color: (text == 'Child Progress' && isSelected!)
-              ? null
-              : const Color(0xffaac3e8),
+          color: isSelected ? Colors.blue : Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontFamily: 'inter',
-              fontWeight: FontWeight.w700,
-            ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildNotifications() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Notifications',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 10),
+        notificationCard('🎉 Congratulation',
+            'Your son has achieved high marks in mathematics.', 'View More'),
+        const SizedBox(height: 10),
+        notificationCard('⚠ Alert !!',
+            'Your child has changed his daily routine.', 'Connect'),
+      ],
+    );
+  }
+
+  Widget notificationCard(String title, String message, String buttonText) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            message,
+            style: const TextStyle(fontSize: 14, color: Colors.black87),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {},
+              child:
+                  Text(buttonText, style: const TextStyle(color: Colors.blue)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildRecentChats() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Recent Chats',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 10),
+        chatBubble('How are you? I’m here to check up on you.'),
+        const SizedBox(height: 10),
+        chatBubble('Any Questions? Ask GATO...'),
+      ],
+    );
+  }
+
+  Widget chatBubble(String text) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child:
+          Text(text, style: const TextStyle(fontSize: 16, color: Colors.black)),
+    );
+  }
+
+  Widget buildBottomButtons() {
+    return Column(
+      children: [
+        TextButton(
+          onPressed: () {},
+          child: const Text('View All', style: TextStyle(color: Colors.blue)),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          ),
+          child: const Text('New Chat', style: TextStyle(color: Colors.white)),
+        ),
+      ],
     );
   }
 }

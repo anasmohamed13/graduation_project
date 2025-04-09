@@ -6,7 +6,7 @@ import 'package:garduationproject/model/firebase/auth_service.dart';
 import 'package:garduationproject/model/firebase/firebase_service.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
 import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
-import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
+import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/dialog.dart';
 import 'package:garduationproject/ui/widget/text_form_field_sign.dart';
@@ -220,7 +220,7 @@ class _SignUpPageState extends State<SignUpPage> {
     if (widget.userType == 'Doctor') {
       Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
     } else if (widget.userType == 'Parent') {
-      Navigator.pushReplacementNamed(context, ProfileParent.routeName);
+      Navigator.pushReplacementNamed(context, HomeParent.routeName);
     }
   }
 
