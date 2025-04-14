@@ -259,14 +259,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void navigateToProfile() {
-    if (widget.user == 'Doctor') {
-      Navigator.pushReplacementNamed(context, ProfileDoctor.routeName,
-          arguments: {'isDoctor': true});
-    } else if (widget.user == 'parent') {
-      // Navigate to parent home
-      Navigator.pushReplacementNamed(context, HomeParent.routeName);
-    }
+  if (widget.user == 'Doctor') {
+    
+    Navigator.pushReplacementNamed(
+      context, 
+      ProfileDoctor.routeName,
+      arguments: {'isDoctor': true}
+    );
+  } else if (widget.user == 'parent') {
+    // Navigate to parent home
+    Navigator.pushReplacementNamed(context, HomeParent.routeName);
   }
+}
 
   Future<void> signIn() async {
     // to check validate aboute email or password before firebase auth--->(read this Gana)

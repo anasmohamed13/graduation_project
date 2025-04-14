@@ -27,4 +27,16 @@ abstract class AppAssets {
   static const String userEdit = 'assets/image/user_edit.png';
   static const String doctorChat = 'assets/image/doctorChat.png';
   static const String microphone = 'assets/image/Microphone.png';
+  static const String blueCalendarIcon = 'assets/image/blue_calendar_icon.svg';
+  static const String levelIcon = 'assets/image/level_icon.png';
+  static const String coinsIcon = 'assets/image/coins_icon.png';
+  static const String happyCat = 'assets/image/happycat.png';
+  static const String moreicon = 'assets/image/more_icon.png';
+  static const String kittytime = 'assets/image/kitty_time.png';
+  static const String bookmarker = 'assets/image/Book_marker.png';
+  static const String cutecat = 'assets/image/cute_cat.png';
+  static const String learncat = 'assets/image/learncat.png';
+  static const String drawingncat = 'assets/image/drawingcat.png';
+  static const String catreadingbook = 'assets/image/catreadingbook.png';
+  static const String catlaptop = 'assets/image/catlaptop.png';
 }
