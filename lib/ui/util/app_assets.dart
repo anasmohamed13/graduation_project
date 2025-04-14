@@ -35,4 +35,8 @@ abstract class AppAssets {
   static const String kittytime = 'assets/image/kitty_time.png';
   static const String bookmarker = 'assets/image/Book_marker.png';
   static const String cutecat = 'assets/image/cute_cat.png';
+  static const String learncat = 'assets/image/learncat.png';
+  static const String drawingncat = 'assets/image/drawingcat.png';
+  static const String catreadingbook = 'assets/image/catreadingbook.png';
+  static const String catlaptop = 'assets/image/catlaptop.png';
 }

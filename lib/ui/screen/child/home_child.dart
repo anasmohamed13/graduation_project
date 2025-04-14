@@ -37,12 +37,30 @@ class HomeChild extends StatelessWidget {
                       ),
                     ),
                   ),
-                  buildChallengeCard()
+                  buildChallengeCard(),
+                  titleActivity(),
+                  buildActivitySection(),
                 ],
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget titleActivity() {
+    return const Positioned(
+      bottom: 335,
+      left: 50,
+      child: Text(
+        'Activities Section',
+        style: TextStyle(
+          fontSize: 20,
+          fontFamily: 'inter',
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
       ),
     );
   }
@@ -247,6 +265,62 @@ class HomeChild extends StatelessWidget {
                   fontSize: 13, color: wordTextColor, fontFamily: 'inter'),
             ),
           ],
+        ),
+      ],
+    );
+  }
+
+  Positioned buildActivitySection() {
+    return Positioned(
+      bottom: 110,
+      left: 15,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildActivity(
+                  image: AppAssets.catreadingbook, text: 'Social Stories'),
+              const SizedBox(
+                width: 25,
+              ),
+              buildActivity(
+                  image: AppAssets.catlaptop, text: 'Traditional Stories'),
+              const SizedBox(
+                width: 25,
+              ),
+              buildActivity(
+                  image: AppAssets.drawingncat, text: 'Drawing Section'),
+            ],
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          Row(
+            children: [
+              buildActivity(image: AppAssets.learncat, text: 'Learn Time'),
+              const SizedBox(
+                width: 296,
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  buildActivity({required String image, required String text}) {
+    return Column(
+      children: [
+        Image.asset(image),
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 14,
+            fontFamily: 'inter',
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
       ],
     );
