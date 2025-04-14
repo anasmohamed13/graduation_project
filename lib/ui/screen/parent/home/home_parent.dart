@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
+import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 // ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
+import 'package:garduationproject/ui/util/app_assets.dart';
 
 class HomeParent extends StatefulWidget {
   static const String routeName = 'parentHome';
@@ -74,8 +78,7 @@ class _HomeParentState extends State<HomeParent> {
           padding: EdgeInsets.only(right: 20),
           child: CircleAvatar(
             radius: 30,
-            backgroundImage:
-                AssetImage('assets/avatar.png'), // Adjust image path
+            backgroundImage: AssetImage(AppAssets.girlMoji),
           ),
         ),
       ],
@@ -88,19 +91,21 @@ class _HomeParentState extends State<HomeParent> {
       children: [
         buildServiceButton('Child Progress',
             isSelected: isChildProgressSelected, onTap: () {
-          setState(() {
-            isChildProgressSelected = !isChildProgressSelected;
-          });
+          // Navigator.pushNamed(context, ChildProgressScreen.routeName);
         }),
-        buildServiceButton('GATO Chat', onTap: () {}),
-        buildServiceButton('Ask Doctor', onTap: () {}),
+        buildServiceButton('GATO Chat', onTap: () {
+          Navigator.pushNamed(context, AiChat.routeName);
+        }),
+        buildServiceButton('Ask Doctor', onTap: () {
+          Navigator.pushNamed(context, ChatPage.routeName);
+        }),
       ],
     );
   }
 
   Widget buildServiceButton(String text,
-      {required VoidCallback onTap, bool isSelected = false}) {
-    return InkWell(
+      {required void Function() onTap, bool isSelected = false}) {
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -130,7 +135,7 @@ class _HomeParentState extends State<HomeParent> {
         notificationCard('🎉 Congratulation',
             'Your son has achieved high marks in mathematics.', 'View More'),
         const SizedBox(height: 10),
-        notificationCard('⚠️ Alert !!',
+        notificationCard('⚠ Alert !!',
             'Your child has changed his daily routine.', 'Connect'),
       ],
     );
@@ -146,14 +151,16 @@ class _HomeParentState extends State<HomeParent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black)),
+          Text(
+            title,
+            style: const TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
           const SizedBox(height: 5),
-          Text(message,
-              style: const TextStyle(fontSize: 14, color: Colors.black87)),
+          Text(
+            message,
+            style: const TextStyle(fontSize: 14, color: Colors.black87),
+          ),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(

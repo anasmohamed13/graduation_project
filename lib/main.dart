@@ -5,7 +5,9 @@ import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
+// ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
+import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
@@ -33,7 +35,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Splash.routeName,
+      initialRoute: GatoTimer.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -48,6 +50,8 @@ class GatoApp extends StatelessWidget {
         ChatPage.routeName: (_) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
         AiChat.routeName: (_) => const AiChat(),
+        GatoTimer.routeName: (_) => const GatoTimer(),
+
         // ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
       },
     );

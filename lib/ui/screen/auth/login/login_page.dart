@@ -4,14 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_doctor.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
-import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
-import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/build_text_form_field_login.dart';
 import 'package:garduationproject/ui/util/dialog.dart';
-import 'package:garduationproject/ui/widget/choosing_login.dart';
 
 class LoginPage extends StatefulWidget {
   final String user;
@@ -240,8 +239,6 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                ChoosingLogin(),
-                const SizedBox(height: 20),
                 buildElevatedButton(
                   () {
                     signIn();
@@ -263,9 +260,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void navigateToProfile() {
     if (widget.user == 'Doctor') {
-      Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
+      Navigator.pushReplacementNamed(context, ProfileDoctor.routeName,
+          arguments: {'isDoctor': true});
     } else if (widget.user == 'parent') {
-      Navigator.pushReplacementNamed(context, ProfileParent.routeName);
+      // Navigate to parent home
+      Navigator.pushReplacementNamed(context, HomeParent.routeName);
     }
   }
 

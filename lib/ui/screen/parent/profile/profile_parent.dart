@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:garduationproject/model/services/firebase_service.dart';
+import 'package:garduationproject/model/firebase/firebase_service.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
+import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
@@ -17,6 +20,9 @@ class ProfileParent extends StatefulWidget {
 class _ProfileParentState extends State<ProfileParent> {
   final FirebaseService firebaseService = FirebaseService();
   UserModel? userData;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   @override
   void initState() {
@@ -26,9 +32,40 @@ class _ProfileParentState extends State<ProfileParent> {
 
   Future<void> fetchUserData() async {
     final data = await firebaseService.fetchUserData();
-    setState(() {
-      userData = data;
-    });
+    try {
+      if (mounted) {
+        setState(() {
+          userData = data;
+          nameController.text = userData?.fullName ?? '';
+          phoneController.text = userData?.phoneNumber ?? '';
+          emailController.text = userData?.email ?? '';
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching user data: \$e');
+    }
+  }
+//-------------- to Ganna its not complete and have a Bug---------------//
+  // Future<void> saveUserData() async {
+  //   try {
+  //     await firebaseService.updateUserField("fullName", nameController.text);
+  //     await firebaseService.updateUserField(
+  //         "phoneNumber", phoneController.text);
+  //     await firebaseService.updateUserField("email", emailController.text);
+
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Profile updated successfully!')),
+  //     );
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Failed to update profile: $e')),
+  //     );
+  //   }
+  // }
+
+  Future<void> signOut() async {
+    await firebaseService.signOut();
+    Navigator.of(context).pushReplacementNamed(HelloPage.routeName);
   }
 
   @override
@@ -55,8 +92,10 @@ class _ProfileParentState extends State<ProfileParent> {
               const SizedBox(
                 width: 24,
               ),
-              buildElevatedButton(() {}, 'Save', const Color(0xff8ebff6),
-                  height * 0.065, width * 0.4, 16, Colors.white),
+              buildElevatedButton(() {
+                signOut();
+              }, 'Save', const Color(0xff8ebff6), height * 0.065, width * 0.4,
+                  16, Colors.white),
             ],
           ),
           const SizedBox(
@@ -94,17 +133,17 @@ class _ProfileParentState extends State<ProfileParent> {
         const SizedBox(
           height: 12,
         ),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
+            Text(
               'Personal Inofrmation',
               style: TextStyle(
                   fontFamily: 'inter',
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
-            Container()
+            SizedBox(),
           ],
         ),
         const SizedBox(
@@ -113,14 +152,14 @@ class _ProfileParentState extends State<ProfileParent> {
         BuildTextFormFiled(
           prefixIcon: Image.asset(AppAssets.userEdit),
           fillColor: Colors.white,
-          hintText: userData?.fullName ?? 'Loading...',
+          hintText: "Full Name",
           text: "Full Name",
           vlaidatorErorr: null,
-          controller: null,
+          controller: nameController,
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(10),
-          height: MediaQuery.of(context).size.height * 0.060,
-          width: MediaQuery.of(context).size.width * 0.78,
+          height: height * 0.060,
+          width: width * 0.78,
           fontsize: 16,
           fontWeight: FontWeight.w600,
           blurRadius: 0,
@@ -132,10 +171,10 @@ class _ProfileParentState extends State<ProfileParent> {
         BuildTextFormFiled(
             prefixIcon: Image.asset(AppAssets.userEdit),
             fillColor: Colors.white,
-            hintText: userData?.email ?? 'Loading...',
+            hintText: "Email Address",
             text: "Email address",
             vlaidatorErorr: null,
-            controller: null,
+            controller: emailController,
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(10),
             height: MediaQuery.of(context).size.height * 0.060,
@@ -150,10 +189,10 @@ class _ProfileParentState extends State<ProfileParent> {
         BuildTextFormFiled(
             prefixIcon: Image.asset(AppAssets.userEdit),
             fillColor: Colors.white,
-            hintText: userData?.phoneNumber ?? 'Loading...',
+            hintText: "Phone Number",
             text: " phone number",
             vlaidatorErorr: null,
-            controller: null,
+            controller: phoneController,
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(10),
             height: MediaQuery.of(context).size.height * 0.060,
@@ -173,8 +212,10 @@ class _ProfileParentState extends State<ProfileParent> {
             const SizedBox(
               width: 24,
             ),
-            buildElevatedButton(() {}, 'Log Out', const Color(0xff8ebff6),
-                height * 0.065, width * 0.4, 16, Colors.white),
+            buildElevatedButton(() {
+              signOut();
+            }, 'Log Out', const Color(0xff8ebff6), height * 0.065, width * 0.4,
+                16, Colors.white),
           ],
         ),
       ],
