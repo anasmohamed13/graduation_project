@@ -52,8 +52,6 @@ class GatoApp extends StatelessWidget {
         HomeParent.routeName: (_) => const HomeParent(),
         AiChat.routeName: (_) => const AiChat(),
         GatoTimer.routeName: (_) => const GatoTimer(),
-
-        // ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
         HomeChild.routeName: (_) => const HomeChild(),
         // ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
       },
