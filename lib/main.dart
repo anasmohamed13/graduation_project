@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
-import 'package:garduationproject/ui/screen/child/home_child.dart';
-import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
+// ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
+import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
+import 'package:garduationproject/ui/screen/child/home_child.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
@@ -49,6 +51,7 @@ class GatoApp extends StatelessWidget {
         ChatPage.routeName: (_) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
         AiChat.routeName: (_) => const AiChat(),
+        GatoTimer.routeName: (_) => const GatoTimer(),
         HomeChild.routeName: (_) => const HomeChild(),
         // ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
       },

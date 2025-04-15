@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/model/firebase/auth_service.dart';
 import 'package:garduationproject/model/firebase/firebase_service.dart';
 import 'package:garduationproject/model/user_model/user_model.dart';
-import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/dialog.dart';
