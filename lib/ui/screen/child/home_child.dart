@@ -40,6 +40,7 @@ class HomeChild extends StatelessWidget {
                   buildChallengeCard(),
                   titleActivity(),
                   buildActivitySection(),
+                  buildNavBar(),
                 ],
               ),
             ],
@@ -323,6 +324,31 @@ class HomeChild extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Positioned buildNavBar() {
+    return Positioned(
+      bottom: 20,
+      right: 80,
+      left: 80,
+      child: Material(
+        elevation: 7,
+        borderRadius: BorderRadius.circular(40),
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              // IconButton(onPressed: (){}, icon: icon)
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
