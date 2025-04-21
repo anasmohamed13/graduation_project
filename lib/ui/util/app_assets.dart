@@ -39,4 +39,10 @@ abstract class AppAssets {
   static const String drawingncat = 'assets/image/drawingcat.png';
   static const String catreadingbook = 'assets/image/catreadingbook.png';
   static const String catlaptop = 'assets/image/catlaptop.png';
+  static const String gameCat = 'assets/image/game cat.png';
+  static const String mathCat = 'assets/image/math cat.png';
+  static const String scienceCat = 'assets/image/science cat.png';
+  static const String planetZone = 'assets/image/Planet zone.png';
+
+  static const String biologyZone = 'assets/image/Biology zone.png';
 }
