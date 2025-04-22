@@ -258,13 +258,13 @@ class RoundedCircularProgressIndicator extends StatelessWidget {
   final double terminalRadius;
 
   const RoundedCircularProgressIndicator({
-    Key? key,
+    super.key,
     required this.value,
     this.strokeWidth = 4.0,
     this.backgroundColor = Colors.grey,
     this.valueColor = Colors.blue,
     this.terminalRadius = 5.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

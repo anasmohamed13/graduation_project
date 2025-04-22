@@ -4,11 +4,15 @@ import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/child/home/home_child.dart';
+import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
+
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 // ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
-import 'package:garduationproject/ui/screen/child/home_child.dart';
+
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
@@ -36,7 +40,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeChild.routeName,
+      initialRoute: LearnPalent.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -53,7 +57,9 @@ class GatoApp extends StatelessWidget {
         AiChat.routeName: (_) => const AiChat(),
         GatoTimer.routeName: (_) => const GatoTimer(),
         HomeChild.routeName: (_) => const HomeChild(),
-        // ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
+        ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
+        LearnPalent.routeName: (_) => const LearnPalent(),
+        SciencePlanet.routeName: (_) => const SciencePlanet(),
       },
     );
   }

@@ -91,7 +91,7 @@ class _HomeParentState extends State<HomeParent> {
       children: [
         buildServiceButton('Child Progress',
             isSelected: isChildProgressSelected, onTap: () {
-          // Navigator.pushNamed(context, ChildProgressScreen.routeName);
+          Navigator.pushNamed(context, ChildProgressScreen.routeName);
         }),
         buildServiceButton('GATO Chat', onTap: () {
           Navigator.pushNamed(context, AiChat.routeName);

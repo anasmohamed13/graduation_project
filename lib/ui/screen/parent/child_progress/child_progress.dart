@@ -1,5 +1,5 @@
+import 'package:fl_chart_flutter/fl_chart_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
 class ChildProgressScreen extends StatelessWidget {
