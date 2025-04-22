@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_doctor.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
-import 'package:garduationproject/ui/screen/docotr/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';

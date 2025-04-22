@@ -270,7 +270,7 @@ class RoundedCircularProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       size: const Size.square(250),
-      painter: RoundedCircularProgressPainter(
+      painter: _RoundedCircularProgressPainter(
         value: value,
         strokeWidth: strokeWidth,
         backgroundColor: backgroundColor,
@@ -281,14 +281,14 @@ class RoundedCircularProgressIndicator extends StatelessWidget {
   }
 }
 
-class RoundedCircularProgressPainter extends CustomPainter {
+class _RoundedCircularProgressPainter extends CustomPainter {
   final double value;
   final double strokeWidth;
   final Color backgroundColor;
   final Color valueColor;
   final double terminalRadius;
 
-  RoundedCircularProgressPainter({
+  _RoundedCircularProgressPainter({
     required this.value,
     required this.strokeWidth,
     required this.backgroundColor,
