@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
-
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
-// ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
-
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
@@ -60,6 +58,7 @@ class GatoApp extends StatelessWidget {
         ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
         LearnPalent.routeName: (_) => const LearnPalent(),
         SciencePlanet.routeName: (_) => const SciencePlanet(),
+        PlanetZone.routeName: (_) => const PlanetZone(),
       },
     );
   }

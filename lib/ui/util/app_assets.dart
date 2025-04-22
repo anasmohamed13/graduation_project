@@ -43,6 +43,13 @@ abstract class AppAssets {
   static const String mathCat = 'assets/image/math cat.png';
   static const String scienceCat = 'assets/image/science cat.png';
   static const String planetZone = 'assets/image/Planet zone.png';
-
   static const String biologyZone = 'assets/image/Biology zone.png';
+  static const String earthPlanet = 'assets/image/Earth.png';
+  static const String jupiterPlanet = 'assets/image/Jupiter.png';
+  static const String marsPlanet = 'assets/image/Mars.png';
+  static const String mercuryPlanet = 'assets/image/Mercury.png';
+  static const String neptunePlanet = 'assets/image/Neptune.png';
+  static const String saturnPlanet = 'assets/image/Saturn.png';
+  static const String uranusPlanet = 'assets/image/Uranus.png';
+  static const String venusPlanet = 'assets/image/Venus.png';
 }
