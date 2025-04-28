@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_detail.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
@@ -38,7 +39,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: LearnPalent.routeName,
+      initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -59,6 +60,7 @@ class GatoApp extends StatelessWidget {
         LearnPalent.routeName: (_) => const LearnPalent(),
         SciencePlanet.routeName: (_) => const SciencePlanet(),
         PlanetZone.routeName: (_) => const PlanetZone(),
+        PlanetDetail.routeName: (_) => const PlanetDetail(),
       },
     );
   }

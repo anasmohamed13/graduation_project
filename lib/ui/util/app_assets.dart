@@ -52,4 +52,7 @@ abstract class AppAssets {
   static const String saturnPlanet = 'assets/image/Saturn.png';
   static const String uranusPlanet = 'assets/image/Uranus.png';
   static const String venusPlanet = 'assets/image/Venus.png';
+  static const String backgroundplanetdetail =
+      'assets/image/background_planet_detail.gif';
+  static const String backgroundplanet = 'assets/image/background_planet.jpg';
 }
