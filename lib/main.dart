@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/biology_intro.dart';
+import 'package:garduationproject/ui/screen/child/intro_biology.dart';
+import 'package:garduationproject/ui/screen/child/intro_child.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
+import 'package:garduationproject/ui/screen/home/splash/child_splash.dart';
 // ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
@@ -36,7 +40,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeChild.routeName,
+      initialRoute:  IntroBiology.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -53,7 +57,11 @@ class GatoApp extends StatelessWidget {
         AiChat.routeName: (_) => const AiChat(),
         GatoTimer.routeName: (_) => const GatoTimer(),
         HomeChild.routeName: (_) => const HomeChild(),
-        // ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
+        ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
+        ChildSplash.routeName: (_) => const ChildSplash(),
+        IntroChild.routeName: (_) => const IntroChild(),
+        IntroBiology.routeName: (_) => const IntroBiology(),
+        BiologyIntro.routeName: (_) => const BiologyIntro(),
       },
     );
   }

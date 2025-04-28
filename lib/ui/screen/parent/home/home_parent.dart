@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
-import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 // ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
