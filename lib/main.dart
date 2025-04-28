@@ -4,6 +4,7 @@ import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/child/biology_intro.dart';
+import 'package:garduationproject/ui/screen/child/body_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/intro_biology.dart';
 import 'package:garduationproject/ui/screen/child/intro_child.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
@@ -40,7 +41,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute:  IntroBiology.routeName,
+      initialRoute: BodySystemsScreen.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -62,6 +63,7 @@ class GatoApp extends StatelessWidget {
         IntroChild.routeName: (_) => const IntroChild(),
         IntroBiology.routeName: (_) => const IntroBiology(),
         BiologyIntro.routeName: (_) => const BiologyIntro(),
+        BodySystemsScreen.routeName: (_) => const BodySystemsScreen(),
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(const BiologyIntro());
 
@@ -16,8 +17,35 @@ class BiologyIntro extends StatelessWidget {
   }
 }
 
-class BiologyIntroScreen extends StatelessWidget {
+class BiologyIntroScreen extends StatefulWidget {
   const BiologyIntroScreen({super.key});
+
+  @override
+  State<BiologyIntroScreen> createState() => _BiologyIntroScreenState();
+}
+
+class _BiologyIntroScreenState extends State<BiologyIntroScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Lock to landscape mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    // Restore default (allow all orientations)
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +60,21 @@ class BiologyIntroScreen extends StatelessWidget {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row( // Use a Row instead of a Column
+            child: Row(
               children: [
-                const Expanded( 
+                const Expanded(
                   flex: 2,
                   child: Text(
-                      'our body that work all the time in\n'
-                  'order to feel alive and be healthy!\n'
-                  'Like the heart that works as a\n'
-                  'blood pump, the lungs that allow\n'
-                  'us to breathe, and the stomach\n'
-                  'that digests the food we eat.\n'
-                  'Are we ready to discover each\n'
-                  'organ and its benefits together?\n'
-                  'Let’s start the magical journey\n'
-                  'inside the human body!',
+                    'our body that work all the time in\n'
+                    'order to feel alive and be healthy!\n'
+                    'Like the heart that works as a\n'
+                    'blood pump, the lungs that allow\n'
+                    'us to breathe, and the stomach\n'
+                    'that digests the food we eat.\n'
+                    'Are we ready to discover each\n'
+                    'organ and its benefits together?\n'
+                    'Let’s start the magical journey\n'
+                    'inside the human body!',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 25,
@@ -55,13 +83,13 @@ class BiologyIntroScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20), 
-                 Expanded(
+                const SizedBox(width: 20),
+                Expanded(
                   flex: 1,
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: RotationTransition(
-                      turns: const AlwaysStoppedAnimation(0.75), 
+                      turns: const AlwaysStoppedAnimation(0.75),
                       child: Image.asset(
                         'assets/image/introbiology.png',
                         width: 300,

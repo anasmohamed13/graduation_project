@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/child/biology_intro.dart';
+import 'package:flutter/services.dart';
 
 class IntroBiology extends StatefulWidget {
   static const String routeName = '/intro-biology';
@@ -13,10 +14,19 @@ class IntroBiologyState extends State<IntroBiology> {
   @override
   void initState() {
     super.initState();
-    
+     SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
+
     Future.delayed(const Duration(seconds: 15), () {
-      
       if (mounted) {
+        
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const BiologyIntro()),
