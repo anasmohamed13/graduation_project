@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/biology_intro.dart';
+import 'package:garduationproject/ui/screen/child/body_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/intro_biology.dart';
+import 'package:garduationproject/ui/screen/child/intro_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_detail.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
@@ -10,6 +14,8 @@ import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
+import 'package:garduationproject/ui/screen/home/splash/child_splash.dart';
+// ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
@@ -39,7 +45,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Splash.routeName,
+      initialRoute: IntroBiology.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -61,6 +67,11 @@ class GatoApp extends StatelessWidget {
         SciencePlanet.routeName: (_) => const SciencePlanet(),
         PlanetZone.routeName: (_) => const PlanetZone(),
         PlanetDetail.routeName: (_) => const PlanetDetail(),
+        ChildSplash.routeName: (_) => const ChildSplash(),
+        IntroChild.routeName: (_) => const IntroChild(),
+        IntroBiology.routeName: (_) => const IntroBiology(),
+        BiologyIntro.routeName: (_) => const BiologyIntro(),
+        BodySystemsScreen.routeName: (_) => const BodySystemsScreen(),
       },
     );
   }
