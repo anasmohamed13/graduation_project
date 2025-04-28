@@ -1,8 +1,11 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:garduationproject/model/child_model/child_model.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
+import 'package:garduationproject/ui/util/dialog.dart';
 import 'package:garduationproject/ui/widget/build_text_form_filed.dart';
 
 class SignUpPatient extends StatefulWidget {
@@ -227,4 +230,35 @@ class _SignUpPatientState extends State<SignUpPatient> {
       ],
     );
   }
+
+  // Future<void> saveChildData() async {
+  //   if (formKey.currentState!.validate()) {
+  //     try {
+  //       ChildModel child = ChildModel(
+  //         firstName: firstNameController.text.trim(),
+  //         gender: selectedGender ?? '',
+  //         age: int.tryParse(ageController.text.trim()) ?? 0,
+  //         description: descriptionController.text.trim(),
+  //         id: '',
+  //         parentEmail: '',
+  //       );
+
+  //       await FirebaseFirestore.instance
+  //           .collection('Parent')
+  //           .doc(emailController.text.trim())
+  //           .collection('Children')
+  //           .add(child.toJson());
+
+  //       if (context.mounted) {
+  //         showMessage(context, body: 'Child saved successfully');
+  //       }
+
+  //       Navigator.pop(context);
+  //     } catch (e) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Error saving child: $e')),
+  //       );
+  //     }
+  //   }
+  // }
 }

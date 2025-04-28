@@ -15,7 +15,7 @@ class ChildModel {
     this.description,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'firstName': firstName,
@@ -26,7 +26,7 @@ class ChildModel {
     };
   }
 
-  factory ChildModel.fromMap(Map<String, dynamic> map) {
+  factory ChildModel.fromJson(Map<String, dynamic> map) {
     return ChildModel(
       id: map['id'] ?? '',
       firstName: map['firstName'] ?? '',
