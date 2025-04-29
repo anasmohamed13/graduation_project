@@ -7,7 +7,7 @@ class BodySystemsScreen extends StatefulWidget {
   const BodySystemsScreen({super.key});
 
   @override
-  State<BodySystemsScreen> createState() => _BodySystemsScreenState();
+  State<BodySystemScreen> createState() => _BodySystemScreenState();
 }
 
 class _BodySystemsScreenState extends State<BodySystemsScreen> {
