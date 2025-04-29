@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'circulatory_system_screen.dart';
 
-class BodySystemsScreen extends StatefulWidget {
+class BodySystemScreen extends StatefulWidget {
   static const String routeName = '/body-system-screen';
 
-  const BodySystemsScreen({super.key});
+  const BodySystemScreen({super.key});
 
   @override
   State<BodySystemScreen> createState() => _BodySystemScreenState();
 }
-
-class _BodySystemsScreenState extends State<BodySystemsScreen> {
+class _BodySystemScreenState extends State<BodySystemScreen> {
   @override
   void initState() {
     super.initState();
-    
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
@@ -23,28 +22,30 @@ class _BodySystemsScreenState extends State<BodySystemsScreen> {
 
   @override
   void dispose() {
-    
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, 
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildSystemButton("Circulatory", Colors.red),
+                  _buildSystemButton("Circulatory system", Colors.red, () {
+                    Navigator.pushNamed(
+                        context, CirculatorySystemScreen.routeName);
+                  }),
                   const SizedBox(height: 16),
                   _buildSystemButton("respiratory system", Colors.purple),
                   const SizedBox(height: 16),
@@ -52,19 +53,13 @@ class _BodySystemsScreenState extends State<BodySystemsScreen> {
                   const SizedBox(height: 16),
                   _buildSystemButton("Digestive system", Colors.lightBlue),
                   const SizedBox(height: 16),
-                  
-                  
                 ],
               ),
-
               const SizedBox(width: 16),
-
-              
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.0),
                       child: Text(
@@ -78,23 +73,20 @@ class _BodySystemsScreenState extends State<BodySystemsScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    
                     Expanded(
-                      child: Center(
-                         child: Transform.rotate(
-                          angle: -1.5708,
-                           child: SizedBox(
-                           width: 500, 
-                             height: 290,
-                        child: Image.asset(
-                          'assets/image/systems.png', 
-                          fit: BoxFit.contain,
+                        child: Center(
+                      child: Transform.rotate(
+                        angle: -1.5708,
+                        child: SizedBox(
+                          width: 500,
+                          height: 290,
+                          child: Image.asset(
+                            'assets/image/systems.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
-                    ),
-                    )
-                    )
+                    ))
                   ],
                 ),
               ),
@@ -105,11 +97,9 @@ class _BodySystemsScreenState extends State<BodySystemsScreen> {
     );
   }
 
-  Widget _buildSystemButton(String text, Color color) {
+  Widget _buildSystemButton(String text, Color color, [VoidCallback? onTap]) {
     return GestureDetector(
-      onTap: () {
-        
-      },
+      onTap: onTap,
       child: Container(
         width: 180,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
