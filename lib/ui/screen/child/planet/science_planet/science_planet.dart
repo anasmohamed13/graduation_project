@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/child/intro_biology.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
@@ -20,7 +21,9 @@ class SciencePlanet extends StatelessWidget {
               namePlanet: 'Planet Zone'),
           const SizedBox(height: 90),
           buildZone(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, IntroBiology.routeName);
+              },
               imagePath: AppAssets.biologyZone,
               namePlanet: 'Biology zone'),
         ],

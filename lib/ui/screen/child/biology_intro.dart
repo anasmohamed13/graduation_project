@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() => runApp(const BiologyIntro());
-
 class BiologyIntro extends StatelessWidget {
   static const String routeName = '/biology-intro';
   const BiologyIntro({super.key});
@@ -21,10 +19,10 @@ class BiologyIntroScreen extends StatefulWidget {
   const BiologyIntroScreen({super.key});
 
   @override
-  State<BiologyIntroScreen> createState() => _BiologyIntroScreenState();
+  State<BiologyIntroScreen> createState() => BiologyIntroScreenState();
 }
 
-class _BiologyIntroScreenState extends State<BiologyIntroScreen> {
+class BiologyIntroScreenState extends State<BiologyIntroScreen> {
   @override
   void initState() {
     super.initState();

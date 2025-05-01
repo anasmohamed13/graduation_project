@@ -55,4 +55,6 @@ abstract class AppAssets {
   static const String backgroundplanetdetail =
       'assets/image/background_planet_detail.gif';
   static const String backgroundplanet = 'assets/image/background_planet.jpg';
+  static const String backgroundlearnPlanet =
+      'assets/image/learn_planet_back.jpg';
 }
