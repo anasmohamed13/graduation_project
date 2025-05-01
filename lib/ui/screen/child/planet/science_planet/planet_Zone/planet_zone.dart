@@ -23,44 +23,53 @@ class _PlanetZoneState extends State<PlanetZone> {
     {
       "name": "Mercury",
       "image": AppAssets.mercuryPlanet,
-      "description": "Mercury is the closest planet to the Sun."
+      "description":
+          "Mercury is the smallest planet and closest to the Sun. It has no atmosphere to trap heat. Its surface is rocky and full of craters. Daytime temperatures are extremely high. Nights are freezing cold."
     },
     {
       "name": "Venus",
       "image": AppAssets.venusPlanet,
-      "description": "Venus is the hottest planet in our solar system."
+      "description":
+          "Venus is covered by thick clouds of sulfuric acid. It's the hottest planet due to its greenhouse effect. The surface has mountains and volcanoes. A day lasts longer than a year. Winds blow at hurricane speeds."
     },
     {
       "name": "Earth",
       "image": AppAssets.earthPlanet,
-      "description": "Earth is the only planet known to support life."
+      "description":
+          "Earth is the only known planet with life. It has water, oxygen, and a magnetic field. Continents float on tectonic plates. Weather supports diverse ecosystems. The Moon stabilizes Earth’s rotation."
     },
     {
       "name": "Mars",
       "image": AppAssets.marsPlanet,
-      "description": "Mars is known as the Red Planet."
+      "description":
+          "Mars is known as the Red Planet. Its surface is dusty and rocky. It has the tallest volcano, Olympus Mons. There are signs of ancient water. Temperatures are very cold year-round."
     },
     {
       "name": "Jupiter",
       "image": AppAssets.jupiterPlanet,
-      "description": "Jupiter is the largest planet in our solar system."
+      "description":
+          "Jupiter is the largest planet in our system. It's a gas giant with no solid surface. Its Great Red Spot is a giant storm. Jupiter has over 90 moons. Strong magnetic fields surround the planet."
     },
     {
       "name": "Saturn",
       "image": AppAssets.saturnPlanet,
-      "description": "Saturn is famous for its beautiful rings."
+      "description":
+          "Saturn is famous for its stunning rings. It's mostly made of hydrogen and helium. The rings are made of ice and rock. It has dozens of moons. Titan, its moon, has a thick atmosphere."
     },
     {
       "name": "Uranus",
       "image": AppAssets.uranusPlanet,
-      "description": "Uranus rotates on its side!"
+      "description":
+          "Uranus spins on its side, unlike other planets. It's an icy giant with faint rings. The atmosphere contains methane. Temperatures are extremely low. Its bluish color comes from methane gas."
     },
     {
       "name": "Neptune",
       "image": AppAssets.neptunePlanet,
-      "description": "Neptune has supersonic strong winds."
+      "description":
+          "Neptune is the farthest known planet. It has strong storms and fast winds. Its deep blue color is due to methane. It's an ice giant with a rocky core. Triton is its largest moon."
     },
   ];
+
   void navigateToPlanetDetail(Map<String, String> planet) {
     Navigator.pushNamed(
       context,
