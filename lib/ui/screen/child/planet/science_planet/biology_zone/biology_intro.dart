@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'body_system_screen.dart';
 
 class BiologyIntro extends StatelessWidget {
-  static const String routeName = '/biology-intro';
+  static const String routeName = '/biology-intro-screen';
   const BiologyIntro({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'biology intro',
-      debugShowCheckedModeBanner: false,
-      home: BiologyIntroScreen(),
-    );
+    return const BiologyIntroScreen();
   }
 }
 
@@ -26,16 +23,22 @@ class BiologyIntroScreenState extends State<BiologyIntroScreen> {
   @override
   void initState() {
     super.initState();
-    // Lock to landscape mode
+
+    // Landscape orientation
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
+
+    // After the frame is built, navigate to the BodySystemsScreen
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushNamed(context, BodySystemScreen.routeName);
+    });
   }
 
   @override
   void dispose() {
-    // Restore default (allow all orientations)
+    // Reset orientation when disposing
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -63,7 +66,7 @@ class BiologyIntroScreenState extends State<BiologyIntroScreen> {
                 const Expanded(
                   flex: 2,
                   child: Text(
-                    'our body that work all the time in\n'
+                    'our body that works all the time in\n'
                     'order to feel alive and be healthy!\n'
                     'Like the heart that works as a\n'
                     'blood pump, the lungs that allow\n'

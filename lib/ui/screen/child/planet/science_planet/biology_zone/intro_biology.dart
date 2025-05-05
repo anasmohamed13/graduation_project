@@ -28,7 +28,7 @@ class IntroBiologyState extends State<IntroBiology> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const BiologyIntro()),
+          MaterialPageRoute(builder: (context) => const BiologyIntroScreen()),
         );
       }
     });

@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/biology_intro.dart';
+import 'package:garduationproject/ui/screen/child/body_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/circulatory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/digestive_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/intro_biology.dart';
+import 'package:garduationproject/ui/screen/child/intro_child.dart';
+import 'package:garduationproject/ui/screen/child/nervous_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/respiratory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories.dart/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/biology_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/body_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology.dart';
@@ -75,6 +84,15 @@ class GatoApp extends StatelessWidget {
         BiologyIntro.routeName: (_) => const BiologyIntro(),
         BodySystemsScreen.routeName: (_) => const BodySystemsScreen(),
         TraditionalStoriesPage.routeName: (_) => const TraditionalStoriesPage(),
+        TraditionalStoriesIntro.routeName: (_) =>
+            const TraditionalStoriesIntro(),
+        BodySystemScreen.routeName: (_) => const BodySystemScreen(),
+        CirculatorySystemScreen.routeName: (_) =>
+            const CirculatorySystemScreen(),
+        RespiratorySystemScreen.routeName: (_) =>
+            const RespiratorySystemScreen(),
+        NervousSystemScreen.routeName: (_) => const NervousSystemScreen(),
+        DigestiveSystemScreen.routeName: (_) => const DigestiveSystemScreen(),
         TraditionalStoriesIntro.routeName: (_) =>
             const TraditionalStoriesIntro(),
       },
