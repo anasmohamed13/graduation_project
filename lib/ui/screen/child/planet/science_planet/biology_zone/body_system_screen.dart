@@ -4,6 +4,7 @@ import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/digestive_system/digestive_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/nervous_system/nervous_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/respiratory_system/respiratory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
 
 class BodySystemScreen extends StatefulWidget {
   static const String routeName = '/body-system-screen';
@@ -35,74 +36,82 @@ class BodySystemScreenState extends State<BodySystemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buildSystemButton("Circulatory system", Colors.red, () {
-                    Navigator.pushNamed(
-                        context, CirculatorySystemScreen.routeName);
-                  }),
-                  const SizedBox(height: 16),
-                  buildSystemButton("respiratory system", Colors.purple, () {
-                    Navigator.pushNamed(
-                        context, RespiratorySystemScreen.routeName);
-                  }),
-                  const SizedBox(height: 16),
-                  buildSystemButton("Nervous system", Colors.orange, () {
-                    Navigator.pushNamed(context, NervousSystemScreen.routeName);
-                  }),
-                  const SizedBox(height: 16),
-                  buildSystemButton("Digestive system", Colors.lightBlue, () {
-                    Navigator.pushNamed(
-                        context, DigestiveSystemScreen.routeName);
-                  }),
-                  const SizedBox(height: 16),
-                ],
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacementNamed(context,
+            SciencePlanet.routeName); // change '/home' to your target route
+        return false; // prevent the default pop behavior
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Text(
-                        "Now my friends, we will begin the journey of exploration inside our wonderful body! Our body has many systems, just like a football team, each system has an important role for us to be healthy and live a happy life.",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Expanded(
-                        child: Center(
-                      child: Transform.rotate(
-                        angle: -1.5708,
-                        child: SizedBox(
-                          width: 500,
-                          height: 290,
-                          child: Image.asset(
-                            'assets/image/systems.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ))
+                    buildSystemButton("Circulatory system", Colors.red, () {
+                      Navigator.pushNamed(
+                          context, CirculatorySystemScreen.routeName);
+                    }),
+                    const SizedBox(height: 16),
+                    buildSystemButton("respiratory system", Colors.purple, () {
+                      Navigator.pushNamed(
+                          context, RespiratorySystemScreen.routeName);
+                    }),
+                    const SizedBox(height: 16),
+                    buildSystemButton("Nervous system", Colors.orange, () {
+                      Navigator.pushNamed(
+                          context, NervousSystemScreen.routeName);
+                    }),
+                    const SizedBox(height: 16),
+                    buildSystemButton("Digestive system", Colors.lightBlue, () {
+                      Navigator.pushNamed(
+                          context, DigestiveSystemScreen.routeName);
+                    }),
+                    const SizedBox(height: 16),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text(
+                          "Now my friends, we will begin the journey of exploration inside our wonderful body! Our body has many systems, just like a football team, each system has an important role for us to be healthy and live a happy life.",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Expanded(
+                          child: Center(
+                        child: Transform.rotate(
+                          angle: -1.5708,
+                          child: SizedBox(
+                            width: 500,
+                            height: 290,
+                            child: Image.asset(
+                              'assets/image/systems.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ))
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
