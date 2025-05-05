@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:garduationproject/ui/screen/child/digestive_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/nervous_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/respiratory_system_screen.dart';
 import 'circulatory_system_screen.dart';
 
 class BodySystemScreen extends StatefulWidget {
@@ -8,9 +11,10 @@ class BodySystemScreen extends StatefulWidget {
   const BodySystemScreen({super.key});
 
   @override
-  State<BodySystemScreen> createState() => _BodySystemScreenState();
+  State<BodySystemScreen> createState() => BodySystemScreenState();
 }
-class _BodySystemScreenState extends State<BodySystemScreen> {
+
+class BodySystemScreenState extends State<BodySystemScreen> {
   @override
   void initState() {
     super.initState();
@@ -47,11 +51,19 @@ class _BodySystemScreenState extends State<BodySystemScreen> {
                         context, CirculatorySystemScreen.routeName);
                   }),
                   const SizedBox(height: 16),
-                  _buildSystemButton("respiratory system", Colors.purple),
+                  _buildSystemButton("respiratory system", Colors.purple, () {
+                    Navigator.pushNamed(
+                        context, RespiratorySystemScreen.routeName);
+                  }),
                   const SizedBox(height: 16),
-                  _buildSystemButton("Musculoskeletal system", Colors.orange),
+                  _buildSystemButton("Nervous system", Colors.orange, () {
+                    Navigator.pushNamed(context, NervousSystemScreen.routeName);
+                  }),
                   const SizedBox(height: 16),
-                  _buildSystemButton("Digestive system", Colors.lightBlue),
+                  _buildSystemButton("Digestive system", Colors.lightBlue, () {
+                    Navigator.pushNamed(
+                        context, DigestiveSystemScreen.routeName);
+                  }),
                   const SizedBox(height: 16),
                 ],
               ),

@@ -6,8 +6,12 @@ import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/child/biology_intro.dart';
 import 'package:garduationproject/ui/screen/child/body_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/circulatory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/digestive_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/intro_biology.dart';
 import 'package:garduationproject/ui/screen/child/intro_child.dart';
+import 'package:garduationproject/ui/screen/child/nervous_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/respiratory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories.dart/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 import 'package:garduationproject/ui/screen/home/splash/child_splash.dart';
@@ -42,7 +46,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: IntroBiology.routeName,
+      initialRoute:  BodySystemScreen.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -66,7 +70,10 @@ class GatoApp extends StatelessWidget {
         BiologyIntro.routeName: (_) => const BiologyIntro(),
         BodySystemScreen.routeName: (_) => const BodySystemScreen(),
         CirculatorySystemScreen.routeName: (_) =>const CirculatorySystemScreen(),
-            
+       RespiratorySystemScreen.routeName: (_) =>const RespiratorySystemScreen(), 
+       NervousSystemScreen.routeName: (_) =>const NervousSystemScreen(),   
+       DigestiveSystemScreen.routeName: (_) =>const DigestiveSystemScreen(),  
+       TraditionalStoriesIntro.routeName:(_) =>const TraditionalStoriesIntro(), 
       },
     );
   }
