@@ -36,11 +36,13 @@ class BodySystemScreenState extends State<BodySystemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushReplacementNamed(context,
-            SciencePlanet.routeName); // change '/home' to your target route
-        return false; // prevent the default pop behavior
+    return PopScope(
+      canPop: false, // prevent default back behavior
+      onPopInvoked: (didPop) {
+        if (!didPop) {
+          Navigator.pushReplacementNamed(context,
+              SciencePlanet.routeName); // replace with your target screen
+        }
       },
       child: Scaffold(
         backgroundColor: Colors.white,
