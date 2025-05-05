@@ -1,51 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/biology_intro.dart';
 import 'package:flutter/services.dart';
-import 'body_system_screen.dart';
 
-class BiologyIntro extends StatelessWidget {
-  static const String routeName = '/biology-intro-screen';
-  const BiologyIntro({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const BiologyIntroScreen();
-  }
-}
-
-class BiologyIntroScreen extends StatefulWidget {
-  const BiologyIntroScreen({super.key});
+class IntroBiology extends StatefulWidget {
+  static const String routeName = '/intro-biology';
+  const IntroBiology({super.key});
 
   @override
-  State<BiologyIntroScreen> createState() => BiologyIntroScreenState();
+  IntroBiologyState createState() => IntroBiologyState();
 }
 
-class BiologyIntroScreenState extends State<BiologyIntroScreen> {
+class IntroBiologyState extends State<IntroBiology> {
   @override
   void initState() {
     super.initState();
-
-    // Landscape orientation
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
 
-    // After the frame is built, navigate to the BodySystemsScreen
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushNamed(context, BodySystemScreen.routeName);
+    Future.delayed(const Duration(seconds: 15), () {
+      if (mounted) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const BiologyIntroScreen()),
+        );
+      }
     });
-  }
-
-  @override
-  void dispose() {
-    // Reset orientation when disposing
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-    super.dispose();
   }
 
   @override
@@ -66,16 +52,14 @@ class BiologyIntroScreenState extends State<BiologyIntroScreen> {
                 const Expanded(
                   flex: 2,
                   child: Text(
-                    'our body that works all the time in\n'
-                    'order to feel alive and be healthy!\n'
-                    'Like the heart that works as a\n'
-                    'blood pump, the lungs that allow\n'
-                    'us to breathe, and the stomach\n'
-                    'that digests the food we eat.\n'
-                    'Are we ready to discover each\n'
-                    'organ and its benefits together?\n'
-                    'Let’s start the magical journey\n'
-                    'inside the human body!',
+                    'Hello my friends!\n'
+                    'Do you know that our body is\n'
+                    'like a big team in which each\n'
+                    'one has his own job? Not\n'
+                    'only do we have senses like\n'
+                    'the eyes and nose that we\n'
+                    'see and smell, but we also\n'
+                    'have organs inside',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 25,
@@ -86,7 +70,7 @@ class BiologyIntroScreenState extends State<BiologyIntroScreen> {
                 ),
                 const SizedBox(width: 20),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: RotationTransition(

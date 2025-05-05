@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
-class HomeChild extends StatelessWidget {
+class HomeChild extends StatefulWidget {
   const HomeChild({super.key});
   static const String routeName = 'home_child';
 
+  @override
+  State<HomeChild> createState() => _HomeChildState();
+}
+
+class _HomeChildState extends State<HomeChild> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -273,7 +280,7 @@ class HomeChild extends StatelessWidget {
 
   Positioned buildActivitySection() {
     return Positioned(
-      bottom: 110,
+      bottom: 175,
       left: 15,
       child: Column(
         children: [
@@ -281,39 +288,45 @@ class HomeChild extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               buildActivity(
-                  image: AppAssets.catreadingbook, text: 'Social Stories'),
+                  image: AppAssets.catreadingbook,
+                  text: 'Social Stories',
+                  onTap: () {}),
               const SizedBox(
                 width: 25,
               ),
               buildActivity(
-                  image: AppAssets.catlaptop, text: 'Traditional Stories'),
+                  image: AppAssets.catlaptop,
+                  text: 'Traditional Stories',
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context, TraditionalStoriesIntro.routeName);
+                  }),
               const SizedBox(
                 width: 25,
               ),
               buildActivity(
-                  image: AppAssets.drawingncat, text: 'Drawing Section'),
+                  image: AppAssets.learncat,
+                  text: 'Learn Time',
+                  onTap: () {
+                    Navigator.pushNamed(context, LearnPlanet.routeName);
+                  }),
             ],
           ),
           const SizedBox(
             height: 25,
           ),
-          Row(
-            children: [
-              buildActivity(image: AppAssets.learncat, text: 'Learn Time'),
-              const SizedBox(
-                width: 296,
-              )
-            ],
-          )
         ],
       ),
     );
   }
 
-  buildActivity({required String image, required String text}) {
+  buildActivity(
+      {required String image,
+      required String text,
+      required void Function()? onTap}) {
     return Column(
       children: [
-        Image.asset(image),
+        InkWell(onTap: onTap, child: Image.asset(image)),
         Text(
           text,
           style: const TextStyle(

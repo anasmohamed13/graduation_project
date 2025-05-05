@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
-class LearnPalent extends StatelessWidget {
-  const LearnPalent({super.key});
+class LearnPlanet extends StatelessWidget {
+  const LearnPlanet({super.key});
   static const String routeName = 'learn_palent';
 
   @override

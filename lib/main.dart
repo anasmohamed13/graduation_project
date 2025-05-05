@@ -3,19 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
-import 'package:garduationproject/ui/screen/child/biology_intro.dart';
-import 'package:garduationproject/ui/screen/child/body_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/circulatory_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/digestive_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/intro_biology.dart';
-import 'package:garduationproject/ui/screen/child/intro_child.dart';
-import 'package:garduationproject/ui/screen/child/nervous_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/respiratory_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/traditional_stories.dart/traditional_stories_intro.dart';
-import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/biology_intro.dart';
+
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/cirulatory_system/circulatory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/digestive_system/digestive_system_screen.dart';
+
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/nervous_system/nervous_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/respiratory_system/respiratory_system_screen.dart';
+
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/biology_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/body_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology.dart';
-import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_child.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/intro_biology.dart';
+import 'package:garduationproject/ui/screen/child/hello/intro_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_detail.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
@@ -56,7 +54,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: TraditionalStoriesIntro.routeName,
+      initialRoute: HomeChild.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -74,7 +72,7 @@ class GatoApp extends StatelessWidget {
         GatoTimer.routeName: (_) => const GatoTimer(),
         HomeChild.routeName: (_) => const HomeChild(),
         ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
-        LearnPalent.routeName: (_) => const LearnPalent(),
+        LearnPlanet.routeName: (_) => const LearnPlanet(),
         SciencePlanet.routeName: (_) => const SciencePlanet(),
         PlanetZone.routeName: (_) => const PlanetZone(),
         PlanetDetail.routeName: (_) => const PlanetDetail(),
@@ -82,7 +80,6 @@ class GatoApp extends StatelessWidget {
         IntroChild.routeName: (_) => const IntroChild(),
         IntroBiology.routeName: (_) => const IntroBiology(),
         BiologyIntro.routeName: (_) => const BiologyIntro(),
-        BodySystemsScreen.routeName: (_) => const BodySystemsScreen(),
         TraditionalStoriesPage.routeName: (_) => const TraditionalStoriesPage(),
         TraditionalStoriesIntro.routeName: (_) =>
             const TraditionalStoriesIntro(),
@@ -93,8 +90,6 @@ class GatoApp extends StatelessWidget {
             const RespiratorySystemScreen(),
         NervousSystemScreen.routeName: (_) => const NervousSystemScreen(),
         DigestiveSystemScreen.routeName: (_) => const DigestiveSystemScreen(),
-        TraditionalStoriesIntro.routeName: (_) =>
-            const TraditionalStoriesIntro(),
       },
     );
   }
