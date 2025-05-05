@@ -35,7 +35,6 @@ class PlanetDetail extends StatelessWidget {
                   height: 200,
                   child: Image.asset(
                     image,
-                    scale: 4,
                   ),
                 ),
               ),
@@ -55,7 +54,7 @@ class PlanetDetail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: RotatedBox(
-                      quarterTurns: 1, // Rotates 90 degrees clockwise
+                      quarterTurns: 1,
                       child: Text(
                         softWrap: true,
                         maxLines: 4,
@@ -63,7 +62,7 @@ class PlanetDetail extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.black,
                           fontFamily: 'inter',
-                          fontSize: 16,
+                          fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

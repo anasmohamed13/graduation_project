@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/child/intro_biology.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 

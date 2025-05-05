@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/child/biology_intro.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/biology_intro.dart';
 import 'package:flutter/services.dart';
 
 class IntroBiology extends StatefulWidget {

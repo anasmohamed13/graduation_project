@@ -57,4 +57,8 @@ abstract class AppAssets {
   static const String backgroundplanet = 'assets/image/background_planet.jpg';
   static const String backgroundlearnPlanet =
       'assets/image/learn_planet_back.jpg';
+  static const String moutain = 'assets/image/mountain.png';
+
+  static const String readCatOnMountain =
+      'assets/image/read_caat_on_mountain.png';
 }
