@@ -61,4 +61,16 @@ abstract class AppAssets {
 
   static const String readCatOnMountain =
       'assets/image/read_caat_on_mountain.png';
+  static const String backgroundTraditional =
+      'assets/image/bacgroundt_traditional.jpg';
+  static const String tradCat = 'assets/image/tradcat.png';
+  static const String cricket = 'assets/image/cricketCover.jpg';
+  static const String doHipposPlay = 'assets/image/do_hippos_play.jpg';
+  static const String jerryBox = 'assets/image/jerrys Box.jpg';
+  static const String nobleGnarble = 'assets/image/noble gnarble.jpg';
+  static const String quokka = 'assets/image/quokka.png';
+  static const String storyOfYesOrNO = 'assets/image/story_of_yes_or_no.jpg';
+  static const String solarSnooks = 'assets/image/solarSnooks.jpg';
+  static const String guardianOfLore = 'assets/image/GuardianOfLore.jpg';
+  static const String gemma = 'assets/image/gemma.jpg';
 }

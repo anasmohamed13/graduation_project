@@ -9,7 +9,8 @@ import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_detail.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
-import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
@@ -46,7 +47,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: TraditionalStoriesPage.routeName,
+      initialRoute: TraditionalStoriesIntro.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -74,6 +75,8 @@ class GatoApp extends StatelessWidget {
         BiologyIntro.routeName: (_) => const BiologyIntro(),
         BodySystemsScreen.routeName: (_) => const BodySystemsScreen(),
         TraditionalStoriesPage.routeName: (_) => const TraditionalStoriesPage(),
+        TraditionalStoriesIntro.routeName: (_) =>
+            const TraditionalStoriesIntro(),
       },
     );
   }
