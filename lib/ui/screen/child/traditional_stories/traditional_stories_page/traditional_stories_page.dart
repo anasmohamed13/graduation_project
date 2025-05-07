@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/video/youtube_video_player_screen.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
-import 'package:url_launcher/url_launcher.dart';
+// تأكد من استيراد الصفحة الجديدة
 
 class TraditionalStoriesPage extends StatelessWidget {
   static const String routeName = 'traditional_stories_page';
 
-  const TraditionalStoriesPage({
-    super.key,
-  });
+  const TraditionalStoriesPage({super.key});
+
+  void selectStory(BuildContext context, String url) {
+    final videoId = Uri.tryParse(url)?.host.contains("youtube") == true;
+    if (videoId) {
+      Navigator.pushNamed(
+        context,
+        YoutubeVideoPlayerScreen.routeName,
+        arguments: url,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Only YouTube videos are supported in this version.'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +35,12 @@ class TraditionalStoriesPage extends StatelessWidget {
         : category == '8-10'
             ? 'Stories for Kids Ages 8-10'
             : 'Stories for Kids Ages 10+';
+
     final List<StoryData> stories = category == '5-8'
         ? [
             StoryData(
               imagePath: AppAssets.storyOfYesOrNO,
-              storyUrl: 'https://youtu.be/FtPhTkvpLyI',
+              storyUrl: 'https://www.youtube.com/watch?v=FtPhTkvpLyI',
             ),
             StoryData(
               imagePath: AppAssets.jerryBox,
@@ -105,7 +122,9 @@ class TraditionalStoriesPage extends StatelessWidget {
                     child: Center(
                       child: IconButton(
                         icon: const Icon(Icons.arrow_back, color: Colors.black),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
                     ),
                   ),
@@ -142,7 +161,12 @@ class TraditionalStoriesPage extends StatelessWidget {
                         childAspectRatio: 0.75,
                       ),
                       itemBuilder: (context, index) {
-                        return BookCoverWidget(storyData: stories[index]);
+                        return BookCoverWidget(
+                          storyData: stories[index],
+                          onTap: () {
+                            selectStory(context, stories[index].storyUrl);
+                          },
+                        );
                       },
                     ),
                   ),
@@ -158,28 +182,18 @@ class TraditionalStoriesPage extends StatelessWidget {
 
 class BookCoverWidget extends StatelessWidget {
   final StoryData storyData;
-
-  Future<void> launchStoryUrl() async {
-    try {
-      final Uri url = Uri.parse(storyData.storyUrl);
-      if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
-        throw 'Could not launch ${storyData.storyUrl}';
-      }
-    } catch (e) {
-      debugPrint('Error launching URL: $e');
-      // You could show a snackbar or dialog here to inform the user
-    }
-  }
+  final VoidCallback onTap;
 
   const BookCoverWidget({
     super.key,
     required this.storyData,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: launchStoryUrl,
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -207,11 +221,9 @@ class BookCoverWidget extends StatelessWidget {
 class StoryData {
   final String imagePath;
   final String storyUrl;
-  //final String title;
 
   StoryData({
     required this.imagePath,
     required this.storyUrl,
-    // required this.title,
   });
 }

@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
-
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/cirulatory_system/circulatory_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/digestive_system/digestive_system_screen.dart';
-
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/nervous_system/nervous_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/respiratory_system/respiratory_system_screen.dart';
-
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/biology_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/body_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/intro_biology.dart';
@@ -18,13 +15,13 @@ import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Z
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/video/youtube_video_player_screen.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 import 'package:garduationproject/ui/screen/home/splash/child_splash.dart';
-// ignore: unused_import
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
@@ -90,6 +87,8 @@ class GatoApp extends StatelessWidget {
             const RespiratorySystemScreen(),
         NervousSystemScreen.routeName: (_) => const NervousSystemScreen(),
         DigestiveSystemScreen.routeName: (_) => const DigestiveSystemScreen(),
+        YoutubeVideoPlayerScreen.routeName: (_) =>
+            const YoutubeVideoPlayerScreen(),
       },
     );
   }

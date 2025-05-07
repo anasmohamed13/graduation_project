@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/cirulatory_system/circulatory_system_screen.dart';
@@ -37,11 +39,10 @@ class BodySystemScreenState extends State<BodySystemScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // prevent default back behavior
+      canPop: false,
       onPopInvoked: (didPop) {
         if (!didPop) {
-          Navigator.pushReplacementNamed(context,
-              SciencePlanet.routeName); // replace with your target screen
+          Navigator.pushReplacementNamed(context, SciencePlanet.routeName);
         }
       },
       child: Scaffold(
@@ -131,7 +132,6 @@ class BodySystemScreenState extends State<BodySystemScreen> {
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              // ignore: deprecated_member_use
               color: color.withOpacity(0.4),
               blurRadius: 8,
               offset: const Offset(0, 4),
