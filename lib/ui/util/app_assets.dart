@@ -73,4 +73,10 @@ abstract class AppAssets {
   static const String solarSnooks = 'assets/image/solarSnooks.jpg';
   static const String guardianOfLore = 'assets/image/GuardianOfLore.jpg';
   static const String gemma = 'assets/image/gemma.jpg';
+  static const String alienMathMission = 'assets/image/Alien Math Mission.png';
+  static const String cosmicCompare = 'assets/image/Cosmic_Compare.png';
+  static const String countWithAliens = 'assets/image/Count with Aliens.png';
+  static const String shapPlanet = 'assets/image/shape_planet_rescue.png';
+  static const String whiteKittenCat = 'assets/image/white_kitten_cat.png';
+  static const String number123 = 'assets/image/numbers.png';
 }

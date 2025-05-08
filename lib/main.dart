@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/math_planet.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/cirulatory_system/circulatory_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/digestive_system/digestive_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/nervous_system/nervous_system_screen.dart';
@@ -89,6 +90,7 @@ class GatoApp extends StatelessWidget {
         DigestiveSystemScreen.routeName: (_) => const DigestiveSystemScreen(),
         YoutubeVideoPlayerScreen.routeName: (_) =>
             const YoutubeVideoPlayerScreen(),
+        MathPlanet.routeName: (_) => const MathPlanet(),
       },
     );
   }

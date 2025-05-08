@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/math_planet.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
@@ -20,7 +21,9 @@ class LearnPlanet extends StatelessWidget {
               namePlanet: 'Science Planet'),
           const SizedBox(height: 90),
           buildPlanet(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, MathPlanet.routeName);
+              },
               imagePath: AppAssets.mathCat,
               namePlanet: 'Math Planet'),
           const SizedBox(height: 90),
