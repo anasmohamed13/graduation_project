@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_intro.dart';
 
 class MathPlanet extends StatelessWidget {
   static const String routeName = 'math_planet';
@@ -11,13 +12,12 @@ class MathPlanet extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // Background image
-            // Positioned.fill(
-            //   child: Image.asset(
-            //     'assets/images/galaxy_bg.jpg', // Replace with your image path
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
+            Positioned.fill(
+              child: Image.asset(
+                AppAssets.mathBackground,
+                fit: BoxFit.cover,
+              ),
+            ),
 
             Positioned(
               left: 25,
@@ -37,8 +37,8 @@ class MathPlanet extends StatelessWidget {
               right: 0,
               child: Center(
                 child: Image.asset(
-                  AppAssets.number123, // Replace with your actual image path
-                  height: 150, // Adjust as needed
+                  AppAssets.number123,
+                  height: 150,
                 ),
               ),
             ),
@@ -52,13 +52,13 @@ class MathPlanet extends StatelessWidget {
                   "Welcome to the Math Galaxy\nwhere numbers shine, planets count, and every problem is an adventure!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w500),
                 ),
               ),
             ),
-            // Games grid
+
             Positioned(
               top: 225,
               left: 0,
@@ -67,37 +67,40 @@ class MathPlanet extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // First column
                     Column(
                       children: [
-                        gameTile(AppAssets.cosmicCompare, 'Cosmic Compare'),
-                        const SizedBox(height: 24),
                         gameTile(
-                            AppAssets.alienMathMission, 'Alien Math Mission'),
+                            AppAssets.cosmicCompare, 'Cosmic Compare', () {}),
+                        const SizedBox(height: 24),
+                        gameTile(AppAssets.alienMathMission,
+                            'Alien Math Mission', () {}),
                       ],
                     ),
                     const SizedBox(width: 24),
-                    // Second column
                     Column(
                       children: [
-                        gameTile(AppAssets.shapPlanet, 'Shape Planet Rescue'),
-                        const SizedBox(height: 24),
                         gameTile(
-                            AppAssets.countWithAliens, 'Count with Aliens'),
+                            AppAssets.shapPlanet, 'Shape Planet Rescue', () {}),
+                        const SizedBox(height: 24),
+                        gameTile(AppAssets.countWithAliens, 'Count with Aliens',
+                            () {
+                          Navigator.pushNamed(
+                              context, CountWithAlienIntro.routeName);
+                        }),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-            // Cat image at the bottom
+
             Positioned(
-              bottom: 16,
+              bottom: 120,
               left: 0,
               right: 0,
               child: Center(
                 child: Image.asset(
-                  AppAssets.whiteKittenCat, // Replace with your cat image path
+                  AppAssets.whiteKittenCat,
                   height: 100,
                 ),
               ),
@@ -108,26 +111,31 @@ class MathPlanet extends StatelessWidget {
     );
   }
 
-  Widget gameTile(String imagePath, String label) {
+  Widget gameTile(String imagePath, String label, void Function()? onTap) {
     return Column(
       children: [
-        Container(
-          width: 180,
-          height: 150,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.cover, // Ensures the image covers the container
+        InkWell(
+          onTap: onTap,
+          child: Container(
+            width: 150,
+            height: 145,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
+        const SizedBox(height: 10),
         Text(
           label,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white),
         ),
       ],
     );

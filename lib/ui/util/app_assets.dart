@@ -79,4 +79,11 @@ abstract class AppAssets {
   static const String shapPlanet = 'assets/image/shape_planet_rescue.png';
   static const String whiteKittenCat = 'assets/image/white_kitten_cat.png';
   static const String number123 = 'assets/image/numbers.png';
+  static const String mathBackground = 'assets/image/mathBackground.jpg';
+  static const String backgroundCountWithAlienIntro =
+      'assets/image/backgroun_intro_countWithAlien.jpg';
+  static const String humanAndAlien = 'assets/image/human_alien.png';
+  static const String happyWhiteKittenCat =
+      'assets/image/happy_white_kitten_cat.png';
+  static const String planet = 'assets/image/planet.png';
 }
