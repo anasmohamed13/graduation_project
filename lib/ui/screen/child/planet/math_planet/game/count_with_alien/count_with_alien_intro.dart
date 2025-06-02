@@ -1,9 +1,26 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
+import 'count_with_alien_game.dart';
 
-class CountWithAlienIntro extends StatelessWidget {
+class CountWithAlienIntro extends StatefulWidget {
   static const String routeName = 'count-with-alien-intro';
   const CountWithAlienIntro({super.key});
+
+  @override
+  State<CountWithAlienIntro> createState() => _CountWithAlienIntroState();
+}
+
+class _CountWithAlienIntroState extends State<CountWithAlienIntro> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        Navigator.pushNamed(context, CountWithAlienGame.routeName);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +39,7 @@ class CountWithAlienIntro extends StatelessWidget {
             top: 150,
             left: MediaQuery.of(context).size.width / 2 - 80,
             child: Image.asset(
-              AppAssets.planet, // Your red planet image
+              AppAssets.planet,
               width: 160,
             ),
           ),
@@ -30,7 +47,7 @@ class CountWithAlienIntro extends StatelessWidget {
             top: 70,
             left: 170,
             child: Image.asset(
-              AppAssets.happyWhiteKittenCat, // Your cat image
+              AppAssets.happyWhiteKittenCat,
               width: 120,
             ),
           ),

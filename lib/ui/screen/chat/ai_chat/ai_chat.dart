@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:garduationproject/bloc/ai_chat_cubit.dart';
+import 'package:garduationproject/bloc/AI/ai_chat_cubit.dart';
 import 'package:garduationproject/model/Ai_models/activities.dart';
 import 'package:garduationproject/model/Ai_models/child_data.dart';
 import 'package:garduationproject/model/Ai_models/mood_ranges.dart';

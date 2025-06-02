@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_game.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/math_planet.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/cirulatory_system/circulatory_system_screen.dart';
@@ -54,7 +55,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeChild.routeName,
+      initialRoute: LearnPlanet.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -94,6 +95,7 @@ class GatoApp extends StatelessWidget {
             const YoutubeVideoPlayerScreen(),
         MathPlanet.routeName: (_) => const MathPlanet(),
         CountWithAlienIntro.routeName: (_) => const CountWithAlienIntro(),
+        CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
       },
     );
   }

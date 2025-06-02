@@ -86,4 +86,9 @@ abstract class AppAssets {
   static const String happyWhiteKittenCat =
       'assets/image/happy_white_kitten_cat.png';
   static const String planet = 'assets/image/planet.png';
+  static const String timerCatFace = 'assets/image/timer_cat_face.png';
+  static const String alienOnPlane = 'assets/image/alienOnPlane.png';
+  static const String alienRocket = 'assets/image/alienRocket.png';
+  static const String planeOfAlien = 'assets/image/planeOfALien.png';
+  static const String gameBackground = 'assets/image/game_background.jpg';
 }
