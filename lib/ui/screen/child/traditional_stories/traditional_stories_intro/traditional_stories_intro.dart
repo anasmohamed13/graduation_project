@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
@@ -116,7 +118,6 @@ class TraditionalStoriesIntro extends StatelessWidget {
           shadows: [
             Shadow(
               blurRadius: 4.0,
-              // ignore: deprecated_member_use
               color: Colors.black.withOpacity(0.3),
               offset: const Offset(1.0, 1.0),
             ),

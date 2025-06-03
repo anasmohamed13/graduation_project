@@ -50,6 +50,7 @@ class PlanetDetail extends StatelessWidget {
                     height: 500,
                     padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
+                      // ignore: deprecated_member_use
                       color: Colors.white.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(16),
                     ),
