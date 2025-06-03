@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/game/alien_math_mission/alien_math_mission.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_intro.dart';
 
@@ -72,8 +73,12 @@ class MathPlanet extends StatelessWidget {
                         gameTile(
                             AppAssets.cosmicCompare, 'Cosmic Compare', () {}),
                         const SizedBox(height: 24),
-                        gameTile(AppAssets.alienMathMission,
-                            'Alien Math Mission', () {}),
+                        gameTile(
+                            AppAssets.alienMathMission, 'Alien Math Mission',
+                            () {
+                          Navigator.pushNamed(
+                              context, AlienMathMissionScreen.routeName);
+                        }),
                       ],
                     ),
                     const SizedBox(width: 24),

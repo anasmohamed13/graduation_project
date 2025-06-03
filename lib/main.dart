@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/game/alien_math_mission/alien_math_mission.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_game.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/math_planet.dart';
@@ -96,6 +97,7 @@ class GatoApp extends StatelessWidget {
         MathPlanet.routeName: (_) => const MathPlanet(),
         CountWithAlienIntro.routeName: (_) => const CountWithAlienIntro(),
         CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
+        AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen()
       },
     );
   }
