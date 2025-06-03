@@ -3,16 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/game/alien_math_mission/alien_math_mission.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_game.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_intro.dart';
+import 'package:garduationproject/ui/screen/child/planet/math_planet/math_planet.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/cirulatory_system/circulatory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/digestive_system/digestive_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/nervous_system/nervous_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/respiratory_system/respiratory_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/biology_intro.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/body_system_screen.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/intro_biology.dart';
+import 'package:garduationproject/ui/screen/child/hello/intro_child.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_detail.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
+import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/video/youtube_video_player_screen.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/science_planet.dart';
-
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
-// ignore: unused_import
+import 'package:garduationproject/ui/screen/home/splash/child_splash.dart';
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
-
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/screen/auth/login/doctor/doctor_login.dart';
@@ -28,6 +43,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     const GatoApp(),
   );
@@ -40,7 +56,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: LearnPalent.routeName,
+      initialRoute: LearnPlanet.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -58,8 +74,30 @@ class GatoApp extends StatelessWidget {
         GatoTimer.routeName: (_) => const GatoTimer(),
         HomeChild.routeName: (_) => const HomeChild(),
         ChildProgressScreen.routeName: (_) => const ChildProgressScreen(),
-        LearnPalent.routeName: (_) => const LearnPalent(),
+        LearnPlanet.routeName: (_) => const LearnPlanet(),
         SciencePlanet.routeName: (_) => const SciencePlanet(),
+        PlanetZone.routeName: (_) => const PlanetZone(),
+        PlanetDetail.routeName: (_) => const PlanetDetail(),
+        ChildSplash.routeName: (_) => const ChildSplash(),
+        IntroChild.routeName: (_) => const IntroChild(),
+        IntroBiology.routeName: (_) => const IntroBiology(),
+        BiologyIntro.routeName: (_) => const BiologyIntro(),
+        TraditionalStoriesPage.routeName: (_) => const TraditionalStoriesPage(),
+        TraditionalStoriesIntro.routeName: (_) =>
+            const TraditionalStoriesIntro(),
+        BodySystemScreen.routeName: (_) => const BodySystemScreen(),
+        CirculatorySystemScreen.routeName: (_) =>
+            const CirculatorySystemScreen(),
+        RespiratorySystemScreen.routeName: (_) =>
+            const RespiratorySystemScreen(),
+        NervousSystemScreen.routeName: (_) => const NervousSystemScreen(),
+        DigestiveSystemScreen.routeName: (_) => const DigestiveSystemScreen(),
+        YoutubeVideoPlayerScreen.routeName: (_) =>
+            const YoutubeVideoPlayerScreen(),
+        MathPlanet.routeName: (_) => const MathPlanet(),
+        CountWithAlienIntro.routeName: (_) => const CountWithAlienIntro(),
+        CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
+        AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen()
       },
     );
   }

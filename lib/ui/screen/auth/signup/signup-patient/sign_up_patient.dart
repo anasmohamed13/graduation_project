@@ -1,10 +1,12 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unused_import
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/provider/gender_provider.dart';
+import 'package:garduationproject/model/child_model/child_model.dart';
+
 import 'package:garduationproject/ui/util/app_assets.dart';
+import 'package:garduationproject/ui/util/dialog.dart';
 import 'package:garduationproject/ui/widget/build_text_form_filed.dart';
-import 'package:provider/provider.dart';
 
 class SignUpPatient extends StatefulWidget {
   static const String routeName = 'signupPatient';
@@ -26,6 +28,7 @@ class _SignUpPatientState extends State<SignUpPatient> {
   final emailController = TextEditingController();
 
   final descriptionController = TextEditingController();
+  String? selectedGender;
 
   @override
   Widget build(BuildContext context) {
@@ -172,56 +175,90 @@ class _SignUpPatientState extends State<SignUpPatient> {
     );
   }
 
-  Widget buildDropDown() => Consumer<GenderProvider>(
-        builder: (context, genderprvider, child) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(7.0),
-                child: Text(
-                  'Gender',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'inter',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
-                ),
+  Widget buildDropDown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(7.0),
+          child: Text(
+            'Gender',
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'inter',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Material(
+          elevation: 2,
+          borderRadius: BorderRadius.circular(16),
+          child: DropdownButtonFormField<String>(
+            value: selectedGender,
+            dropdownColor: Colors.grey.shade100,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(8),
               ),
-              Material(
-                elevation: 2,
-                borderRadius: BorderRadius.circular(16),
-                child: DropdownButtonFormField(
-                  dropdownColor: Colors.grey.shade100,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                  ),
-                  value: genderprvider.localGender,
-                  isExpanded: true,
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'male',
-                      child: Text('Male'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'female',
-                      child: Text('Female'),
-                    ),
-                  ],
-                  onChanged: genderprvider.setGender,
-                ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              filled: true,
+              fillColor: Colors.grey.shade100,
+            ),
+            isExpanded: true,
+            items: const [
+              DropdownMenuItem(
+                value: 'male',
+                child: Text('Male'),
+              ),
+              DropdownMenuItem(
+                value: 'female',
+                child: Text('Female'),
               ),
             ],
-          );
-        },
-      );
+            onChanged: (String? value) {
+              setState(() {
+                selectedGender = value;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Future<void> saveChildData() async {
+  //   if (formKey.currentState!.validate()) {
+  //     try {
+  //       ChildModel child = ChildModel(
+  //         firstName: firstNameController.text.trim(),
+  //         gender: selectedGender ?? '',
+  //         age: int.tryParse(ageController.text.trim()) ?? 0,
+  //         description: descriptionController.text.trim(),
+  //         id: '',
+  //         parentEmail: '',
+  //       );
+
+  //       await FirebaseFirestore.instance
+  //           .collection('Parent')
+  //           .doc(emailController.text.trim())
+  //           .collection('Children')
+  //           .add(child.toJson());
+
+  //       if (context.mounted) {
+  //         showMessage(context, body: 'Child saved successfully');
+  //       }
+
+  //       Navigator.pop(context);
+  //     } catch (e) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Error saving child: $e')),
+  //       );
+  //     }
+  //   }
+  // }
 }

@@ -43,6 +43,52 @@ abstract class AppAssets {
   static const String mathCat = 'assets/image/math cat.png';
   static const String scienceCat = 'assets/image/science cat.png';
   static const String planetZone = 'assets/image/Planet zone.png';
-
   static const String biologyZone = 'assets/image/Biology zone.png';
+  static const String earthPlanet = 'assets/image/Earth.png';
+  static const String jupiterPlanet = 'assets/image/Jupiter.png';
+  static const String marsPlanet = 'assets/image/Mars.png';
+  static const String mercuryPlanet = 'assets/image/Mercury.png';
+  static const String neptunePlanet = 'assets/image/Neptune.png';
+  static const String saturnPlanet = 'assets/image/Saturn.png';
+  static const String uranusPlanet = 'assets/image/Uranus.png';
+  static const String venusPlanet = 'assets/image/Venus.png';
+  static const String backgroundplanetdetail =
+      'assets/image/background_planet_detail.gif';
+  static const String backgroundplanet = 'assets/image/background_planet.jpg';
+  static const String backgroundlearnPlanet =
+      'assets/image/learn_planet_back.jpg';
+  static const String moutain = 'assets/image/mountain.png';
+
+  static const String readCatOnMountain =
+      'assets/image/read_caat_on_mountain.png';
+  static const String backgroundTraditional =
+      'assets/image/bacgroundt_traditional.jpg';
+  static const String tradCat = 'assets/image/tradcat.png';
+  static const String cricket = 'assets/image/cricketCover.jpg';
+  static const String doHipposPlay = 'assets/image/do_hippos_play.jpg';
+  static const String jerryBox = 'assets/image/jerrys Box.jpg';
+  static const String nobleGnarble = 'assets/image/noble gnarble.jpg';
+  static const String quokka = 'assets/image/quokka.png';
+  static const String storyOfYesOrNO = 'assets/image/story_of_yes_or_no.jpg';
+  static const String solarSnooks = 'assets/image/solarSnooks.jpg';
+  static const String guardianOfLore = 'assets/image/GuardianOfLore.jpg';
+  static const String gemma = 'assets/image/gemma.jpg';
+  static const String alienMathMission = 'assets/image/Alien Math Mission.png';
+  static const String cosmicCompare = 'assets/image/Cosmic_Compare.png';
+  static const String countWithAliens = 'assets/image/Count with Aliens.png';
+  static const String shapPlanet = 'assets/image/shape_planet_rescue.png';
+  static const String whiteKittenCat = 'assets/image/white_kitten_cat.png';
+  static const String number123 = 'assets/image/numbers.png';
+  static const String mathBackground = 'assets/image/mathBackground.jpg';
+  static const String backgroundCountWithAlienIntro =
+      'assets/image/backgroun_intro_countWithAlien.jpg';
+  static const String humanAndAlien = 'assets/image/human_alien.png';
+  static const String happyWhiteKittenCat =
+      'assets/image/happy_white_kitten_cat.png';
+  static const String planet = 'assets/image/planet.png';
+  static const String timerCatFace = 'assets/image/timer_cat_face.png';
+  static const String alienOnPlane = 'assets/image/alienOnPlane.png';
+  static const String alienRocket = 'assets/image/alienRocket.png';
+  static const String planeOfAlien = 'assets/image/planeOfALien.png';
+  static const String gameBackground = 'assets/image/game_background.jpg';
 }

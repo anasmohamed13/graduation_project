@@ -34,6 +34,35 @@ class FirebaseService {
     await firestore.collection(collection).doc(user.email).set(user.toJson());
   }
 
+  // Future<void> saveChild({
+  //   required String parentEmail,
+  //   required Map<String, dynamic> childData,
+  // }) async {
+  //   try {
+  //     String childId = firestore
+  //         .collection('Parents')
+  //         .doc(parentEmail)
+  //         .collection('Children')
+  //         .doc()
+  //         .id;
+
+  //     await firestore
+  //         .collection('Parents')
+  //         .doc(parentEmail)
+  //         .collection('Children')
+  //         .doc(childId)
+  //         .set({
+  //       ...childData,
+  //       'childId': childId,
+  //     });
+
+  //     print('Child saved successfully');
+  //   } catch (e) {
+  //     print('Error saving child: $e');
+  //     throw Exception('Failed to save child: $e');
+  //   }
+  // }
+
   Future<void> signOut() async {
     await auth.signOut();
   }
