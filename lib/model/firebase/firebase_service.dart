@@ -2,15 +2,14 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:garduationproject/model/user_model/user_model.dart';
+import 'package:garduationproject/model/doctor_model/doctor_model.dart';
+import 'package:garduationproject/model/parent_model/parent_model.dart';
 
 //comment to Gana this code to save user data in firestore
 //but the doctor have collection and parent have another collection
 class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-
-  UserModel? userData;
 
   //-------------- to Ganna its not complete and have a Bug---------------//
   // Future<void> updateUserField(String field, String value) async {
@@ -29,9 +28,25 @@ class FirebaseService {
   //   }
   // }
 
-  Future<void> saveUser(UserModel user) async {
-    String collection = user.userType == 'Doctor' ? 'Doctors' : 'Parents';
-    await firestore.collection(collection).doc(user.email).set(user.toJson());
+  Future<void> saveUser({
+    required String userType,
+    required Map<String, dynamic> userData,
+    required String email,
+  }) async {
+    String collection = userType == 'Doctor' ? 'Doctors' : 'Parents';
+    await firestore.collection(collection).doc(email).set(userData);
+  }
+
+  Future<void> saveDoctor(DoctorModel doctor) async {
+    await firestore
+        .collection('Doctor')
+        .doc(doctor.email) // أو استخدم uid إن أحببت
+        .set(doctor.toJson());
+  }
+
+  // حفظ بيانات ولي الأمر في مجموعة "Parent"
+  Future<void> saveParent(ParentModel parent) async {
+    await firestore.collection('Parent').doc(parent.email).set(parent.toJson());
   }
 
   // Future<void> saveChild({
@@ -67,21 +82,24 @@ class FirebaseService {
     await auth.signOut();
   }
 
-  Future<UserModel?> fetchUserData() async {
+  Future<dynamic> fetchUserData() async {
     try {
-      //get current user (read this ganna)
       final User? user = auth.currentUser;
       if (user != null) {
-        // تحديد اسم الـ Collection بناءً على نوع المستخدم
         String collection = await getUserCollection(user.email!);
-
-        if (collection.isNotEmpty) {
-          // to ganna this to read data from firestore
+        if (collection == 'Doctors') {
           DocumentSnapshot snapshot =
-              await firestore.collection(collection).doc(user.email).get();
-
+              await firestore.collection('Doctors').doc(user.email).get();
           if (snapshot.exists) {
-            return UserModel.fromJson(snapshot.data() as Map<String, dynamic>);
+            return DoctorModel.fromJson(
+                snapshot.data() as Map<String, dynamic>);
+          }
+        } else if (collection == 'Parents') {
+          DocumentSnapshot snapshot =
+              await firestore.collection('Parents').doc(user.email).get();
+          if (snapshot.exists) {
+            return ParentModel.fromJson(
+                snapshot.data() as Map<String, dynamic>);
           }
         }
       }

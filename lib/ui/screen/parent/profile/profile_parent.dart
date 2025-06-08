@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:garduationproject/model/firebase/firebase_service.dart';
-import 'package:garduationproject/model/user_model/user_model.dart';
+import 'package:garduationproject/model/parent_model/parent_model.dart';
+
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
@@ -19,7 +20,7 @@ class ProfileParent extends StatefulWidget {
 
 class _ProfileParentState extends State<ProfileParent> {
   final FirebaseService firebaseService = FirebaseService();
-  UserModel? userData;
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -35,10 +36,10 @@ class _ProfileParentState extends State<ProfileParent> {
     try {
       if (mounted) {
         setState(() {
-          userData = data;
-          nameController.text = userData?.fullName ?? '';
-          phoneController.text = userData?.phoneNumber ?? '';
-          emailController.text = userData?.email ?? '';
+          final parent = ParentModel.fromJson(data);
+          nameController.text = parent.fullName;
+          phoneController.text = parent.phoneNumber;
+          emailController.text = parent.email;
         });
       }
     } catch (e) {

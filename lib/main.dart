@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
@@ -43,20 +44,22 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  User? user = FirebaseAuth.instance.currentUser;
 
   runApp(
-    const GatoApp(),
+    GatoApp(isLoggedIn: user != null),
   );
 }
 
 class GatoApp extends StatelessWidget {
-  const GatoApp({super.key});
+  final bool isLoggedIn;
+  const GatoApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: LearnPlanet.routeName,
+      initialRoute: ProfileDoctor.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),

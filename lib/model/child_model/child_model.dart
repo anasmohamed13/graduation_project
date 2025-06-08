@@ -1,5 +1,4 @@
 class ChildModel {
-  String id;
   String firstName;
   String gender;
   int age;
@@ -7,7 +6,6 @@ class ChildModel {
   String? description;
 
   ChildModel({
-    required this.id,
     required this.firstName,
     required this.gender,
     required this.age,
@@ -17,7 +15,6 @@ class ChildModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'firstName': firstName,
       'gender': gender,
       'age': age,
@@ -26,14 +23,13 @@ class ChildModel {
     };
   }
 
-  factory ChildModel.fromJson(Map<String, dynamic> map) {
+  factory ChildModel.fromJson(Map<String, dynamic> json) {
     return ChildModel(
-      id: map['id'] ?? '',
-      firstName: map['firstName'] ?? '',
-      gender: map['gender'] ?? '',
-      age: map['age']?.toInt() ?? 0,
-      parentEmail: map['parentEmail'] ?? '',
-      description: map['description'],
+      firstName: json['firstName'] ?? '',
+      gender: json['gender'] ?? '',
+      age: json['age']?.toInt() ?? 0,
+      parentEmail: json['parentEmail'] ?? '',
+      description: json['description'],
     );
   }
 }
