@@ -27,6 +27,7 @@ class FirebaseService {
   //     throw Exception("Failed to update $field: $e");
   //   }
   // }
+
   Future<bool> checkDoctorExistsByEmail(String email) async {
     final snapshot = await FirebaseFirestore.instance
         .collection('Doctor')
@@ -45,44 +46,12 @@ class FirebaseService {
   }
 
   Future<void> saveDoctor(DoctorModel doctor) async {
-    await firestore
-        .collection('Doctor')
-        .doc(doctor.email) // أو استخدم uid إن أحببت
-        .set(doctor.toJson());
+    await firestore.collection('Doctor').doc(doctor.email).set(doctor.toJson());
   }
 
   Future<void> saveParent(ParentModel parent) async {
     await firestore.collection('Parent').doc(parent.email).set(parent.toJson());
   }
-
-  // Future<void> saveChild({
-  //   required String parentEmail,
-  //   required Map<String, dynamic> childData,
-  // }) async {
-  //   try {
-  //     String childId = firestore
-  //         .collection('Parents')
-  //         .doc(parentEmail)
-  //         .collection('Children')
-  //         .doc()
-  //         .id;
-
-  //     await firestore
-  //         .collection('Parents')
-  //         .doc(parentEmail)
-  //         .collection('Children')
-  //         .doc(childId)
-  //         .set({
-  //       ...childData,
-  //       'childId': childId,
-  //     });
-
-  //     print('Child saved successfully');
-  //   } catch (e) {
-  //     print('Error saving child: $e');
-  //     throw Exception('Failed to save child: $e');
-  //   }
-  // }
 
   Future<void> signOut() async {
     await auth.signOut();
@@ -115,7 +84,6 @@ class FirebaseService {
     return null;
   }
 
-  // ميثود لتحديد Collection بناءً على البريد الإلكتروني
   Future<String> getUserCollection(String email) async {
     try {
       // check this email in doctor collection (comment to ganna)
@@ -136,58 +104,4 @@ class FirebaseService {
     }
     return ''; // if the user not found in any collection
   }
-
-//------------->will deleted or fixed <------------
-  // Future<void> signInWithGoogle(BuildContext context) async {
-  //   try {
-  //     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //     if (googleUser == null) return; // when User canceled sign-in (to Ganna)
-  //     GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
-
-  //     AuthCredential credential = GoogleAuthProvider.credential(
-  //       accessToken: googleAuth.accessToken,
-  //       idToken: googleAuth.idToken,
-  //     );
-  //     UserCredential userCredential =
-  //         await FirebaseAuth.instance.signInWithCredential(credential);
-  //     User? firebaseUser = userCredential.user;
-  //     if (firebaseUser != null) {
-  //       // Fetch user data from Firestore
-  //       UserModel? userModel = await fetchUserData();
-
-  //       if (userModel != null) {
-  //         // Navigate to the correct profile based on userType
-  //         navigateToProfile(context, userModel.userType);
-  //       } else {
-  //         UserModel newUser = UserModel(
-  //           fullName: firebaseUser.displayName ?? '',
-  //           email: firebaseUser.email ?? '',
-  //           phoneNumber: firebaseUser.phoneNumber ?? '',
-  //           userType: 'Parent',
-  //           medicalLicenseNumber: null,
-  //           MedicalSpecializatin: null,
-  //         );
-  //         await saveUser(newUser);
-
-  //         navigateToProfile(context, newUser.userType);
-  //       }
-  //     }
-
-  //     // complete this method to save user and navigate to profile
-  //     // create method to sign in via phone}
-  //   } catch (e) {
-  //     print('Error signing in with Google: $e');
-  //   }
-  // }
 }
-
-//will deleted
-// void navigateToProfile(BuildContext context, String userType) {
-//   if (userType == UserModel.collectionDoctor) {
-//     Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
-//   } else if (userType == UserModel.collectionParent) {
-//     Navigator.pushReplacementNamed(context, ProfileParent.routeName);
-//   } else {
-//     print('Unknown user type: $userType');
-//   }
-// }

@@ -73,7 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     fullName = text;
                   },
                 ),
-                const SizedBox(height: 26),
+                const SizedBox(height: 18),
                 TextFormFieldSign(
                   hintText: 'Email',
                   vlaidatorErorr: '',
@@ -92,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     email = text;
                   },
                 ),
-                const SizedBox(height: 26),
+                const SizedBox(height: 18),
                 TextFormFieldSign(
                   hintText: 'Phone number',
                   vlaidatorErorr: '',
@@ -109,9 +109,37 @@ class _SignUpPageState extends State<SignUpPage> {
                     phoneNumber = text;
                   },
                 ),
-                const SizedBox(height: 26),
-
-                // Show this only for Parent users
+                const SizedBox(height: 18),
+                if (widget.userType == 'Doctor') ...[
+                  TextFormFieldSign(
+                    hintText: 'Medical Specializatin',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (value) {},
+                    onChanged: (text) {
+                      MedicalSpecializatin = text;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  TextFormFieldSign(
+                    hintText: 'Medical License Number',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (vlaue) {},
+                    onChanged: (text) {
+                      medicalLicenseNumber = text;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                ],
                 if (widget.userType == 'Parent') ...[
                   TextFormFieldSign(
                     hintText: 'Doctor Email',
@@ -133,7 +161,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   const SizedBox(height: 26),
                 ],
-
                 TextFormFieldSign(
                   hintText: 'Password',
                   vlaidatorErorr: '',
@@ -169,7 +196,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     textAlign: TextAlign.start,
                   ),
                 ),
-                const SizedBox(height: 26),
+                const SizedBox(height: 18),
                 TextFormFieldSign(
                   hintText: 'Confirm password',
                   vlaidatorErorr: '',
@@ -264,7 +291,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       User? user = await authService.signUp(email, password);
       if (user != null) {
-        if (widget.userType == 'Doctor') {
+        if (widget.userType == 'Doctors') {
           DoctorModel doctor = DoctorModel(
             fullName: fullName,
             email: email,
