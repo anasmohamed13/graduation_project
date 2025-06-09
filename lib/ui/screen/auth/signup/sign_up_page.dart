@@ -29,6 +29,8 @@ class _SignUpPageState extends State<SignUpPage> {
   String confirmPassword = '';
   String medicalLicenseNumber = '';
   String MedicalSpecializatin = '';
+  String doctorEmail = ''; // New field for parent
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final AuthService authService = AuthService();
   final FirebaseService databaseService = FirebaseService();
@@ -44,9 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 const Text(
                   'Start now, and share your\n medical expertise with the\n world!',
                   style: TextStyle(
@@ -56,9 +56,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(
-                  height: 26,
-                ),
+                const SizedBox(height: 26),
                 TextFormFieldSign(
                   hintText: 'Full name',
                   vlaidatorErorr: '',
@@ -67,44 +65,75 @@ class _SignUpPageState extends State<SignUpPage> {
                   borderRadius: BorderRadius.circular(30),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'pleas enter your name';
+                      return 'Please enter your name';
                     }
+                    return null;
                   },
                   onChanged: (text) {
                     fullName = text;
                   },
                 ),
-                const SizedBox(
-                  height: 26,
-                ),
+                const SizedBox(height: 26),
                 TextFormFieldSign(
                   hintText: 'Email',
                   vlaidatorErorr: '',
                   controller: null,
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(30),
-                  validator: (value) {},
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        !value.contains('@')) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
+                  },
                   onChanged: (text) {
                     email = text;
                   },
                 ),
-                const SizedBox(
-                  height: 26,
-                ),
+                const SizedBox(height: 26),
                 TextFormFieldSign(
                   hintText: 'Phone number',
                   vlaidatorErorr: '',
                   controller: null,
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(30),
-                  validator: (value) {},
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter your phone number';
+                    }
+                    return null;
+                  },
                   onChanged: (text) {
                     phoneNumber = text;
                   },
                 ),
-                const SizedBox(
-                  height: 26,
-                ),
+                const SizedBox(height: 26),
+
+                // Show this only for Parent users
+                if (widget.userType == 'Parent') ...[
+                  TextFormFieldSign(
+                    hintText: 'Doctor Email',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !value.contains('@')) {
+                        return 'Enter a valid doctor email';
+                      }
+                      return null;
+                    },
+                    onChanged: (text) {
+                      doctorEmail = text;
+                    },
+                  ),
+                  const SizedBox(height: 26),
+                ],
+
                 TextFormFieldSign(
                   hintText: 'Password',
                   vlaidatorErorr: '',
@@ -115,11 +144,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     if (value == null || value.isEmpty) {
                       return 'Password is required';
                     }
-
                     if (!RegExp(r'^\d+$').hasMatch(value)) {
                       return 'Password must contain only numbers';
                     }
-                    // Check length (4-6 digits)
                     if (value.length < 4 || value.length > 6) {
                       return 'Password must be 4-6 digits';
                     }
@@ -134,16 +161,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Text(
                     '• Must be 4-6 digits\n• Numbers only',
                     style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12,
-                        fontFamily: 'inter',
-                        fontWeight: FontWeight.w500),
+                      color: Colors.red,
+                      fontSize: 12,
+                      fontFamily: 'inter',
+                      fontWeight: FontWeight.w500,
+                    ),
                     textAlign: TextAlign.start,
                   ),
                 ),
-                const SizedBox(
-                  height: 26,
-                ),
+                const SizedBox(height: 26),
                 TextFormFieldSign(
                   hintText: 'Confirm password',
                   vlaidatorErorr: '',
@@ -160,11 +186,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     confirmPassword = text;
                   },
                 ),
-                const SizedBox(
-                  height: 60,
+                const SizedBox(height: 60),
+                buildElevatedButton(
+                  createAccount,
+                  'Sign Up',
+                  const Color(0xffec5e4c),
+                  60,
+                  170,
+                  20,
+                  Colors.white,
                 ),
-                buildElevatedButton(createAccount, 'Sign Up',
-                    const Color(0xffec5e4c), 60, 170, 20, Colors.white),
               ],
             ),
           ),
@@ -215,6 +246,22 @@ class _SignUpPageState extends State<SignUpPage> {
     try {
       showLoading(context);
 
+      if (widget.userType == 'Parent') {
+        bool doctorExists =
+            await databaseService.checkDoctorExistsByEmail(doctorEmail);
+        if (!doctorExists) {
+          hideLoading(context);
+          showMessage(
+            context,
+            title: 'Doctor not found',
+            body:
+                'No doctor found with this email. Please enter a valid doctor email.',
+            posButtonTitle: 'OK',
+          );
+          return;
+        }
+      }
+
       User? user = await authService.signUp(email, password);
       if (user != null) {
         if (widget.userType == 'Doctor') {
@@ -233,6 +280,7 @@ class _SignUpPageState extends State<SignUpPage> {
             email: email,
             phoneNumber: phoneNumber,
             userType: 'Parent',
+            doctorEmail: doctorEmail,
           );
           await databaseService.saveParent(parent);
         }
@@ -249,16 +297,20 @@ class _SignUpPageState extends State<SignUpPage> {
         message = "The account already exists for that email.";
       }
       if (context.mounted) {
-        showMessage(context,
-            title: 'Error!',
-            body: 'Your error is: $message',
-            posButtonTitle: 'Ok');
+        showMessage(
+          context,
+          title: 'Error!',
+          body: 'Your error is: $message',
+          posButtonTitle: 'Ok',
+        );
       }
     } catch (e) {
       hideLoading(context);
-      showMessage(context,
-          title: 'Error!',
-          body: 'Something went wrong. Please try again later.');
+      showMessage(
+        context,
+        title: 'Error!',
+        body: 'Something went wrong. Please try again later.',
+      );
     }
   }
 }

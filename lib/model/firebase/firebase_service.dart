@@ -27,6 +27,13 @@ class FirebaseService {
   //     throw Exception("Failed to update $field: $e");
   //   }
   // }
+  Future<bool> checkDoctorExistsByEmail(String email) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Doctor')
+        .where('email', isEqualTo: email)
+        .get();
+    return snapshot.docs.isNotEmpty;
+  }
 
   Future<void> saveUser({
     required String userType,
@@ -44,7 +51,6 @@ class FirebaseService {
         .set(doctor.toJson());
   }
 
-  // حفظ بيانات ولي الأمر في مجموعة "Parent"
   Future<void> saveParent(ParentModel parent) async {
     await firestore.collection('Parent').doc(parent.email).set(parent.toJson());
   }
