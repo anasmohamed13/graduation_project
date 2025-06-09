@@ -12,7 +12,6 @@ import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/digestive_system/digestive_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/nervous_system/nervous_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/respiratory_system/respiratory_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/biology_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/body_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/intro_biology.dart';
 import 'package:garduationproject/ui/screen/child/hello/intro_child.dart';
@@ -59,7 +58,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: ProfileDoctor.routeName,
+      initialRoute: LearnPlanet.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -84,7 +83,6 @@ class GatoApp extends StatelessWidget {
         ChildSplash.routeName: (_) => const ChildSplash(),
         IntroChild.routeName: (_) => const IntroChild(),
         IntroBiology.routeName: (_) => const IntroBiology(),
-        BiologyIntro.routeName: (_) => const BiologyIntro(),
         TraditionalStoriesPage.routeName: (_) => const TraditionalStoriesPage(),
         TraditionalStoriesIntro.routeName: (_) =>
             const TraditionalStoriesIntro(),

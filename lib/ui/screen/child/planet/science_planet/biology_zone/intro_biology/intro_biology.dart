@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/biology_intro.dart';
 import 'package:flutter/services.dart';
+import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/body_system_screen.dart';
 
 class IntroBiology extends StatefulWidget {
   static const String routeName = '/intro-biology';
@@ -11,25 +11,28 @@ class IntroBiology extends StatefulWidget {
 }
 
 class IntroBiologyState extends State<IntroBiology> {
+  bool showSecondText = false;
+
   @override
   void initState() {
     super.initState();
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
 
-    Future.delayed(const Duration(seconds: 15), () {
+    Future.delayed(const Duration(seconds: 12), () {
       if (mounted) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
+        setState(() {
+          showSecondText = true;
+        });
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const BiologyIntroScreen()),
-        );
+        Future.delayed(const Duration(seconds: 10), () {
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, BodySystemScreen.routeName);
+          }
+        });
       }
     });
   }
@@ -49,23 +52,51 @@ class IntroBiologyState extends State<IntroBiology> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   flex: 2,
-                  child: Text(
-                    'Hello my friends!\n'
-                    'Do you know that our body is\n'
-                    'like a big team in which each\n'
-                    'one has his own job? Not\n'
-                    'only do we have senses like\n'
-                    'the eyes and nose that we\n'
-                    'see and smell, but we also\n'
-                    'have organs inside',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(seconds: 1),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    child: showSecondText
+                        ? const Text(
+                            'our body that works all the time in\n'
+                            'order to feel alive and be healthy!\n'
+                            'Like the heart that works as a\n'
+                            'blood pump, the lungs that allow\n'
+                            'us to breathe, and the stomach\n'
+                            'that digests the food we eat.\n'
+                            'Are we ready to discover each\n'
+                            'organ and its benefits together?\n'
+                            'Let’s start the magical journey\n'
+                            'inside the human body!',
+                            key: ValueKey(2),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : const Text(
+                            'Hello my friends!\n'
+                            'Do you know that our body is\n'
+                            'like a big team in which each\n'
+                            'one has his own job? Not\n'
+                            'only do we have senses like\n'
+                            'the eyes and nose that we\n'
+                            'see and smell, but we also\n'
+                            'have organs inside',
+                            key: ValueKey(1),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 20),
