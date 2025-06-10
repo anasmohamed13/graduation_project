@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/patient_queue.dart';
 
 class PatientCardScreen extends StatefulWidget {
   static const String routeName = 'PatientCardScreen';
@@ -27,26 +28,34 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 82,
-                    width: 82,
-                    decoration: const ShapeDecoration(
-                      shape: CircleBorder(),
-                      color: Color(0xffF1F1F1),
-                    ),
-                    child: IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
+                  
+                  SizedBox(
+                    height: 48,
+                    width: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        shape: const CircleBorder(),
+                        backgroundColor: const Color(0xffF1F1F1),
+                        elevation: 0,
+                      ),
+                     onPressed: () {
+                       Navigator.pushReplacementNamed(context, PatientQueueScreen.routeName);
+                        },
+
+                      child: const Icon(Icons.arrow_back_rounded, color: Colors.black),
                     ),
                   ),
                   const Text(
                     "Patient card",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
                   ),
-                  const SizedBox(height: 82, width: 82)
+                  const SizedBox(width: 48), 
                 ],
               ),
               const SizedBox(height: 30),
+
+              
               Container(
                 height: 185,
                 padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 29),
@@ -68,7 +77,7 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                         children: [
                           Text("Patient #21", style: TextStyle(color: Colors.white, fontSize: 14)),
                           SizedBox(height: 5),
-                          Text("Teresa Wilier 's\ndaughter",
+                          Text("Teresa Wilier's\ndaughter",
                               style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           Text("12 y.o.", style: TextStyle(color: Colors.white, fontSize: 18)),
@@ -83,33 +92,42 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 20),
+
+              
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(20),
                   color: const Color(0xffF6F6F6),
                   border: Border.all(color: Colors.grey.shade300, width: 1),
                 ),
                 child: Row(
                   children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Problem research", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black)),
-                        Text("start date: 10 Nov,2024", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.grey)),
-                        Text("Doctor: Tom Nelson", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black)),
-                      ],
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Problem research",
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black)),
+                          SizedBox(height: 5),
+                          Text("Start: 10 Nov 2024",
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey)),
+                          Text("Dr. Tom Nelson",
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black)),
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 5),
                     CircularPercentIndicator(
-                      radius: 40,
-                      lineWidth: 8.0,
+                      radius: 35,
+                      lineWidth: 6.0,
                       animation: true,
                       percent: percent,
                       center: Text(
                         "${(percent * 100).toInt()}%",
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       circularStrokeCap: CircularStrokeCap.round,
                       progressColor: const Color(0xFFE74C3C),
@@ -118,7 +136,10 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 33),
+
+              // 🔵 CIRCLE ICON SELECTORS
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(4, (index) {
@@ -150,7 +171,10 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                   );
                 }),
               ),
+
               const SizedBox(height: 30),
+
+              // 🟣 DESCRIPTION SECTION
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 30),
                 decoration: BoxDecoration(
@@ -196,31 +220,31 @@ final List<ProblemDetail> problems = [
     description:
         "Current situation: He has a speech delay and difficulty forming sentences correctly. "
         "Problem: He does not pronounce words clearly and has difficulty pronouncing difficult letters. "
-        "Impact of the problem: He has low self-confidence and avoids speaking in front of others ",
+        "Impact of the problem: He has low self-confidence and avoids speaking in front of others.",
     imagePath: 'assets/image/brain.png',
   ),
   ProblemDetail(
     title: "Communicational Problem",
     description:
         "Current situation: The patient has difficulty expressing his thoughts clearly, especially in social situations. "
-        "Problem: He has difficulty understanding the intentions of others or interpreting their expressions correctly. "
-        "Effect of the problem: This sometimes leads to embarrassing situations or misunderstandings by others, which increases his isolation. ",
-    imagePath: 'assets/image/faces.png',
+        "Problem: He has difficulty understanding the intentions of others. "
+        "Effect: Leads to isolation and misunderstandings.",
+    imagePath: 'assets/image/icons8-family-50.png',
   ),
   ProblemDetail(
     title: "Emotional Problem",
     description:
-        "Current situation: He suffers from frequent mood swings and a constant feeling of insecurity."
-        "Problem: He finds it difficult to talk about his feelings or express what is bothering him, which leads to an accumulation of stress. "
-        "Impact of the problem: He shows symptoms of anxiety such as tension or sudden crying in unexpected situations ",
-    imagePath: 'assets/image/Ellipse7.png',
+        "Current situation: Frequent mood swings and insecurity. "
+        "Problem: Difficulty expressing feelings causes stress buildup. "
+        "Impact: Anxiety symptoms like tension and sudden crying.",
+    imagePath: 'assets/image/icons8-anime-emoji-64.png',
   ),
   ProblemDetail(
     title: "Learning Problem",
     description:
-        "Current situation: He struggles with concentration during lessons and forgets learned material quickly. "
-        "Problem: He finds it difficult to follow instructions and complete assignments on time. "
-        "Effect of the problem: This impacts his academic performance and confidence in class.",
-    imagePath: 'assets/image/Ellipse55.png',
+        "Current situation: Struggles with concentration and memory. "
+        "Problem: Difficulty following instructions and completing tasks. "
+        "Impact: Affects academic performance and confidence.",
+    imagePath: 'assets/image/icons8-book-shelf-50.png', 
   ),
 ];
