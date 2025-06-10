@@ -21,10 +21,10 @@ import 'package:garduationproject/ui/screen/child/social_stories/social_stories.
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/video/youtube_video_player_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/calendar_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/doctor_home_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/patient_card_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/patient_queue.dart';
+import 'package:garduationproject/ui/screen/doctor/home/calendar_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/home/doctor_home_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/patient_card/patient_card_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/patient_queue/patient_queue.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
@@ -63,7 +63,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: DoctorHomeScreen.routeName,
+      initialRoute: SignUpPatient.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -105,11 +105,8 @@ class GatoApp extends StatelessWidget {
         CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
         AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen(),
         SocialStoriesScreen.routeName: (_) => const SocialStoriesScreen(),
-        AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen(),
-        // ignore: prefer_const_constructors
-        PatientQueueScreen.routeName: (_) => PatientQueueScreen(),
-        // ignore: prefer_const_constructors
-        DoctorHomeScreen.routeName: (_) => DoctorHomeScreen(),
+        PatientQueueScreen.routeName: (_) => const PatientQueueScreen(),
+        DoctorHomeScreen.routeName: (_) => const DoctorHomeScreen(),
         CalendarScreen.routeName: (_) => const CalendarScreen(),
         PatientCardScreen.routeName: (_) => const PatientCardScreen(),
       },

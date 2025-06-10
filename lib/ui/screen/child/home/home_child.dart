@@ -1,5 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
@@ -13,6 +17,61 @@ class HomeChild extends StatefulWidget {
 }
 
 class _HomeChildState extends State<HomeChild> {
+  String? childName;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchChildName();
+  }
+
+  void fetchChildName() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('No authenticated user found');
+        return;
+      }
+
+      print('Current user (child): ${user.uid}');
+
+      // Since children are stored under Parent/{parentEmail}/Children/{childName}
+      // We need to search through all parents to find this child
+      final parentQuery =
+          await FirebaseFirestore.instance.collection('Parent').get();
+
+      for (var parentDoc in parentQuery.docs) {
+        print('Searching in parent: ${parentDoc.id}');
+
+        final childrenQuery = await FirebaseFirestore.instance
+            .collection('Parent')
+            .doc(parentDoc.id)
+            .collection('Children')
+            .get();
+
+        for (var childDoc in childrenQuery.docs) {
+          print('Found child document: ${childDoc.id}');
+          final childData = childDoc.data();
+          print('Child data: $childData');
+
+          // For now, we'll get the first child we find
+          // You might want to add logic to match the specific child to the current user
+          if (childData.containsKey('firstName')) {
+            setState(() {
+              childName = childData['firstName'];
+            });
+            print('Child name found: $childName');
+            return;
+          }
+        }
+      }
+
+      print('No child found in any parent document');
+    } catch (e) {
+      print('Error fetching child name: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +88,7 @@ class _HomeChildState extends State<HomeChild> {
                     ),
                   ),
                   buildLevelBar(),
-                  buildWelcomeBack()
+                  buildWelcomeBack(),
                 ],
               ),
               Stack(
@@ -86,41 +145,39 @@ class _HomeChildState extends State<HomeChild> {
         ),
         child: Row(
           children: [
-            const SizedBox(
-              width: 15,
-            ),
+            const SizedBox(width: 15),
             buildIndicator(
-                icon: Image.asset(AppAssets.levelIcon),
-                width: 115,
-                height: 50,
-                text: 'Level 1'),
-            const SizedBox(
-              width: 15,
+              icon: Image.asset(AppAssets.levelIcon),
+              width: 115,
+              height: 50,
+              text: 'Level 1',
             ),
+            const SizedBox(width: 15),
             buildIndicator(
-                icon: Image.asset(AppAssets.coinsIcon),
-                width: 95,
-                height: 50,
-                text: '200'),
-            const SizedBox(
-              width: 15,
+              icon: Image.asset(AppAssets.coinsIcon),
+              width: 95,
+              height: 50,
+              text: '200',
             ),
+            const SizedBox(width: 15),
             buildIndicator(
-                icon: SvgPicture.asset(AppAssets.blueCalendarIcon),
-                width: 111,
-                height: 50,
-                text: 'MyCalender'),
+              icon: SvgPicture.asset(AppAssets.blueCalendarIcon),
+              width: 111,
+              height: 50,
+              text: 'MyCalender',
+            ),
           ],
         ),
       ),
     );
   }
 
-  buildIndicator(
-      {required Widget icon,
-      required double width,
-      required double height,
-      required String text}) {
+  Widget buildIndicator({
+    required Widget icon,
+    required double width,
+    required double height,
+    required String text,
+  }) {
     return Container(
       height: height,
       width: width,
@@ -128,23 +185,21 @@ class _HomeChildState extends State<HomeChild> {
         borderRadius: BorderRadius.circular(60),
         color: Colors.white12,
       ),
-      child: Row(children: [
-        const SizedBox(
-          width: 5,
-        ),
-        icon,
-        const SizedBox(
-          width: 5,
-        ),
-        Text(
-          text,
-          style: const TextStyle(color: Colors.grey, fontSize: 15),
-        ),
-      ]),
+      child: Row(
+        children: [
+          const SizedBox(width: 5),
+          icon,
+          const SizedBox(width: 5),
+          Text(
+            text,
+            style: const TextStyle(color: Colors.grey, fontSize: 15),
+          ),
+        ],
+      ),
     );
   }
 
-  buildWelcomeBack() {
+  Positioned buildWelcomeBack() {
     return Positioned(
       top: 100,
       left: 65,
@@ -152,9 +207,9 @@ class _HomeChildState extends State<HomeChild> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text(
-              'Welcome back, Sarah',
-              style: TextStyle(
+            Text(
+              'Welcome back, ${childName ?? '..'}',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -171,7 +226,7 @@ class _HomeChildState extends State<HomeChild> {
     );
   }
 
-  buildChallengeCard() {
+  Positioned buildChallengeCard() {
     return Positioned(
       top: 0,
       left: 30,
@@ -181,14 +236,13 @@ class _HomeChildState extends State<HomeChild> {
         borderRadius: BorderRadius.circular(30),
         child: Container(
           height: 180,
-          width: 10,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30), color: Colors.white),
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.white,
+          ),
           child: Column(
             children: [
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   const SizedBox(width: 8),
@@ -202,9 +256,7 @@ class _HomeChildState extends State<HomeChild> {
                   const Icon(Icons.more_horiz_outlined, color: Colors.grey),
                 ],
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               const Divider(
                 thickness: 1,
                 color: Colors.grey,
@@ -217,25 +269,23 @@ class _HomeChildState extends State<HomeChild> {
                   Text(
                     'So for today',
                     style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'inter',
-                        fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      fontFamily: 'inter',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   buildRowDailyChallenge(
-                      image: AppAssets.cutecat,
-                      numText: '10',
-                      wordText: 'Activities',
-                      wordTextColor: Colors.blue),
-                  const SizedBox(
-                    width: 75,
+                    image: AppAssets.cutecat,
+                    numText: '10',
+                    wordText: 'Activities',
+                    wordTextColor: Colors.blue,
                   ),
+                  const SizedBox(width: 75),
                   buildRowDailyChallenge(
                     image: AppAssets.cutecat,
                     numText: '40 mins',
@@ -243,7 +293,7 @@ class _HomeChildState extends State<HomeChild> {
                     wordTextColor: Colors.red,
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -251,11 +301,12 @@ class _HomeChildState extends State<HomeChild> {
     );
   }
 
-  Row buildRowDailyChallenge(
-      {required String image,
-      required String numText,
-      required String wordText,
-      required Color wordTextColor}) {
+  Row buildRowDailyChallenge({
+    required String image,
+    required String numText,
+    required String wordText,
+    required Color wordTextColor,
+  }) {
     return Row(
       children: [
         Image.asset(image),
@@ -270,7 +321,10 @@ class _HomeChildState extends State<HomeChild> {
             Text(
               wordText,
               style: TextStyle(
-                  fontSize: 13, color: wordTextColor, fontFamily: 'inter'),
+                fontSize: 13,
+                color: wordTextColor,
+                fontFamily: 'inter',
+              ),
             ),
           ],
         ),
@@ -288,42 +342,40 @@ class _HomeChildState extends State<HomeChild> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               buildActivity(
-                  image: AppAssets.catreadingbook,
-                  text: 'Social Stories',
-                  onTap: () {}),
-              const SizedBox(
-                width: 25,
+                image: AppAssets.catreadingbook,
+                text: 'Social Stories',
+                onTap: () {},
               ),
+              const SizedBox(width: 25),
               buildActivity(
-                  image: AppAssets.catlaptop,
-                  text: 'Traditional Stories',
-                  onTap: () {
-                    Navigator.pushNamed(
-                        context, TraditionalStoriesIntro.routeName);
-                  }),
-              const SizedBox(
-                width: 25,
+                image: AppAssets.catlaptop,
+                text: 'Traditional Stories',
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, TraditionalStoriesIntro.routeName);
+                },
               ),
+              const SizedBox(width: 25),
               buildActivity(
-                  image: AppAssets.learncat,
-                  text: 'Learn Time',
-                  onTap: () {
-                    Navigator.pushNamed(context, LearnPlanet.routeName);
-                  }),
+                image: AppAssets.learncat,
+                text: 'Learn Time',
+                onTap: () {
+                  Navigator.pushNamed(context, LearnPlanet.routeName);
+                },
+              ),
             ],
           ),
-          const SizedBox(
-            height: 25,
-          ),
+          const SizedBox(height: 25),
         ],
       ),
     );
   }
 
-  buildActivity(
-      {required String image,
-      required String text,
-      required void Function()? onTap}) {
+  Widget buildActivity({
+    required String image,
+    required String text,
+    required void Function()? onTap,
+  }) {
     return Column(
       children: [
         InkWell(onTap: onTap, child: Image.asset(image)),
@@ -357,7 +409,7 @@ class _HomeChildState extends State<HomeChild> {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // IconButton(onPressed: (){}, icon: icon)
+              // Add buttons here later
             ],
           ),
         ),

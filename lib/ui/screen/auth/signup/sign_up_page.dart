@@ -6,8 +6,8 @@ import 'package:garduationproject/model/doctor_model/doctor_model.dart';
 import 'package:garduationproject/model/firebase/auth_service.dart';
 import 'package:garduationproject/model/firebase/firebase_service.dart';
 import 'package:garduationproject/model/parent_model/parent_model.dart';
+import 'package:garduationproject/ui/screen/doctor/home/doctor_home_screen.dart';
 
-import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/dialog.dart';
@@ -29,7 +29,8 @@ class _SignUpPageState extends State<SignUpPage> {
   String confirmPassword = '';
   String medicalLicenseNumber = '';
   String MedicalSpecializatin = '';
-  String doctorEmail = ''; // New field for parent
+  String doctorEmail = '';
+  String childName = '';
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final AuthService authService = AuthService();
@@ -159,6 +160,22 @@ class _SignUpPageState extends State<SignUpPage> {
                       doctorEmail = text;
                     },
                   ),
+                  const SizedBox(height: 18),
+                  TextFormFieldSign(
+                    hintText: 'Child Name',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter child name';
+                      }
+                    },
+                    onChanged: (text) {
+                      childName = text;
+                    },
+                  ),
                   const SizedBox(height: 26),
                 ],
                 TextFormFieldSign(
@@ -261,7 +278,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void navigateToProfile() {
     if (widget.userType == 'Doctor') {
-      Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
+      Navigator.pushReplacementNamed(context, DoctorHomeScreen.routeName);
     } else if (widget.userType == 'Parent') {
       Navigator.pushReplacementNamed(context, HomeParent.routeName);
     }
@@ -291,7 +308,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       User? user = await authService.signUp(email, password);
       if (user != null) {
-        if (widget.userType == 'Doctors') {
+        if (widget.userType == 'Doctor') {
           DoctorModel doctor = DoctorModel(
             fullName: fullName,
             email: email,
@@ -303,12 +320,12 @@ class _SignUpPageState extends State<SignUpPage> {
           await databaseService.saveDoctor(doctor);
         } else if (widget.userType == 'Parent') {
           ParentModel parent = ParentModel(
-            fullName: fullName,
-            email: email,
-            phoneNumber: phoneNumber,
-            userType: 'Parent',
-            doctorEmail: doctorEmail,
-          );
+              fullName: fullName,
+              email: email,
+              phoneNumber: phoneNumber,
+              userType: 'Parent',
+              doctorEmail: doctorEmail,
+              childName: childName);
           await databaseService.saveParent(parent);
         }
 

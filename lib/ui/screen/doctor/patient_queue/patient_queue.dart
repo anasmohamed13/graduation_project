@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:garduationproject/ui/screen/doctor/patient_card/patient_card_screen.dart';
 
 class PatientQueueScreen extends StatefulWidget {
   static const String routeName = 'patientQueue';
@@ -36,19 +36,11 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
 
       for (var doc in snapshot.docs) {
         final data = doc.data();
-        final name = data['name'] ?? 'No Name';
+        final name = data['fullName'] ?? 'No Name';
         final image = data['image'] ?? 'assets/image/default.png';
-        final joinDate = data['joinDate'];
-
-        String formattedDate = 'Unknown';
-        if (joinDate is Timestamp) {
-          final date = joinDate.toDate();
-          formattedDate = DateFormat('d MMM yyyy').format(date);
-        }
 
         loadedPatients.add({
-          'name': name,
-          'date': formattedDate,
+          'fullName': name,
           'image': image,
         });
       }
@@ -58,7 +50,6 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
         isLoading = false;
       });
     } catch (e) {
-      
       // ignore: avoid_print
       print('Error fetching patients: $e');
       setState(() {
@@ -117,24 +108,20 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      patient['name']!,
+                                      patient['fullName']!,
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Joined in ${patient['date']}',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, PatientCardScreen.routeName);
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFFF8C8C),
                                   shape: RoundedRectangleBorder(

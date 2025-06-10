@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:garduationproject/model/doctor_model/doctor_model.dart';
+import 'package:garduationproject/model/firebase/firebase_service.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart'; // 🔹 Uncomment if using Firebase
 // import 'package:table_calendar/table_calendar.dart'; // 🔹 Optional calendar package
-import 'package:garduationproject/ui/screen/doctor/profile/calendar_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/patient_queue.dart';
+import 'package:garduationproject/ui/screen/doctor/home/calendar_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/patient_queue/patient_queue.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
   static const String routeName = 'doctorHome';
@@ -33,6 +35,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
     },
   ];
 
+  String? doctorName;
+  bool isLoading = true;
+
   /*
   // 🔹 Sample Firebase Firestore integration (Replace timetable above)
   Future<void> fetchTimetableFromFirestore() async {
@@ -57,6 +62,28 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   */
 
   @override
+  void initState() {
+    super.initState();
+    loadDoctorName();
+  }
+
+  Future<void> loadDoctorName() async {
+    final firebaseService = FirebaseService();
+    final userData = await firebaseService.fetchUserData();
+    if (userData is DoctorModel) {
+      setState(() {
+        doctorName = userData.fullName;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        "Doctor";
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFDFDFD),
@@ -73,14 +100,15 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     backgroundImage: AssetImage('assets/image/Ellipse 1.png'),
                   ),
                   const SizedBox(width: 12),
-                   const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text(
-                        'Hello, Nelson',
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      Text(
+                        'Hello, $doctorName',
+                        style: const TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
                       ),
-                       Text(
+                      const Text(
                         '11 November 2024',
                         style: TextStyle(color: Colors.grey),
                       ),
@@ -98,7 +126,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                       const Positioned(
                         top: 10,
                         right: 10,
-                        child: CircleAvatar(radius: 5, backgroundColor: Colors.red),
+                        child: CircleAvatar(
+                            radius: 5, backgroundColor: Colors.red),
                       ),
                     ],
                   ),
@@ -113,17 +142,25 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
-                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 10)
+                ],
               ),
               child: Row(
                 children: [
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text('Number of patient (+30)', style: TextStyle(fontSize: 20)),
-                       SizedBox(height: 4),
-                       Text('130', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.red)),
-                       Text('24 not active', style: TextStyle(fontSize: 18, color: Colors.grey)),
+                      Text('Number of patient (+30)',
+                          style: TextStyle(fontSize: 20)),
+                      SizedBox(height: 4),
+                      Text('130',
+                          style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red)),
+                      Text('24 not active',
+                          style: TextStyle(fontSize: 18, color: Colors.grey)),
                     ],
                   ),
                   const Spacer(),
@@ -131,14 +168,17 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                          MaterialPageRoute(builder: (_) => const PatientQueueScreen()),
-                    );
+                        MaterialPageRoute(
+                            builder: (_) => const PatientQueueScreen()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFCCCCCC),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
                     ),
-                    child: const Text('View Queue', style: TextStyle(color: Colors.black)),
+                    child: const Text('View Queue',
+                        style: TextStyle(color: Colors.black)),
                   ),
                 ],
               ),
@@ -147,28 +187,29 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
             const SizedBox(height: 16),
 
             // Timetable heading
-           Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 16),
-  child: Row(
-    children: [
-      const Text(
-        'Your timetable',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-      ),
-      const Spacer(),
-      IconButton(
-        icon: const Icon(Icons.tune, size: 30),
-        onPressed: () {
-          // Open calendar page
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CalendarScreen()),
-          );
-        },
-      ),
-    ],
-  ),
-),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  const Text(
+                    'Your timetable',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.tune, size: 30),
+                    onPressed: () {
+                      // Open calendar page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const CalendarScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
 
             const SizedBox(height: 8),
 
@@ -179,12 +220,21 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  for (final day in ['10\nSun', '11\nMon', '12\nTue', '13\nWed', '14\nThr', '15\nFri'])
+                  for (final day in [
+                    '10\nSun',
+                    '11\nMon',
+                    '12\nTue',
+                    '13\nWed',
+                    '14\nThr',
+                    '15\nFri'
+                  ])
                     Container(
                       width: 48,
                       margin: const EdgeInsets.symmetric(horizontal: 6),
                       decoration: BoxDecoration(
-                        color: day.contains('Mon') ? Colors.red : Colors.transparent,
+                        color: day.contains('Mon')
+                            ? Colors.red
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       alignment: Alignment.center,
@@ -193,7 +243,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: day.contains('Mon') ? Colors.white : Colors.black87,
+                          color: day.contains('Mon')
+                              ? Colors.white
+                              : Colors.black87,
                         ),
                       ),
                     )
@@ -216,7 +268,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 4)
+                      ],
                     ),
                     child: Row(
                       children: [
@@ -236,11 +290,13 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                             children: [
                               Text(
                                 entry['name']!,
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               const Text(
                                 'Attached file',
-                                style: TextStyle(fontSize: 13, color: Colors.grey),
+                                style:
+                                    TextStyle(fontSize: 13, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -249,7 +305,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                           onPressed: () {
                             // Start chat with patient
                           },
-                          icon: const Icon(Icons.chat_bubble_outline, color: Colors.red),
+                          icon: const Icon(Icons.chat_bubble_outline,
+                              color: Colors.red),
                         ),
                       ],
                     ),

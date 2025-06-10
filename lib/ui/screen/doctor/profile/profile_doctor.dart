@@ -1,16 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:garduationproject/model/doctor_model/doctor_model.dart';
+import 'package:garduationproject/model/firebase/firebase_service.dart';
+
 import 'package:garduationproject/ui/util/app_assets.dart';
-import 'package:garduationproject/ui/util/build_drop_down.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/widget/build_text_form_filed.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'dart:io';
+import 'dart:convert';
 
 class ProfileDoctor extends StatefulWidget {
   static const String routeName = 'profileDoctor';
@@ -23,55 +27,102 @@ class ProfileDoctor extends StatefulWidget {
 class _ProfileDoctorState extends State<ProfileDoctor> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final ImagePicker _picker = ImagePicker();
+  final ImagePicker picker = ImagePicker();
   File? selectedImage;
   bool isImageSelected = false;
-
-  // Controllers
-  final TextEditingController workingDaysController = TextEditingController();
-  final TextEditingController bioController = TextEditingController();
-
-  // Selected values
-  int? selectedWorkingDays;
-  String? selectedFromHour;
-  String? selectedFromMinute;
-  String? selectedToHour;
-  String? selectedToMinute;
+  Uint8List? imageBytes;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController specializationController =
+      TextEditingController();
+  final FirebaseService firebaseService = FirebaseService();
 
   @override
   void initState() {
     super.initState();
     loadSavedImage();
+    fetchDoctorData();
   }
 
-  Future<void> loadSavedImage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('doctor_profile_image');
-    if (imagePath != null) {
-      setState(() {
-        selectedImage = File(imagePath);
-        isImageSelected = true;
-      });
+  Future<void> fetchUserData() async {
+    final data = await firebaseService.fetchUserData();
+    try {
+      if (mounted) {
+        setState(() {
+          final doctor = DoctorModel.fromJson(data);
+          nameController.text = doctor.fullName;
+          phoneController.text = doctor.phoneNumber;
+          emailController.text = doctor.email;
+          specializationController.text = doctor.medicalSpecializatin ?? '';
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching user data: \$e');
     }
   }
 
-// method to pick image and save the image path in sharedPreferences
+  Future<void> loadSavedImage() async {
+    final user = auth.currentUser;
+    if (user == null) return;
+
+    final doc = await firestore.collection('Doctor').doc(user.email).get();
+    if (doc.exists &&
+        doc.data() != null &&
+        doc.data()!['profileimage'] != null) {
+      final base64Image = doc.data()!['profileimage'];
+      try {
+        final bytes = base64Decode(base64Image);
+        setState(() {
+          selectedImage = null;
+          isImageSelected = true;
+        });
+        imageBytes = bytes;
+      } catch (e) {
+        setState(() {
+          isImageSelected = false;
+        });
+      }
+    }
+  }
+
+  Future<void> fetchDoctorData() async {
+    final user = auth.currentUser;
+    if (user == null) return;
+
+    final doc = await firestore.collection('Doctor').doc(user.email).get();
+    if (doc.exists && doc.data() != null) {
+      final data = doc.data()!;
+      nameController.text = data['fullName'] ?? '';
+      emailController.text = data['email'] ?? '';
+      phoneController.text = data['phoneNumber'] ?? '';
+      specializationController.text = data['medicalSpecializatin'] ?? '';
+    }
+  }
+
   Future<void> pickImage() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         setState(() {
           selectedImage = File(image.path);
           isImageSelected = true;
         });
 
-        // Save image path to SharedPreferences(comment to ganna)
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('doctor_profile_image', image.path);
+        final bytes = await selectedImage!.readAsBytes();
+        final base64Image = base64Encode(bytes);
+
+        final user = auth.currentUser;
+        if (user != null) {
+          await firestore
+              .collection('Doctor')
+              .doc(user.email)
+              .update({'profileimage': base64Image});
+        }
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
+        SnackBar(content: Text('Error picking/uploading image: $e')),
       );
     }
   }
@@ -81,36 +132,12 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
       final user = auth.currentUser;
       if (user == null) return;
 
-      // Get existing doctor data
-      final userDoc = await firestore
-          .collection(DoctorModel.collectionName)
-          .doc(user.email)
-          .get();
-      if (!userDoc.exists) return;
-
-      final existingData = userDoc.data() as Map<String, dynamic>;
-      final doctorModel = DoctorModel.fromJson(existingData);
-
-      // Create updated doctor model with new profile data
-      final updatedDoctor = DoctorModel(
-        fullName: doctorModel.fullName,
-        email: doctorModel.email,
-        phoneNumber: doctorModel.phoneNumber,
-        userType: doctorModel.userType,
-        medicalLicenseNumber: doctorModel.medicalLicenseNumber,
-        medicalSpecializatin: doctorModel.medicalSpecializatin,
-        workingDays: doctorModel.workingDays,
-        workingDaysList: workingDaysController.text.split(','),
-        workingHoursFrom: '$selectedFromHour:$selectedFromMinute',
-        workingHoursTo: '$selectedToHour:$selectedToMinute',
-        bio: bioController.text,
-      );
-
-      // Update the document
-      await firestore
-          .collection(DoctorModel.collectionName)
-          .doc(user.email)
-          .update(updatedDoctor.toJson());
+      await firestore.collection('Doctor').doc(user.email).update({
+        'fullName': nameController.text.trim(),
+        'email': emailController.text.trim(),
+        'phoneNumber': phoneController.text.trim(),
+        'medicalSpecializatin': specializationController.text.trim(),
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile saved successfully!')),
@@ -124,6 +151,8 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -143,8 +172,8 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
             Center(
               child: CircleAvatar(
                 radius: 70,
-                backgroundImage: isImageSelected && selectedImage != null
-                    ? FileImage(selectedImage!)
+                backgroundImage: isImageSelected && imageBytes != null
+                    ? MemoryImage(imageBytes!)
                     : null,
                 child: !isImageSelected
                     ? Image.asset(AppAssets.profileImageDoctor)
@@ -185,7 +214,7 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
                   width: 16,
                 ),
                 Text(
-                  'Job Information',
+                  'Profile Information',
                   style: TextStyle(
                     fontSize: 24,
                     fontFamily: 'inter',
@@ -198,174 +227,87 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
             const SizedBox(
               height: 8,
             ),
-            Row(
-              children: [
-                const SizedBox(
-                  width: 5,
-                ),
-                buildDropDown(
-                  text: 'Number of days you work',
-                  icon: Image.asset(
-                    AppAssets.dropDownIcon,
-                    scale: 0.9,
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Column(
+                children: [
+                  BuildTextFormFiled(
+                    prefixIcon: Image.asset(AppAssets.userEdit),
+                    fillColor: Colors.white,
+                    hintText: "full Name",
+                    text: "Full Name",
+                    vlaidatorErorr: null,
+                    controller: nameController,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(22),
+                    height: height * 0.060,
+                    width: width * 0.80,
+                    fontsize: 16,
+                    fontWeight: FontWeight.w600,
+                    blurRadius: 0,
+                    offset: const Offset(0, 2),
                   ),
-                  color: Colors.grey.shade100,
-                  fontsize: 12,
-                  height: 60,
-                  width: 180,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedWorkingDays = int.tryParse(value.toString());
-                    });
-                  },
-                ),
-                /*
-                will add here a medicalLicenseNumber 
-                */
-              ],
-            ),
-            Row(
-              children: [
-                const SizedBox(
-                  width: 6,
-                ),
-                BuildTextFormFiled(
-                  hintText: '',
-                  text: 'Set your working days',
-                  vlaidatorErorr: '',
-                  controller: workingDaysController,
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(20),
-                  height: 40,
-                  width: 180,
-                  fontsize: 14,
-                  fontWeight: FontWeight.w800,
-                  blurRadius: 0,
-                  offset: const Offset(0, 0),
-                  suffixIcon: IconButton(
-                      onPressed: () {},
-                      icon: Image.asset(AppAssets.calendarIcon)),
-                ),
-                /*
-                will add here a medicalSpecializatin 
-                */
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Center(
-              child: Text(
-                'Your working hours',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'inter',
-                    fontWeight: FontWeight.w700),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  BuildTextFormFiled(
+                      prefixIcon: Image.asset(AppAssets.userEdit),
+                      fillColor: Colors.white,
+                      hintText: "Email Address",
+                      text: "Email address",
+                      vlaidatorErorr: null,
+                      controller: emailController,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(22),
+                      height: MediaQuery.of(context).size.height * 0.060,
+                      width: MediaQuery.of(context).size.width * 0.80,
+                      fontsize: 16,
+                      fontWeight: FontWeight.w600,
+                      blurRadius: 0,
+                      offset: const Offset(0, 2)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  BuildTextFormFiled(
+                      prefixIcon: Image.asset(AppAssets.userEdit),
+                      fillColor: Colors.white,
+                      hintText: "Phone Number",
+                      text: " phone number",
+                      vlaidatorErorr: null,
+                      controller: phoneController,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(22),
+                      height: MediaQuery.of(context).size.height * 0.060,
+                      width: MediaQuery.of(context).size.width * 0.80,
+                      fontsize: 16,
+                      fontWeight: FontWeight.w600,
+                      blurRadius: 0,
+                      offset: const Offset(0, 2)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  BuildTextFormFiled(
+                      prefixIcon: Image.asset(AppAssets.userEdit),
+                      fillColor: Colors.white,
+                      hintText: "Medical Specializatin",
+                      text: "Medical Specializatin",
+                      vlaidatorErorr: null,
+                      controller: specializationController,
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(22),
+                      height: MediaQuery.of(context).size.height * 0.060,
+                      width: MediaQuery.of(context).size.width * 0.80,
+                      fontsize: 16,
+                      fontWeight: FontWeight.w600,
+                      blurRadius: 0,
+                      offset: const Offset(0, 2)),
+                ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'From',
-                  style: TextStyle(
-                      fontFamily: 'inter',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-                buildDropDown(
-                    text: null,
-                    color: Colors.grey.shade100,
-                    icon: Image.asset(
-                      AppAssets.dropDownIcon,
-                      scale: 0.1,
-                    ),
-                    fontsize: 0,
-                    height: 62,
-                    width: 90,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedFromHour = value.toString();
-                      });
-                    }),
-                buildDropDown(
-                    text: null,
-                    color: const Color(0xffffe8e5),
-                    icon: Image.asset(
-                      AppAssets.dropDownIcon,
-                      scale: 0.1,
-                    ),
-                    fontsize: 0,
-                    height: 62,
-                    width: 90,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedFromMinute = value.toString();
-                      });
-                    }),
-                const Text(
-                  'To',
-                  style: TextStyle(
-                      fontFamily: 'inter',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-                buildDropDown(
-                    text: null,
-                    color: Colors.grey.shade100,
-                    icon: Image.asset(
-                      AppAssets.dropDownIcon,
-                      scale: 0.1,
-                    ),
-                    fontsize: 0,
-                    height: 60,
-                    width: 90,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedToHour = value.toString();
-                      });
-                    }),
-                buildDropDown(
-                    text: null,
-                    color: const Color(0xffddeafb),
-                    icon: Image.asset(
-                      AppAssets.dropDownIcon,
-                      scale: 0.1,
-                    ),
-                    fontsize: 0,
-                    height: 60,
-                    width: 85,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedToMinute = value.toString();
-                      });
-                    }),
-              ],
-            ),
             const SizedBox(
-              height: 8,
+              height: 20,
             ),
-            const Text(
-              'Add Your Bio in profile',
-              style:
-                  TextStyle(fontFamily: 'inter', fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            BuildTextFormFiled(
-                maxline: 4,
-                hintText: 'Write a CV about yourself, your specialty, etc.',
-                text: null,
-                vlaidatorErorr: null,
-                controller: bioController,
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(16),
-                height: 75,
-                width: 350,
-                fontsize: 0,
-                fontWeight: null,
-                blurRadius: 1,
-                offset: const Offset(0, 0)),
-            const SizedBox(height: 24),
             buildElevatedButton(() => saveProfile(), 'Confirm',
                 const Color(0xffec5e4c), 60, 170, 20, Colors.white),
           ],
