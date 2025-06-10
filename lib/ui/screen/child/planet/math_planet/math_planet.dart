@@ -24,6 +24,7 @@ class MathPlanet extends StatelessWidget {
               left: 25,
               top: 20,
               child: CircleAvatar(
+                // ignore: deprecated_member_use
                 backgroundColor: Colors.white.withOpacity(0.7),
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.black),
