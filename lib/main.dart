@@ -20,6 +20,10 @@ import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Z
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/video/youtube_video_player_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/calendar_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/doctor_home_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/patient_card_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/patient_queue.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
@@ -37,6 +41,8 @@ import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_do
 import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/screen/home/splash/splash.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +62,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: LearnPlanet.routeName,
+      initialRoute:  PatientCardScreen.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -97,7 +103,15 @@ class GatoApp extends StatelessWidget {
         MathPlanet.routeName: (_) => const MathPlanet(),
         CountWithAlienIntro.routeName: (_) => const CountWithAlienIntro(),
         CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
-        AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen()
+        AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen(),
+        // ignore: prefer_const_constructors
+        PatientQueueScreen.routeName: (_) => PatientQueueScreen(),
+        // ignore: prefer_const_constructors
+        DoctorHomeScreen.routeName: (_) => DoctorHomeScreen(),
+        CalendarScreen.routeName: (_) => const CalendarScreen(),
+        PatientCardScreen.routeName: (_) => const PatientCardScreen(),  
+      
+
       },
     );
   }
