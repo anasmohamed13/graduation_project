@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/auth/login/login_page.dart';
 
 class DoctorLogin extends StatelessWidget {
-  static const String routName = 'Doctor';
+  static const String routeName = 'Doctor';
   const DoctorLogin({super.key});
 
   @override

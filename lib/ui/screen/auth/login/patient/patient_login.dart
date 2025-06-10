@@ -5,7 +5,7 @@ import 'package:garduationproject/ui/screen/auth/signup/signup-patient/sign_up_p
 import 'package:garduationproject/ui/util/app_assets.dart';
 
 class PatientLogin extends StatefulWidget {
-  static const String routName = 'patient';
+  static const String routeName = 'patient';
   const PatientLogin({super.key});
 
   @override

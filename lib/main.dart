@@ -17,6 +17,7 @@ import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_
 import 'package:garduationproject/ui/screen/child/hello/intro_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_detail.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
+import 'package:garduationproject/ui/screen/child/social_stories/social_stories.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/video/youtube_video_player_screen.dart';
@@ -58,13 +59,13 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: SignUpParent.routeName,
+      initialRoute: SocialStoriesScreen.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
-        ParentLogin.routName: (_) => const ParentLogin(),
-        DoctorLogin.routName: (_) => const DoctorLogin(),
-        PatientLogin.routName: (_) => const PatientLogin(),
+        ParentLogin.routeName: (_) => const ParentLogin(),
+        DoctorLogin.routeName: (_) => const DoctorLogin(),
+        PatientLogin.routeName: (_) => const PatientLogin(),
         SignUpPatient.routeName: (_) => const SignUpPatient(),
         SignUpParent.routeName: (_) => const SignUpParent(),
         SignUpDoctor.routeName: (_) => const SignUpDoctor(),
@@ -98,7 +99,8 @@ class GatoApp extends StatelessWidget {
         MathPlanet.routeName: (_) => const MathPlanet(),
         CountWithAlienIntro.routeName: (_) => const CountWithAlienIntro(),
         CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
-        AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen()
+        AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen(),
+        SocialStoriesScreen.routeName: (_) => const SocialStoriesScreen(),
       },
     );
   }
