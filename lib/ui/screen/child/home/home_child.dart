@@ -24,6 +24,7 @@ class _HomeChildState extends State<HomeChild> {
   void initState() {
     super.initState();
     fetchChildName();
+      GatoTimerService().startTimer(context);
   }
 
   void fetchChildName() async {
@@ -73,11 +74,7 @@ class _HomeChildState extends State<HomeChild> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    GatoTimerService().startTimer(context);
-  }
+ 
 
   @override
   Widget build(BuildContext context) {

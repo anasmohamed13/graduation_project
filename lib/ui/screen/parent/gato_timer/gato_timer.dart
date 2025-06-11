@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer_service.dart';
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
@@ -21,7 +20,7 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     if (!gatoTimerService.isRunning) {
-      gatoTimerService.resetTimer(seconds: 600);
+      gatoTimerService.resetTimer(seconds: 600); // مؤقت لـ 10 دقائق للتجربة
       gatoTimerService.resumeTimer(context);
     }
   }
@@ -63,49 +62,18 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
             children: [
               Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 37, left: 26, right: 26),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 48.5,
-                          height: 43,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(width: 25),
-                        ShaderMask(
-                          blendMode: BlendMode.srcIn,
-                          shaderCallback: (Rect bounds) {
-                            return const LinearGradient(
-                              colors: [Color(0xff113BA7), Color(0xff8EBFF6)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ).createShader(bounds);
-                          },
-                          child: const Text(
-                            "Gato Timer",
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
+                  const SizedBox(height: 60),
+                  const Center(
+                    child: Text(
+                      "Gato Timer",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xff113BA7),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 33),
-                  SvgPicture.asset(
-                    'assets/image/Gatotimer.svg',
-                    width: 200,
-                    height: 200,
-                  ),
+                  const Spacer(),
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -131,6 +99,7 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
                       ),
                     ],
                   ),
+                  const Spacer(),
                 ],
               ),
               Positioned(

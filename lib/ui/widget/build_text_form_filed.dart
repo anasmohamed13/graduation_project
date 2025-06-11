@@ -65,6 +65,7 @@ class BuildTextFormFiled extends StatelessWidget {
             borderRadius: borderRadius ?? BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
+                // ignore: deprecated_member_use
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: blurRadius ?? 1,
                 offset: offset ?? const Offset(0, 4),

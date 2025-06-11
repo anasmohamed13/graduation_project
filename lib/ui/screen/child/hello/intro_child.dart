@@ -42,6 +42,7 @@ class _IntroChildState extends State<IntroChild> {
             fit: BoxFit.cover,
           ),
           Container(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.2),
           ),
           AnimatedSwitcher(

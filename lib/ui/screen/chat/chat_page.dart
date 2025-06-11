@@ -92,7 +92,9 @@ class _ChatPageState extends State<ChatPage> {
   void sendMessage() {
     if (messageController.text.trim().isEmpty ||
         doctorEmail == null ||
-        parentEmail == null) return;
+        parentEmail == null) {
+      return;
+    }
 
     String messageText = messageController.text.trim();
     String senderType =
@@ -100,7 +102,7 @@ class _ChatPageState extends State<ChatPage> {
 
     firestore
         .collection('chats')
-        .doc('${doctorEmail}_${parentEmail}')
+        .doc('${doctorEmail}_$parentEmail')
         .collection('messages')
         .add({
       'text': messageText,
@@ -175,7 +177,7 @@ class _ChatPageState extends State<ChatPage> {
           StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('chats')
-                .doc('${doctorEmail}_${parentEmail}')
+                .doc('${doctorEmail}_$parentEmail')
                 .collection('messages')
                 .orderBy('timestamp', descending: false)
                 .snapshots(),
