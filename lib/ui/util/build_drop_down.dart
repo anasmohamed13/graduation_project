@@ -7,6 +7,7 @@ Widget buildDropDown({
   required double fontsize,
   required double height,
   required double width,
+  void Function(dynamic)? onChanged,
 }) =>
     Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,7 +26,6 @@ Widget buildDropDown({
           width: width,
           child: DropdownButtonFormField(
             iconSize: 4,
-
             icon: icon,
             dropdownColor: Colors.grey.shade100,
             decoration: InputDecoration(
@@ -52,7 +52,7 @@ Widget buildDropDown({
                 );
               },
             ),
-            onChanged: (value) {},
+            onChanged: onChanged,
           ),
         ),
       ],

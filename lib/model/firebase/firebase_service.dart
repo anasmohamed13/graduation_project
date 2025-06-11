@@ -2,15 +2,14 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:garduationproject/model/user_model/user_model.dart';
+import 'package:garduationproject/model/doctor_model/doctor_model.dart';
+import 'package:garduationproject/model/parent_model/parent_model.dart';
 
 //comment to Gana this code to save user data in firestore
 //but the doctor have collection and parent have another collection
 class FirebaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-
-  UserModel? userData;
 
   //-------------- to Ganna its not complete and have a Bug---------------//
   // Future<void> updateUserField(String field, String value) async {
@@ -29,59 +28,53 @@ class FirebaseService {
   //   }
   // }
 
-  Future<void> saveUser(UserModel user) async {
-    String collection = user.userType == 'Doctor' ? 'Doctors' : 'Parents';
-    await firestore.collection(collection).doc(user.email).set(user.toJson());
+  Future<bool> checkDoctorExistsByEmail(String email) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Doctor')
+        .where('email', isEqualTo: email)
+        .get();
+    return snapshot.docs.isNotEmpty;
   }
 
-  // Future<void> saveChild({
-  //   required String parentEmail,
-  //   required Map<String, dynamic> childData,
-  // }) async {
-  //   try {
-  //     String childId = firestore
-  //         .collection('Parents')
-  //         .doc(parentEmail)
-  //         .collection('Children')
-  //         .doc()
-  //         .id;
+  Future<void> saveUser({
+    required String userType,
+    required Map<String, dynamic> userData,
+    required String email,
+  }) async {
+    String collection = userType == 'Doctor' ? 'Doctors' : 'Parents';
+    await firestore.collection(collection).doc(email).set(userData);
+  }
 
-  //     await firestore
-  //         .collection('Parents')
-  //         .doc(parentEmail)
-  //         .collection('Children')
-  //         .doc(childId)
-  //         .set({
-  //       ...childData,
-  //       'childId': childId,
-  //     });
+  Future<void> saveDoctor(DoctorModel doctor) async {
+    await firestore.collection('Doctor').doc(doctor.email).set(doctor.toJson());
+  }
 
-  //     print('Child saved successfully');
-  //   } catch (e) {
-  //     print('Error saving child: $e');
-  //     throw Exception('Failed to save child: $e');
-  //   }
-  // }
+  Future<void> saveParent(ParentModel parent) async {
+    await firestore.collection('Parent').doc(parent.email).set(parent.toJson());
+  }
 
   Future<void> signOut() async {
     await auth.signOut();
   }
 
-  Future<UserModel?> fetchUserData() async {
+  Future<dynamic> fetchUserData() async {
     try {
-      //get current user (read this ganna)
       final User? user = auth.currentUser;
       if (user != null) {
-        // تحديد اسم الـ Collection بناءً على نوع المستخدم
         String collection = await getUserCollection(user.email!);
-
-        if (collection.isNotEmpty) {
-          // to ganna this to read data from firestore
+        if (collection == 'Doctors') {
           DocumentSnapshot snapshot =
-              await firestore.collection(collection).doc(user.email).get();
-
+              await firestore.collection('Doctors').doc(user.email).get();
           if (snapshot.exists) {
-            return UserModel.fromJson(snapshot.data() as Map<String, dynamic>);
+            return DoctorModel.fromJson(
+                snapshot.data() as Map<String, dynamic>);
+          }
+        } else if (collection == 'Parents') {
+          DocumentSnapshot snapshot =
+              await firestore.collection('Parents').doc(user.email).get();
+          if (snapshot.exists) {
+            return ParentModel.fromJson(
+                snapshot.data() as Map<String, dynamic>);
           }
         }
       }
@@ -91,7 +84,6 @@ class FirebaseService {
     return null;
   }
 
-  // ميثود لتحديد Collection بناءً على البريد الإلكتروني
   Future<String> getUserCollection(String email) async {
     try {
       // check this email in doctor collection (comment to ganna)
@@ -112,58 +104,4 @@ class FirebaseService {
     }
     return ''; // if the user not found in any collection
   }
-
-//------------->will deleted or fixed <------------
-  // Future<void> signInWithGoogle(BuildContext context) async {
-  //   try {
-  //     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //     if (googleUser == null) return; // when User canceled sign-in (to Ganna)
-  //     GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
-
-  //     AuthCredential credential = GoogleAuthProvider.credential(
-  //       accessToken: googleAuth.accessToken,
-  //       idToken: googleAuth.idToken,
-  //     );
-  //     UserCredential userCredential =
-  //         await FirebaseAuth.instance.signInWithCredential(credential);
-  //     User? firebaseUser = userCredential.user;
-  //     if (firebaseUser != null) {
-  //       // Fetch user data from Firestore
-  //       UserModel? userModel = await fetchUserData();
-
-  //       if (userModel != null) {
-  //         // Navigate to the correct profile based on userType
-  //         navigateToProfile(context, userModel.userType);
-  //       } else {
-  //         UserModel newUser = UserModel(
-  //           fullName: firebaseUser.displayName ?? '',
-  //           email: firebaseUser.email ?? '',
-  //           phoneNumber: firebaseUser.phoneNumber ?? '',
-  //           userType: 'Parent',
-  //           medicalLicenseNumber: null,
-  //           MedicalSpecializatin: null,
-  //         );
-  //         await saveUser(newUser);
-
-  //         navigateToProfile(context, newUser.userType);
-  //       }
-  //     }
-
-  //     // complete this method to save user and navigate to profile
-  //     // create method to sign in via phone}
-  //   } catch (e) {
-  //     print('Error signing in with Google: $e');
-  //   }
-  // }
 }
-
-//will deleted
-// void navigateToProfile(BuildContext context, String userType) {
-//   if (userType == UserModel.collectionDoctor) {
-//     Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
-//   } else if (userType == UserModel.collectionParent) {
-//     Navigator.pushReplacementNamed(context, ProfileParent.routeName);
-//   } else {
-//     print('Unknown user type: $userType');
-//   }
-// }

@@ -1,12 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/model/firebase/firebase_service.dart';
-import 'package:garduationproject/model/user_model/user_model.dart';
+import 'package:garduationproject/model/parent_model/parent_model.dart';
 import 'package:garduationproject/ui/screen/home/hello/hello_page.dart';
-
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
+import 'package:garduationproject/ui/util/image_service.dart';
 import 'package:garduationproject/ui/widget/build_text_form_filed.dart';
 
 class ProfileParent extends StatefulWidget {
@@ -19,7 +19,8 @@ class ProfileParent extends StatefulWidget {
 
 class _ProfileParentState extends State<ProfileParent> {
   final FirebaseService firebaseService = FirebaseService();
-  UserModel? userData;
+  final ImageService imageService = ImageService();
+  File? imageFile;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -30,42 +31,12 @@ class _ProfileParentState extends State<ProfileParent> {
     fetchUserData();
   }
 
-  Future<void> fetchUserData() async {
-    final data = await firebaseService.fetchUserData();
-    try {
-      if (mounted) {
-        setState(() {
-          userData = data;
-          nameController.text = userData?.fullName ?? '';
-          phoneController.text = userData?.phoneNumber ?? '';
-          emailController.text = userData?.email ?? '';
-        });
-      }
-    } catch (e) {
-      debugPrint('Error fetching user data: \$e');
-    }
-  }
-//-------------- to Ganna its not complete and have a Bug---------------//
-  // Future<void> saveUserData() async {
-  //   try {
-  //     await firebaseService.updateUserField("fullName", nameController.text);
-  //     await firebaseService.updateUserField(
-  //         "phoneNumber", phoneController.text);
-  //     await firebaseService.updateUserField("email", emailController.text);
-
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Profile updated successfully!')),
-  //     );
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to update profile: $e')),
-  //     );
-  //   }
-  // }
-
-  Future<void> signOut() async {
-    await firebaseService.signOut();
-    Navigator.of(context).pushReplacementNamed(HelloPage.routeName);
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    super.dispose();
   }
 
   @override
@@ -87,8 +58,18 @@ class _ProfileParentState extends State<ProfileParent> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildElevatedButton(() {}, 'Upload New', const Color(0xff8ebff6),
-                  height * 0.065, width * 0.4, 16, Colors.white),
+              buildElevatedButton(() async {
+                final pickedFile = await imageService.pickAndUploadImage(
+                    collection: 'Parent',
+                    docId: emailController.text,
+                    imageFieldName: 'profileImage');
+                if (pickedFile != null && mounted) {
+                  setState(() {
+                    imageFile = File(pickedFile.path);
+                  });
+                }
+              }, 'Upload New', const Color(0xff8ebff6), height * 0.065,
+                  width * 0.4, 16, Colors.white),
               const SizedBox(
                 width: 24,
               ),
@@ -123,6 +104,53 @@ class _ProfileParentState extends State<ProfileParent> {
         ],
       ),
     );
+  }
+
+  Future<void> fetchUserData() async {
+    final data = await firebaseService.fetchUserData();
+    try {
+      if (mounted) {
+        setState(() {
+          final parent = ParentModel.fromJson(data);
+          nameController.text = parent.fullName;
+          phoneController.text = parent.phoneNumber;
+          emailController.text = parent.email;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching user data: \$e');
+    }
+  }
+
+  Material buildCircleAvatar(
+      {required BorderRadiusGeometry? borderRadius,
+      required double? radius,
+      required double? elevation}) {
+    return Material(
+      shadowColor: const Color(0xffe1eeff),
+      color: const Color(0xffe1eeff),
+      borderRadius: borderRadius,
+      elevation: elevation ?? 10,
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        radius: radius,
+        child: imageFile != null
+            ? ClipOval(
+                child: Image.file(
+                  imageFile!,
+                  width: radius! * 2,
+                  height: radius * 2,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Image.asset(AppAssets.girlMoji),
+      ),
+    );
+  }
+
+  Future<void> signOut() async {
+    await firebaseService.signOut();
+    Navigator.of(context).pushReplacementNamed(HelloPage.routeName);
   }
 
   buildPersonalInformation() {
@@ -246,21 +274,4 @@ class _ProfileParentState extends State<ProfileParent> {
       ),
     );
   }
-}
-
-Material buildCircleAvatar(
-    {required BorderRadiusGeometry? borderRadius,
-    required double? radius,
-    required double? elevation}) {
-  return Material(
-    shadowColor: const Color(0xffe1eeff),
-    color: const Color(0xffe1eeff),
-    borderRadius: borderRadius,
-    elevation: elevation ?? 10,
-    child: CircleAvatar(
-      backgroundColor: Colors.transparent,
-      radius: radius,
-      child: Image.asset(AppAssets.girlMoji),
-    ),
-  );
 }

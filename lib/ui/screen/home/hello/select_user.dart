@@ -34,13 +34,13 @@ class SelectUser extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () =>
-                        Navigator.pushNamed(context, PatientLogin.routName),
+                        Navigator.pushNamed(context, PatientLogin.routeName),
                     child: UserLabel(image: AppAssets.patient, title: 'child'),
                   ),
                   const SizedBox(width: 10),
                   InkWell(
                     onTap: () =>
-                        Navigator.pushNamed(context, ParentLogin.routName),
+                        Navigator.pushNamed(context, ParentLogin.routeName),
                     child: UserLabel(image: AppAssets.parent, title: 'parent'),
                   ),
                 ],
@@ -53,7 +53,7 @@ class SelectUser extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () =>
-                        Navigator.pushNamed(context, DoctorLogin.routName),
+                        Navigator.pushNamed(context, DoctorLogin.routeName),
                     child: UserLabel(image: AppAssets.doctor, title: 'Doctor'),
                   ),
                 ],

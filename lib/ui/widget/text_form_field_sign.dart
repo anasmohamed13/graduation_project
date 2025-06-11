@@ -26,7 +26,7 @@ class TextFormFieldSign extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      width: MediaQuery.of(context).size.width * 0.75,
+      width: MediaQuery.of(context).size.width * 0.80,
       child: TextFormField(
           onChanged: onChanged,
           controller: controller,

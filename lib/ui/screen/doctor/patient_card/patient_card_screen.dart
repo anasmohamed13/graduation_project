@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/patient_queue.dart';
+import 'package:garduationproject/ui/screen/doctor/patient_queue/patient_queue.dart';
 
 class PatientCardScreen extends StatefulWidget {
   static const String routeName = 'PatientCardScreen';
@@ -13,10 +15,36 @@ class PatientCardScreen extends StatefulWidget {
 
 class _PatientCardScreenState extends State<PatientCardScreen> {
   int selectedIndex = 0;
-  double percent = 0.64;
+  late double percent;
+  Map<String, dynamic>? patientData;
+  @override
+  void initState() {
+    super.initState();
+    percent = generateRandomPercentage();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // استقبال البيانات المرسلة من الصفحة السابقة
+    patientData ??=
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+  }
+
+  double generateRandomPercentage() {
+    final random = Random();
+    return ((random.nextDouble() * 0.99) + 0.01);
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (patientData == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('No patient data available'),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -28,7 +56,6 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  
                   SizedBox(
                     height: 48,
                     width: 48,
@@ -39,26 +66,30 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                         backgroundColor: const Color(0xffF1F1F1),
                         elevation: 0,
                       ),
-                     onPressed: () {
-                       Navigator.pushReplacementNamed(context, PatientQueueScreen.routeName);
-                        },
-
-                      child: const Icon(Icons.arrow_back_rounded, color: Colors.black),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, PatientQueueScreen.routeName);
+                      },
+                      child: const Icon(Icons.arrow_back_rounded,
+                          color: Colors.black),
                     ),
                   ),
                   const Text(
                     "Patient card",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
                   ),
-                  const SizedBox(width: 48), 
+                  const SizedBox(width: 48),
                 ],
               ),
               const SizedBox(height: 30),
 
-              
               Container(
                 height: 185,
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 29),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 29),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   gradient: const LinearGradient(
@@ -71,23 +102,32 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Patient #21", style: TextStyle(color: Colors.white, fontSize: 14)),
-                          SizedBox(height: 5),
-                          Text("Teresa Wilier's\ndaughter",
-                              style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold)),
-                          SizedBox(height: 10),
-                          Text("12 y.o.", style: TextStyle(color: Colors.white, fontSize: 18)),
+                          const SizedBox(height: 5),
+                          Text(
+                              "${patientData!['parentName']}'s\n${patientData!['childGender'] == 'male' ? 'son' : 'daughter'}",
+                              style: const TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 10),
+                          Text("Age: ${patientData!['age']}",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontFamily: 'inter',
+                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
                     SizedBox(
                       height: 100,
                       width: 100,
-                      child: Image.asset('assets/image/parentcat.png', fit: BoxFit.contain),
+                      child: Image.asset('assets/image/parentcat.png',
+                          fit: BoxFit.contain),
                     ),
                   ],
                 ),
@@ -95,7 +135,6 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
 
               const SizedBox(height: 20),
 
-              
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -110,12 +149,16 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("Problem research",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black)),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black)),
                           SizedBox(height: 5),
-                          Text("Start: 10 Nov 2024",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey)),
                           Text("Dr. Tom Nelson",
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black)),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black)),
                         ],
                       ),
                     ),
@@ -127,7 +170,8 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                       percent: percent,
                       center: Text(
                         "${(percent * 100).toInt()}%",
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       circularStrokeCap: CircularStrokeCap.round,
                       progressColor: const Color(0xFFE74C3C),
@@ -155,14 +199,16 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: selectedIndex == index ? Colors.red : Colors.grey,
+                          color:
+                              selectedIndex == index ? Colors.red : Colors.grey,
                           width: 2,
                         ),
                       ),
                       child: Center(
                         child: Image.asset(
                           problems[index].imagePath,
-                          color: selectedIndex == index ? Colors.red : Colors.grey,
+                          color:
+                              selectedIndex == index ? Colors.red : Colors.grey,
                           height: 30,
                           width: 30,
                         ),
@@ -176,7 +222,8 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
 
               // 🟣 DESCRIPTION SECTION
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 30),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 13, horizontal: 30),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   color: const Color(0xffF6F6F6),
@@ -187,12 +234,18 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                   children: [
                     Text(
                       problems[selectedIndex].title,
-                      style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       problems[selectedIndex].description,
-                      style: const TextStyle(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
                       textAlign: TextAlign.start,
                     ),
                   ],
@@ -211,7 +264,10 @@ class ProblemDetail {
   final String description;
   final String imagePath;
 
-  ProblemDetail({required this.title, required this.description, required this.imagePath});
+  ProblemDetail(
+      {required this.title,
+      required this.description,
+      required this.imagePath});
 }
 
 final List<ProblemDetail> problems = [
@@ -233,18 +289,16 @@ final List<ProblemDetail> problems = [
   ),
   ProblemDetail(
     title: "Emotional Problem",
-    description:
-        "Current situation: Frequent mood swings and insecurity. "
+    description: "Current situation: Frequent mood swings and insecurity. "
         "Problem: Difficulty expressing feelings causes stress buildup. "
         "Impact: Anxiety symptoms like tension and sudden crying.",
     imagePath: 'assets/image/icons8-anime-emoji-64.png',
   ),
   ProblemDetail(
     title: "Learning Problem",
-    description:
-        "Current situation: Struggles with concentration and memory. "
+    description: "Current situation: Struggles with concentration and memory. "
         "Problem: Difficulty following instructions and completing tasks. "
         "Impact: Affects academic performance and confidence.",
-    imagePath: 'assets/image/icons8-book-shelf-50.png', 
+    imagePath: 'assets/image/icons8-book-shelf-50.png',
   ),
 ];

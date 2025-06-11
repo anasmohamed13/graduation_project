@@ -10,27 +10,43 @@ class LearnPlanet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          const SizedBox(height: 70),
-          buildPlanet(
-              onTap: () {
-                Navigator.pushNamed(context, SciencePlanet.routeName);
-              },
-              imagePath: AppAssets.scienceCat,
-              namePlanet: 'Science Planet'),
-          const SizedBox(height: 90),
-          buildPlanet(
-              onTap: () {
-                Navigator.pushNamed(context, MathPlanet.routeName);
-              },
-              imagePath: AppAssets.mathCat,
-              namePlanet: 'Math Planet'),
-          const SizedBox(height: 90),
-          buildPlanet(
-              onTap: () {},
-              imagePath: AppAssets.gameCat,
-              namePlanet: 'Fun Planet'),
+          Positioned.fill(
+            child: RotatedBox(
+              quarterTurns: -3,
+              child: Image.asset(
+                AppAssets.backgroundlearnPlanet,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // Content
+          Column(
+            children: [
+              const SizedBox(height: 70),
+              buildPlanet(
+                  onTap: () {
+                    Navigator.pushNamed(context, SciencePlanet.routeName);
+                  },
+                  imagePath: AppAssets.scienceCat,
+                  namePlanet: 'Science Planet'),
+              const SizedBox(height: 90),
+              buildPlanet(
+                  onTap: () {
+                    Navigator.pushNamed(context, MathPlanet.routeName);
+                  },
+                  imagePath: AppAssets.mathCat,
+                  namePlanet: 'Math Planet'),
+              const SizedBox(height: 90),
+              buildPlanet(
+                  onTap: () {},
+                  imagePath: AppAssets.gameCat,
+                  namePlanet: 'Fun Planet'),
+            ],
+          ),
         ],
       ),
     );
@@ -48,7 +64,7 @@ class LearnPlanet extends StatelessWidget {
           onTap: onTap,
           child: Image.asset(
             imagePath,
-            width: 150,
+            width: 125,
             height: 200,
             fit: BoxFit.contain,
           ),
@@ -61,7 +77,7 @@ class LearnPlanet extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),

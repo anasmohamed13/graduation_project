@@ -10,22 +10,37 @@ class SciencePlanet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          const SizedBox(height: 165),
-          buildZone(
-              onTap: () {
-                Navigator.pushNamed(context, PlanetZone.routeName);
-              },
-              imagePath: AppAssets.planetZone,
-              namePlanet: 'Planet Zone'),
-          const SizedBox(height: 90),
-          buildZone(
-              onTap: () {
-                Navigator.pushNamed(context, IntroBiology.routeName);
-              },
-              imagePath: AppAssets.biologyZone,
-              namePlanet: 'Biology zone'),
+          Positioned.fill(
+            child: RotatedBox(
+              quarterTurns: -3,
+              child: Image.asset(
+                AppAssets.scincePlanetBackGround,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              const SizedBox(height: 165),
+              buildZone(
+                  onTap: () {
+                    Navigator.pushNamed(context, PlanetZone.routeName);
+                  },
+                  imagePath: AppAssets.planetZone,
+                  namePlanet: 'Planet Zone'),
+              const SizedBox(height: 90),
+              buildZone(
+                  onTap: () {
+                    Navigator.pushNamed(context, IntroBiology.routeName);
+                  },
+                  imagePath: AppAssets.biologyZone,
+                  namePlanet: 'Biology zone'),
+            ],
+          ),
         ],
       ),
     );
@@ -46,7 +61,7 @@ class SciencePlanet extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),

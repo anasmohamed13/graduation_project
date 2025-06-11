@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/auth/login/login_page.dart';
 
 class ParentLogin extends StatelessWidget {
-  static const String routName = 'ParentLogin';
+  static const String routeName = 'ParentLogin';
   const ParentLogin({super.key});
 
   @override

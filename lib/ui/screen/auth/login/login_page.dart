@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_doctor.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
+import 'package:garduationproject/ui/screen/doctor/home/doctor_home_screen.dart';
+
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
@@ -259,18 +260,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void navigateToProfile() {
-  if (widget.user == 'Doctor') {
-    
-    Navigator.pushReplacementNamed(
-      context, 
-      ProfileDoctor.routeName,
-      arguments: {'isDoctor': true}
-    );
-  } else if (widget.user == 'parent') {
-    // Navigate to parent home
-    Navigator.pushReplacementNamed(context, HomeParent.routeName);
+    if (widget.user == 'Doctor') {
+      Navigator.pushReplacementNamed(context, DoctorHomeScreen.routeName,
+          arguments: {'isDoctor': true});
+    } else if (widget.user == 'parent') {
+      // Navigate to parent home
+      Navigator.pushReplacementNamed(context, HomeParent.routeName);
+    }
   }
-}
 
   Future<void> signIn() async {
     // to check validate aboute email or password before firebase auth--->(read this Gana)

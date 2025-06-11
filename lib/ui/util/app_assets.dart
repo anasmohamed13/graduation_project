@@ -91,4 +91,7 @@ abstract class AppAssets {
   static const String alienRocket = 'assets/image/alienRocket.png';
   static const String planeOfAlien = 'assets/image/planeOfALien.png';
   static const String gameBackground = 'assets/image/game_background.jpg';
+  static const String scincePlanetBackGround =
+      'assets/image/scince_Planet_backGround.jpg';
+  static const String message = 'assets/image/Message.png';
 }

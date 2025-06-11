@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
@@ -102,8 +104,42 @@ class _HomeParentState extends State<HomeParent> {
         buildServiceButton('GATO Chat', onTap: () {
           Navigator.pushNamed(context, AiChat.routeName);
         }),
-        buildServiceButton('Ask Doctor', onTap: () {
-          Navigator.pushNamed(context, ChatPage.routeName);
+        buildServiceButton('Ask Doctor', onTap: () async {
+          final user = FirebaseAuth.instance.currentUser;
+          if (user == null) return;
+
+          final parentEmail = user.email;
+          try {
+            final parentDoc = await FirebaseFirestore.instance
+                .collection('Parent')
+                .doc(parentEmail)
+                .get();
+
+            if (!mounted) return;
+
+            if (parentDoc.exists &&
+                parentDoc.data()!.containsKey('doctorEmail')) {
+              final doctorEmail = parentDoc['doctorEmail'];
+
+              Navigator.pushNamed(
+                context,
+                ChatPage.routeName,
+                arguments: {
+                  'parentEmail': parentEmail,
+                  'doctorEmail': doctorEmail,
+                },
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("No linked doctor found.")),
+              );
+            }
+          } catch (e) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Error: $e")),
+            );
+          }
         }),
       ],
     );

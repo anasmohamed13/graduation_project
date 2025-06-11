@@ -2,10 +2,12 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:garduationproject/model/doctor_model/doctor_model.dart';
 import 'package:garduationproject/model/firebase/auth_service.dart';
 import 'package:garduationproject/model/firebase/firebase_service.dart';
-import 'package:garduationproject/model/user_model/user_model.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
+import 'package:garduationproject/model/parent_model/parent_model.dart';
+import 'package:garduationproject/ui/screen/doctor/home/doctor_home_screen.dart';
+
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/dialog.dart';
@@ -27,6 +29,9 @@ class _SignUpPageState extends State<SignUpPage> {
   String confirmPassword = '';
   String medicalLicenseNumber = '';
   String MedicalSpecializatin = '';
+  String doctorEmail = '';
+  String childName = '';
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final AuthService authService = AuthService();
   final FirebaseService databaseService = FirebaseService();
@@ -40,145 +45,200 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Form(
           key: formKey,
           child: Center(
-            child: Stack(
+            child: Column(
               children: [
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 12,
+                const SizedBox(height: 12),
+                const Text(
+                  'Start now, and share your\n medical expertise with the\n world!',
+                  style: TextStyle(
+                    fontFamily: 'inter',
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 26),
+                TextFormFieldSign(
+                  hintText: 'Full name',
+                  vlaidatorErorr: '',
+                  controller: null,
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(30),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                  onChanged: (text) {
+                    fullName = text;
+                  },
+                ),
+                const SizedBox(height: 18),
+                TextFormFieldSign(
+                  hintText: 'Email',
+                  vlaidatorErorr: '',
+                  controller: null,
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(30),
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        !value.contains('@')) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
+                  },
+                  onChanged: (text) {
+                    email = text;
+                  },
+                ),
+                const SizedBox(height: 18),
+                TextFormFieldSign(
+                  hintText: 'Phone number',
+                  vlaidatorErorr: '',
+                  controller: null,
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(30),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter your phone number';
+                    }
+                    return null;
+                  },
+                  onChanged: (text) {
+                    phoneNumber = text;
+                  },
+                ),
+                const SizedBox(height: 18),
+                if (widget.userType == 'Doctor') ...[
+                  TextFormFieldSign(
+                    hintText: 'Medical Specializatin',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (value) {},
+                    onChanged: (text) {
+                      MedicalSpecializatin = text;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  TextFormFieldSign(
+                    hintText: 'Medical License Number',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (vlaue) {},
+                    onChanged: (text) {
+                      medicalLicenseNumber = text;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                ],
+                if (widget.userType == 'Parent') ...[
+                  TextFormFieldSign(
+                    hintText: 'Doctor Email',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !value.contains('@')) {
+                        return 'Enter a valid doctor email';
+                      }
+                      return null;
+                    },
+                    onChanged: (text) {
+                      doctorEmail = text;
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  TextFormFieldSign(
+                    hintText: 'Child Name',
+                    vlaidatorErorr: '',
+                    controller: null,
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(30),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter child name';
+                      }
+                    },
+                    onChanged: (text) {
+                      childName = text;
+                    },
+                  ),
+                  const SizedBox(height: 26),
+                ],
+                TextFormFieldSign(
+                  hintText: 'Password',
+                  vlaidatorErorr: '',
+                  controller: null,
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(30),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password is required';
+                    }
+                    if (!RegExp(r'^\d+$').hasMatch(value)) {
+                      return 'Password must contain only numbers';
+                    }
+                    if (value.length < 4 || value.length > 6) {
+                      return 'Password must be 4-6 digits';
+                    }
+                    return null;
+                  },
+                  onChanged: (text) {
+                    password = text;
+                  },
+                ),
+                const Align(
+                  alignment: Alignment(-0.6, 0),
+                  child: Text(
+                    '• Must be 4-6 digits\n• Numbers only',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                      fontFamily: 'inter',
+                      fontWeight: FontWeight.w500,
                     ),
-                    const Text(
-                      'Start now, and share your\n medical expertise with the\n world!',
-                      style: TextStyle(
-                        fontFamily: 'inter',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormFieldSign(
-                      hintText: 'Full name',
-                      vlaidatorErorr: '',
-                      controller: null,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(30),
-                      validator: (p0) {},
-                      onChanged: (text) {
-                        fullName = text;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormFieldSign(
-                      hintText: 'Email',
-                      vlaidatorErorr: '',
-                      controller: null,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(30),
-                      validator: (value) {},
-                      onChanged: (text) {
-                        email = text;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormFieldSign(
-                      hintText: 'Phone number',
-                      vlaidatorErorr: '',
-                      controller: null,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(30),
-                      validator: (p0) {},
-                      onChanged: (text) {
-                        phoneNumber = text;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    if (widget.userType == 'Doctor') ...[
-                      TextFormFieldSign(
-                        hintText: 'Medical Specializatin',
-                        vlaidatorErorr: '',
-                        controller: null,
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(30),
-                        validator: (p0) {},
-                        onChanged: (text) {
-                          MedicalSpecializatin = text;
-                        },
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      TextFormFieldSign(
-                        hintText: 'Medical License Number',
-                        vlaidatorErorr: '',
-                        controller: null,
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(30),
-                        validator: (p0) {},
-                        onChanged: (text) {
-                          medicalLicenseNumber = text;
-                        },
-                      ),
-                    ],
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    TextFormFieldSign(
-                      hintText: 'Password',
-                      vlaidatorErorr: '',
-                      controller: null,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(30),
-                      validator: (value) {},
-                      onChanged: (text) {
-                        password = text;
-                      },
-                    ),
-                    const Align(
-                      alignment: Alignment(-0.3, 2),
-                      child: Text(
-                        '• Minimum 8 characters\n• Contains numbers, letters and symbols',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
-                            fontFamily: 'inter',
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    TextFormFieldSign(
-                      hintText: 'Confirm password',
-                      vlaidatorErorr: '',
-                      controller: null,
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(30),
-                      validator: (value) {
-                        if (value != password) {
-                          return 'Passwords do not match';
-                        }
-                        return null;
-                      },
-                      onChanged: (text) {
-                        confirmPassword = text;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    buildElevatedButton(createAccout, 'Sign Up',
-                        const Color(0xffec5e4c), 60, 170, 20, Colors.white),
-                  ],
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                TextFormFieldSign(
+                  hintText: 'Confirm password',
+                  vlaidatorErorr: '',
+                  controller: null,
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(30),
+                  validator: (value) {
+                    if (value != password) {
+                      return 'Passwords do not match';
+                    }
+                    return null;
+                  },
+                  onChanged: (text) {
+                    confirmPassword = text;
+                  },
+                ),
+                const SizedBox(height: 60),
+                buildElevatedButton(
+                  createAccount,
+                  'Sign Up',
+                  const Color(0xffec5e4c),
+                  60,
+                  170,
+                  20,
+                  Colors.white,
                 ),
               ],
             ),
@@ -218,28 +278,57 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void navigateToProfile() {
     if (widget.userType == 'Doctor') {
-      Navigator.pushReplacementNamed(context, ProfileDoctor.routeName);
+      Navigator.pushReplacementNamed(context, DoctorHomeScreen.routeName);
     } else if (widget.userType == 'Parent') {
       Navigator.pushReplacementNamed(context, HomeParent.routeName);
     }
   }
 
-  Future<void> createAccout() async {
+  Future<void> createAccount() async {
     if (!formKey.currentState!.validate()) return;
+
     try {
       showLoading(context);
+
+      if (widget.userType == 'Parent') {
+        bool doctorExists =
+            await databaseService.checkDoctorExistsByEmail(doctorEmail);
+        if (!doctorExists) {
+          hideLoading(context);
+          showMessage(
+            context,
+            title: 'Doctor not found',
+            body:
+                'No doctor found with this email. Please enter a valid doctor email.',
+            posButtonTitle: 'OK',
+          );
+          return;
+        }
+      }
+
       User? user = await authService.signUp(email, password);
       if (user != null) {
-        UserModel userModel = UserModel(
-          fullName: fullName,
-          email: email,
-          phoneNumber: phoneNumber,
-          userType: widget.userType,
-          medicalLicenseNumber: widget.userType == 'Doctor'
-              ? medicalLicenseNumber
-              : medicalLicenseNumber,
-        );
-        await databaseService.saveUser(userModel);
+        if (widget.userType == 'Doctor') {
+          DoctorModel doctor = DoctorModel(
+            fullName: fullName,
+            email: email,
+            phoneNumber: phoneNumber,
+            userType: 'Doctor',
+            medicalLicenseNumber: medicalLicenseNumber,
+            medicalSpecializatin: MedicalSpecializatin,
+          );
+          await databaseService.saveDoctor(doctor);
+        } else if (widget.userType == 'Parent') {
+          ParentModel parent = ParentModel(
+              fullName: fullName,
+              email: email,
+              phoneNumber: phoneNumber,
+              userType: 'Parent',
+              doctorEmail: doctorEmail,
+              childName: childName);
+          await databaseService.saveParent(parent);
+        }
+
         hideLoading(context);
         navigateToProfile();
       }
@@ -252,15 +341,20 @@ class _SignUpPageState extends State<SignUpPage> {
         message = "The account already exists for that email.";
       }
       if (context.mounted) {
-        showMessage(context,
-            title: 'Error!',
-            body: 'youe error is =$message',
-            posButtonTitle: 'Ok');
+        showMessage(
+          context,
+          title: 'Error!',
+          body: 'Your error is: $message',
+          posButtonTitle: 'Ok',
+        );
       }
     } catch (e) {
       hideLoading(context);
-      showMessage(context,
-          title: 'Error!', body: 'some thing is wrong try later..');
+      showMessage(
+        context,
+        title: 'Error!',
+        body: 'Something went wrong. Please try again later.',
+      );
     }
   }
 }

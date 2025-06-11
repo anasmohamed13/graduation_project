@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
@@ -11,19 +12,19 @@ import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/digestive_system/digestive_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/nervous_system/nervous_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/respiratory_system/respiratory_system_screen.dart';
-import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/biology_intro.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/body_system_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/biology_zone/intro_biology/intro_biology.dart';
 import 'package:garduationproject/ui/screen/child/hello/intro_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_detail.dart';
 import 'package:garduationproject/ui/screen/child/planet/science_planet/planet_Zone/planet_zone.dart';
+import 'package:garduationproject/ui/screen/child/social_stories/social_stories.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/traditional_stories_page.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_page/video/youtube_video_player_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/calendar_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/doctor_home_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/patient_card_screen.dart';
-import 'package:garduationproject/ui/screen/doctor/profile/patient_queue.dart';
+import 'package:garduationproject/ui/screen/doctor/home/calendar_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/home/doctor_home_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/patient_card/patient_card_screen.dart';
+import 'package:garduationproject/ui/screen/doctor/patient_queue/patient_queue.dart';
 import 'package:garduationproject/ui/screen/doctor/profile/profile_doctor.dart';
 import 'package:garduationproject/ui/screen/child/home/home_child.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
@@ -42,21 +43,21 @@ import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_pa
 import 'package:garduationproject/ui/screen/auth/signup/signup-patient/sign_up_patient.dart';
 import 'package:garduationproject/ui/screen/home/splash/splash.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  User? user = FirebaseAuth.instance.currentUser;
 
   runApp(
-    const GatoApp(),
+    GatoApp(isLoggedIn: user != null),
   );
 }
 
 class GatoApp extends StatelessWidget {
-  const GatoApp({super.key});
+  final bool isLoggedIn;
+  const GatoApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +67,15 @@ class GatoApp extends StatelessWidget {
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
-        ParentLogin.routName: (_) => const ParentLogin(),
-        DoctorLogin.routName: (_) => const DoctorLogin(),
-        PatientLogin.routName: (_) => const PatientLogin(),
+        ParentLogin.routeName: (_) => const ParentLogin(),
+        DoctorLogin.routeName: (_) => const DoctorLogin(),
+        PatientLogin.routeName: (_) => const PatientLogin(),
         SignUpPatient.routeName: (_) => const SignUpPatient(),
         SignUpParent.routeName: (_) => const SignUpParent(),
         SignUpDoctor.routeName: (_) => const SignUpDoctor(),
         ProfileDoctor.routeName: (_) => const ProfileDoctor(),
         ProfileParent.routeName: (_) => const ProfileParent(),
-        ChatPage.routeName: (_) => const ChatPage(),
+        ChatPage.routeName: (context) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
         AiChat.routeName: (_) => const AiChat(),
         GatoTimer.routeName: (_) => const GatoTimer(),
@@ -87,7 +88,6 @@ class GatoApp extends StatelessWidget {
         ChildSplash.routeName: (_) => const ChildSplash(),
         IntroChild.routeName: (_) => const IntroChild(),
         IntroBiology.routeName: (_) => const IntroBiology(),
-        BiologyIntro.routeName: (_) => const BiologyIntro(),
         TraditionalStoriesPage.routeName: (_) => const TraditionalStoriesPage(),
         TraditionalStoriesIntro.routeName: (_) =>
             const TraditionalStoriesIntro(),
@@ -104,14 +104,11 @@ class GatoApp extends StatelessWidget {
         CountWithAlienIntro.routeName: (_) => const CountWithAlienIntro(),
         CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
         AlienMathMissionScreen.routeName: (_) => const AlienMathMissionScreen(),
-        // ignore: prefer_const_constructors
-        PatientQueueScreen.routeName: (_) => PatientQueueScreen(),
-        // ignore: prefer_const_constructors
-        DoctorHomeScreen.routeName: (_) => DoctorHomeScreen(),
+        SocialStoriesScreen.routeName: (_) => const SocialStoriesScreen(),
+        PatientQueueScreen.routeName: (_) => const PatientQueueScreen(),
+        DoctorHomeScreen.routeName: (_) => const DoctorHomeScreen(),
         CalendarScreen.routeName: (_) => const CalendarScreen(),
-        PatientCardScreen.routeName: (_) => const PatientCardScreen(),  
-      
-
+        PatientCardScreen.routeName: (_) => const PatientCardScreen(),
       },
     );
   }
