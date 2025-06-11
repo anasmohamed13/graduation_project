@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
+import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer_service.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
 class HomeChild extends StatefulWidget {
@@ -13,6 +14,12 @@ class HomeChild extends StatefulWidget {
 }
 
 class _HomeChildState extends State<HomeChild> {
+  @override
+  void initState() {
+    super.initState();
+    GatoTimerService().startTimer(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

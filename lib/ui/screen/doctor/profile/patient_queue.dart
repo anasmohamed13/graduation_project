@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:garduationproject/ui/screen/doctor/profile/patient_card_screen.dart';
 
 class PatientQueueScreen extends StatefulWidget {
   static const String routeName = 'patientQueue';
@@ -9,63 +8,43 @@ class PatientQueueScreen extends StatefulWidget {
   const PatientQueueScreen({super.key});
 
   @override
-  State<PatientQueueScreen> createState() => _PatientQueueScreenState();
+   State<PatientQueueScreen> createState() => _PatientQueueScreenState();
 }
 
 class _PatientQueueScreenState extends State<PatientQueueScreen> {
-  List<Map<String, String>> patients = [];
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPatients();
-  }
-
-  Future<void> fetchPatients() async {
-    try {
-      final doctorEmail = FirebaseAuth.instance.currentUser?.email;
-      if (doctorEmail == null) return;
-
-      final snapshot = await FirebaseFirestore.instance
-          .collection('Parent')
-          .where('doctorEmail', isEqualTo: doctorEmail)
-          .get();
-
-      final List<Map<String, String>> loadedPatients = [];
-
-      for (var doc in snapshot.docs) {
-        final data = doc.data();
-        final name = data['name'] ?? 'No Name';
-        final image = data['image'] ?? 'assets/image/default.png';
-        final joinDate = data['joinDate'];
-
-        String formattedDate = 'Unknown';
-        if (joinDate is Timestamp) {
-          final date = joinDate.toDate();
-          formattedDate = DateFormat('d MMM yyyy').format(date);
-        }
-
-        loadedPatients.add({
-          'name': name,
-          'date': formattedDate,
-          'image': image,
-        });
-      }
-
-      setState(() {
-        patients = loadedPatients;
-        isLoading = false;
-      });
-    } catch (e) {
-      
-      // ignore: avoid_print
-      print('Error fetching patients: $e');
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
+  
+  final List<Map<String, String>> patients = [
+    {
+      'name': 'Teresa Wilier',  
+      'date': '12 Oct 2024',
+      'image': 'assets/image/Ellipse 9.png'
+    },
+    {
+      'name': 'Anna Wilier',
+      'date': '4 Jun 2024',
+      'image': 'assets/image/Ellipse 11.png'
+    },
+    {
+      'name': 'Ivan Wilier',
+      'date': '19 Aug 2024',
+      'image': 'assets/image/Ellipse 10.png'
+    },
+    {
+      'name': 'John Wilier',
+      'date': '10 Nov 2024',
+      'image': 'assets/image/Ellipse 12.png'
+    },
+    {
+      'name': 'Sarah Wilier',
+      'date': '7 Jul 2024',
+      'image': 'assets/image/Ellipse 16.png'
+    },
+    {
+      'name': 'Tom Wilier',
+      'date': '1 Feb 2024',
+      'image': 'assets/image/Ellipse 17.png'
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +53,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
       body: SafeArea(
         child: Column(
           children: [
+           
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -81,7 +61,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context,PatientCardScreen.routeName);
                     },
                   ),
                   const SizedBox(width: 8),
@@ -95,66 +75,72 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                 ],
               ),
             ),
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Expanded(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: patients.length,
-                      itemBuilder: (context, index) {
-                        final patient = patients[index];
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
+
+            
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: patients.length,
+                itemBuilder: (context, index) {
+                  final patient = patients[index];
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: AssetImage(patient['image']!),
+                        ),
+                        const SizedBox(width: 12),
+
+                        
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CircleAvatar(
-                                radius: 35,
-                                backgroundImage: AssetImage(patient['image']!),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      patient['name']!,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Joined in ${patient['date']}',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
+                              Text(
+                                patient['name']!,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFF8C8C),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 10),
-                                ),
-                                child: const Text(
-                                  'View Patient Card',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
+                              Text(
+                                'Joined in ${patient['date']}',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ],
                           ),
-                        );
-                      },
+                        ),
+
+                        
+                        ElevatedButton(
+                          onPressed: () {
+                            
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFF8C8C),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                          ),
+                          child: const Text(
+                            'View Patient Card',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

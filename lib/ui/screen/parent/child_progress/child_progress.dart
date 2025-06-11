@@ -1,10 +1,38 @@
+import 'dart:math';
 import 'package:fl_chart_flutter/fl_chart_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer.dart';
+import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
-class ChildProgressScreen extends StatelessWidget {
+class ChildProgressScreen extends StatefulWidget {
   const ChildProgressScreen({super.key});
   static const String routeName = "child progress";
+
+  @override
+  State<ChildProgressScreen> createState() => _ChildProgressScreenState();
+}
+
+class _ChildProgressScreenState extends State<ChildProgressScreen> {
+  final Random _rnd = Random();
+  late List<double> _barValues;
+  late Map<String, double> _indicatorValues;
+
+  @override
+  void initState() {
+    super.initState();
+    _barValues = List.generate(
+      12,
+      (_) => (_rnd.nextDouble() * 0.99 + 0.01) * 100,
+    );
+
+    _indicatorValues = {
+      'Education': _rnd.nextDouble(),
+      'Activity': _rnd.nextDouble(),
+      'Social Skills': _rnd.nextDouble(),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,11 +40,11 @@ class ChildProgressScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.blue[50],
         elevation: 0,
-        title: const Text('Child Progress',
-            style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black)),
+        title: const Text(
+          'Child Progress',
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
         centerTitle: true,
         actions: const [
           Padding(
@@ -67,10 +95,9 @@ class ChildProgressScreen extends StatelessWidget {
         children: [
           Icon(icon, color: Colors.black54, size: 24),
           const SizedBox(width: 8),
-          Text(
-            text,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
+          Text(text,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         ],
       ),
     );
@@ -101,8 +128,8 @@ class ChildProgressScreen extends StatelessWidget {
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      getTitlesWidget: (double value, TitleMeta meta) {
-                        List<String> months = [
+                      getTitlesWidget: (value, meta) {
+                        const months = [
                           'J',
                           'F',
                           'M',
@@ -123,19 +150,25 @@ class ChildProgressScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                barGroups: List.generate(12, (index) => barGroup(index)),
+                barGroups: List.generate(
+                  12,
+                  (i) => BarChartGroupData(
+                    x: i,
+                    barRods: [
+                      BarChartRodData(
+                        toY: _barValues[i],
+                        width: 10,
+                        color: Colors.blue,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  BarChartGroupData barGroup(int index) {
-    return BarChartGroupData(x: index, barRods: [
-      BarChartRodData(toY: (index % 4 + 3) * 10, color: Colors.blue, width: 10),
-    ]);
   }
 
   Widget buildProgressIndicators() {
@@ -149,15 +182,27 @@ class ChildProgressScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Daily Progress',
+          const Text('Overall Skills',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
-          progressBar('Education', 0.44, Icons.book),
-          progressBar('Activity', 0.83, Icons.directions_run),
-          progressBar('social skills', 0.63, Icons.star),
+          for (var entry in _indicatorValues.entries)
+            progressBar(entry.key, entry.value, _iconFor(entry.key)),
         ],
       ),
     );
+  }
+
+  IconData _iconFor(String title) {
+    switch (title) {
+      case 'Education':
+        return Icons.book;
+      case 'Activity':
+        return Icons.directions_run;
+      case 'Social Skills':
+        return Icons.star;
+      default:
+        return Icons.circle;
+    }
   }
 
   Widget progressBar(String title, double value, IconData icon) {
@@ -174,10 +219,13 @@ class ChildProgressScreen extends StatelessWidget {
                 Text(title,
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
                 LinearProgressIndicator(
-                    value: value,
-                    backgroundColor: Colors.grey[300],
-                    color: Colors.blue),
+                  value: value,
+                  backgroundColor: Colors.grey[300],
+                  color: Colors.blue,
+                  minHeight: 8,
+                ),
               ],
             ),
           ),
@@ -191,6 +239,8 @@ class ChildProgressScreen extends StatelessWidget {
   }
 
   Widget buildBottomNavBar() {
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+
     return Center(
       child: Container(
         width: 250,
@@ -200,12 +250,51 @@ class ChildProgressScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(Icons.home, size: 30, color: Colors.blue),
-            Icon(Icons.history, size: 30, color: Colors.black),
-            Icon(Icons.settings, size: 30, color: Colors.black),
+            GestureDetector(
+              onTap: () {
+                if (currentRoute != HomeParent.routeName) {
+                  Navigator.pushNamed(context, HomeParent.routeName);
+                }
+              },
+              child: Icon(
+                Icons.home,
+                size: 30,
+                color: currentRoute == HomeParent.routeName
+                    ? Colors.blue
+                    : Colors.black,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (currentRoute != GatoTimer.routeName) {
+                  Navigator.pushNamed(context, GatoTimer.routeName);
+                }
+              },
+              child: Icon(
+                Icons.history,
+                size: 30,
+                color: currentRoute == GatoTimer.routeName
+                    ? Colors.blue
+                    : Colors.black,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (currentRoute != ChildProgressScreen.routeName) {
+                  Navigator.pushNamed(context, ChildProgressScreen.routeName);
+                }
+              },
+              child: Icon(
+                Icons.settings,
+                size: 30,
+                color: currentRoute == ChildProgressScreen.routeName
+                    ? Colors.blue
+                    : Colors.black,
+              ),
+            ),
           ],
         ),
       ),
