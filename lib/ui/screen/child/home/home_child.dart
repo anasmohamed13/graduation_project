@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
+import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer_service.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
 class HomeChild extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomeChildState extends State<HomeChild> {
   void initState() {
     super.initState();
     fetchChildName();
+      GatoTimerService().startTimer(context);
   }
 
   void fetchChildName() async {
@@ -71,6 +73,8 @@ class _HomeChildState extends State<HomeChild> {
       print('Error fetching child name: $e');
     }
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {

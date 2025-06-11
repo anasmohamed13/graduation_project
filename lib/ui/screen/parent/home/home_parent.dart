@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
+import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer_service.dart';
+// ignore: unused_import
+import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
 
 class HomeParent extends StatefulWidget {
@@ -16,6 +19,11 @@ class HomeParent extends StatefulWidget {
 
 class _HomeParentState extends State<HomeParent> {
   bool isChildProgressSelected = false;
+  @override
+  void initState() {
+    super.initState();
+    GatoTimerService().startTimer(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,11 +246,6 @@ class _HomeParentState extends State<HomeParent> {
     return Column(
       children: [
         TextButton(
-          onPressed: () {},
-          child: const Text('View All', style: TextStyle(color: Colors.blue)),
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,

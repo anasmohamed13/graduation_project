@@ -92,7 +92,9 @@ class _ChatPageState extends State<ChatPage> {
   void sendMessage() {
     if (messageController.text.trim().isEmpty ||
         doctorEmail == null ||
-        parentEmail == null) return;
+        parentEmail == null) {
+      return;
+    }
 
     String messageText = messageController.text.trim();
     String senderType =

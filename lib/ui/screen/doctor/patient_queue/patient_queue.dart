@@ -50,6 +50,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
 
           final childGender = childData['gender'] ?? 'Unknown';
           final age = childData['age'] ?? 'No entry age';
+          final childName = childData['fullName'] ?? 'Unknown';
 
           loadedPatients.add({
             'parentId': parentDoc.id,
@@ -57,7 +58,8 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
             'parentName': parentName,
             'parentImage': parentImage,
             'childGender': childGender,
-            'age': age
+            'age': age,
+            'childName': childName,
           });
         }
       }
@@ -67,8 +69,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
         isLoading = false;
       });
     } catch (e) {
-      // ignore: avoid_print
-      print('Error fetching patients: $e');
+      debugPrint('Error fetching patients: $e');
       setState(() {
         isLoading = false;
       });
@@ -104,7 +105,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
               ),
             ),
             isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Expanded(child: Center(child: CircularProgressIndicator()))
                 : Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -118,7 +119,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                               CircleAvatar(
                                 radius: 35,
                                 backgroundImage:
-                                    AssetImage(patient['image'] ?? ''),
+                                    AssetImage(patient['parentImage']),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -126,10 +127,17 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      patient['parentName']!,
+                                      patient['parentName'],
                                       style: const TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Child: ${patient['childName']} (${patient['childGender']})',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
                                       ),
                                     ),
                                   ],
