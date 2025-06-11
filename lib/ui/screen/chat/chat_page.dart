@@ -100,7 +100,7 @@ class _ChatPageState extends State<ChatPage> {
 
     firestore
         .collection('chats')
-        .doc('${doctorEmail}_${parentEmail}')
+        .doc('${doctorEmail}_$parentEmail')
         .collection('messages')
         .add({
       'text': messageText,
@@ -175,7 +175,7 @@ class _ChatPageState extends State<ChatPage> {
           StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('chats')
-                .doc('${doctorEmail}_${parentEmail}')
+                .doc('${doctorEmail}_$parentEmail')
                 .collection('messages')
                 .orderBy('timestamp', descending: false)
                 .snapshots(),
@@ -239,7 +239,7 @@ class _ChatPageState extends State<ChatPage> {
       Function(bool) onTyping, bool isTyping) {
     bool isDoctor = auth.currentUser!.email == doctorEmail;
     return Container(
-      height: MediaQuery.of(context).size.height * 0.073,
+      height: MediaQuery.of(context).size.height * 0.07,
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
