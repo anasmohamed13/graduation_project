@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/model/doctor_model/doctor_model.dart';
-import 'package:garduationproject/model/firebase/firebase_service.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart'; // 🔹 Uncomment if using Firebase
-// import 'package:table_calendar/table_calendar.dart'; // 🔹 Optional calendar package
+import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/doctor/home/calendar_screen.dart';
 import 'package:garduationproject/ui/screen/doctor/patient_queue/patient_queue.dart';
+import 'package:garduationproject/ui/util/app_assets.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
   static const String routeName = 'doctorHome';
@@ -16,70 +18,67 @@ class DoctorHomeScreen extends StatefulWidget {
 }
 
 class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
-  // Replace this static list later with real-time Firebase data
-  List<Map<String, String>> timetable = [
-    {
-      'time': '2 p.m.',
-      'name': 'Teresa Wilier',
-      'image': 'assets/image/Ellipse 9.png',
-    },
-    {
-      'time': '4 p.m.',
-      'name': 'Ivan Wilier',
-      'image': 'assets/image/Ellipse 10.png',
-    },
-    {
-      'time': '6 p.m.',
-      'name': 'Anna Wilier',
-      'image': 'assets/image/Ellipse 11.png',
-    },
-  ];
-
+  Map<String, dynamic>? parentData;
+  String? parentId;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String? parentImageUrl;
   String? doctorName;
   bool isLoading = true;
-
-  /*
-  // 🔹 Sample Firebase Firestore integration (Replace timetable above)
-  Future<void> fetchTimetableFromFirestore() async {
-    final snapshot = await FirebaseFirestore.instance.collection('appointments').get();
-    setState(() {
-      timetable = snapshot.docs.map((doc) {
-        final data = doc.data();
-        return {
-          'time': data['time'] ?? '',
-          'name': data['name'] ?? '',
-          'image': data['image'] ?? 'assets/image/default_avatar.png',
-        };
-      }).toList();
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchTimetableFromFirestore(); // 🔹 Uncomment when Firebase is configured
-  }
-  */
 
   @override
   void initState() {
     super.initState();
     loadDoctorName();
+    fetchLinkedParent();
+  }
+
+  Future<void> fetchLinkedParent() async {
+    final currentUser = auth.currentUser;
+    if (currentUser == null) return;
+
+    final snapshot = await firestore
+        .collection("Parent")
+        .where("doctorEmail", isEqualTo: currentUser.email)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      setState(() {
+        parentData = snapshot.docs.first.data();
+        parentId = snapshot.docs.first.id;
+        parentImageUrl = parentData?['profileImage'];
+      });
+    }
+  }
+
+  Future<DoctorModel?> fetchDoctorData() async {
+    final uid = FirebaseAuth.instance.currentUser?.email;
+    if (uid == null) return null;
+
+    final doc =
+        await FirebaseFirestore.instance.collection('Doctor').doc(uid).get();
+    if (!doc.exists || doc.data() == null) return null;
+
+    return DoctorModel.fromJson(doc.data()!);
   }
 
   Future<void> loadDoctorName() async {
-    final firebaseService = FirebaseService();
-    final userData = await firebaseService.fetchUserData();
-    if (userData is DoctorModel) {
+    final DoctorModel? userData = await fetchDoctorData();
+
+    if (userData != null) {
       setState(() {
         doctorName = userData.fullName;
         isLoading = false;
       });
     } else {
       setState(() {
-        "Doctor";
+        doctorName = "Doctor";
         isLoading = false;
       });
+      if (kDebugMode) {
+        print("⚠️ No doctor data found for the current UID.");
+      }
     }
   }
 
@@ -119,9 +118,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.notifications_none),
-                        onPressed: () {
-                          // Add notification logic
-                        },
+                        onPressed: () {},
                       ),
                       const Positioned(
                         top: 10,
@@ -135,7 +132,6 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               ),
             ),
 
-            // Patient count card
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(16),
@@ -166,11 +162,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                   const Spacer(),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const PatientQueueScreen()),
-                      );
+                      Navigator.pushNamed(
+                          context, PatientQueueScreen.routeName);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFCCCCCC),
@@ -186,7 +179,6 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
             const SizedBox(height: 16),
 
-            // Timetable heading
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -254,66 +246,62 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
             ),
 
             const SizedBox(height: 16),
-
-            // Timetable List
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: timetable.length,
-                itemBuilder: (context, index) {
-                  final entry = timetable[index];
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black12, blurRadius: 4)
-                      ],
+            if (parentData != null)
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.09,
+                margin: const EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.all(9),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 4)
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 26,
+                      backgroundImage: parentImageUrl != null
+                          ? NetworkImage(parentImageUrl!)
+                          : const AssetImage(AppAssets.girlMoji)
+                              as ImageProvider,
                     ),
-                    child: Row(
-                      children: [
-                        Text(
-                          entry['time']!,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 16),
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundImage: AssetImage(entry['image']!),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                entry['name']!,
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              const Text(
-                                'Attached file',
-                                style:
-                                    TextStyle(fontSize: 13, color: Colors.grey),
-                              ),
-                            ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            parentData?['fullName'] ?? 'Parent',
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            // Start chat with patient
-                          },
-                          icon: const Icon(Icons.chat_bubble_outline,
-                              color: Colors.red),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  );
-                },
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          ChatPage.routeName,
+                          arguments: {
+                            'doctorEmail':
+                                FirebaseAuth.instance.currentUser!.email!,
+                            'parentEmail': parentId,
+                          },
+                        );
+                      },
+                      icon: Image.asset(
+                        color: Colors.orange,
+                        AppAssets.message,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),

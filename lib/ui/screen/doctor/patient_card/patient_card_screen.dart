@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:garduationproject/ui/screen/doctor/patient_queue/patient_queue.dart';
@@ -13,10 +15,36 @@ class PatientCardScreen extends StatefulWidget {
 
 class _PatientCardScreenState extends State<PatientCardScreen> {
   int selectedIndex = 0;
-  double percent = 0.64;
+  late double percent;
+  Map<String, dynamic>? patientData;
+  @override
+  void initState() {
+    super.initState();
+    percent = generateRandomPercentage();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // استقبال البيانات المرسلة من الصفحة السابقة
+    patientData ??=
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+  }
+
+  double generateRandomPercentage() {
+    final random = Random();
+    return ((random.nextDouble() * 0.99) + 0.01);
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (patientData == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('No patient data available'),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -74,19 +102,20 @@ class _PatientCardScreenState extends State<PatientCardScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 5),
-                          Text("Teresa Wilier's\ndaughter",
-                              style: TextStyle(
+                          const SizedBox(height: 5),
+                          Text(
+                              "${patientData!['parentName']}'s\n${patientData!['childGender'] == 'male' ? 'son' : 'daughter'}",
+                              style: const TextStyle(
                                   fontSize: 22,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
-                          SizedBox(height: 10),
-                          Text("12 y.o.",
-                              style: TextStyle(
+                          const SizedBox(height: 10),
+                          Text("Age: ${patientData!['age']}",
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 24,
                                   fontFamily: 'inter',

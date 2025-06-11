@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,11 +8,10 @@ import 'package:garduationproject/model/firebase/firebase_service.dart';
 
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
+import 'package:garduationproject/ui/util/image_service.dart';
 import 'package:garduationproject/ui/widget/build_text_form_filed.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'dart:io';
-import 'dart:convert';
 
 class ProfileDoctor extends StatefulWidget {
   static const String routeName = 'profileDoctor';
@@ -27,10 +24,8 @@ class ProfileDoctor extends StatefulWidget {
 class _ProfileDoctorState extends State<ProfileDoctor> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final ImagePicker picker = ImagePicker();
-  File? selectedImage;
-  bool isImageSelected = false;
-  Uint8List? imageBytes;
+  final ImageService imageService = ImageService();
+  File? imageFile;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -41,7 +36,7 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
   @override
   void initState() {
     super.initState();
-    loadSavedImage();
+
     fetchDoctorData();
   }
 
@@ -62,30 +57,6 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
     }
   }
 
-  Future<void> loadSavedImage() async {
-    final user = auth.currentUser;
-    if (user == null) return;
-
-    final doc = await firestore.collection('Doctor').doc(user.email).get();
-    if (doc.exists &&
-        doc.data() != null &&
-        doc.data()!['profileimage'] != null) {
-      final base64Image = doc.data()!['profileimage'];
-      try {
-        final bytes = base64Decode(base64Image);
-        setState(() {
-          selectedImage = null;
-          isImageSelected = true;
-        });
-        imageBytes = bytes;
-      } catch (e) {
-        setState(() {
-          isImageSelected = false;
-        });
-      }
-    }
-  }
-
   Future<void> fetchDoctorData() async {
     final user = auth.currentUser;
     if (user == null) return;
@@ -97,33 +68,6 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
       emailController.text = data['email'] ?? '';
       phoneController.text = data['phoneNumber'] ?? '';
       specializationController.text = data['medicalSpecializatin'] ?? '';
-    }
-  }
-
-  Future<void> pickImage() async {
-    try {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        setState(() {
-          selectedImage = File(image.path);
-          isImageSelected = true;
-        });
-
-        final bytes = await selectedImage!.readAsBytes();
-        final base64Image = base64Encode(bytes);
-
-        final user = auth.currentUser;
-        if (user != null) {
-          await firestore
-              .collection('Doctor')
-              .doc(user.email)
-              .update({'profileimage': base64Image});
-        }
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking/uploading image: $e')),
-      );
     }
   }
 
@@ -170,22 +114,27 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
         child: Column(
           children: [
             Center(
-              child: CircleAvatar(
-                radius: 70,
-                backgroundImage: isImageSelected && imageBytes != null
-                    ? MemoryImage(imageBytes!)
-                    : null,
-                child: !isImageSelected
-                    ? Image.asset(AppAssets.profileImageDoctor)
-                    : null,
-              ),
+              child: buildCircleAvatar(
+                  borderRadius: BorderRadius.circular(75),
+                  radius: 75,
+                  elevation: 10),
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 buildElevatedButton(
-                  () => pickImage(),
+                  () async {
+                    final pickedFile = await imageService.pickAndUploadImage(
+                        collection: 'Doctor',
+                        docId: emailController.text,
+                        imageFieldName: 'profileImage');
+                    if (pickedFile != null && mounted) {
+                      setState(() {
+                        imageFile = File(pickedFile.path);
+                      });
+                    }
+                  },
                   'Upload New',
                   const Color(0xffffc6be),
                   60,
@@ -312,6 +261,32 @@ class _ProfileDoctorState extends State<ProfileDoctor> {
                 const Color(0xffec5e4c), 60, 170, 20, Colors.white),
           ],
         ),
+      ),
+    );
+  }
+
+  Material buildCircleAvatar(
+      {required BorderRadiusGeometry? borderRadius,
+      required double? radius,
+      required double? elevation}) {
+    return Material(
+      shadowColor: const Color(0xffe1eeff),
+      color: const Color(0xffe1eeff),
+      borderRadius: borderRadius,
+      elevation: elevation ?? 10,
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        radius: radius,
+        child: imageFile != null
+            ? ClipOval(
+                child: Image.file(
+                  imageFile!,
+                  width: radius! * 2,
+                  height: radius * 2,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Image.asset(AppAssets.profileImageDoctor),
       ),
     );
   }

@@ -63,7 +63,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: SignUpPatient.routeName,
+      initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -75,7 +75,7 @@ class GatoApp extends StatelessWidget {
         SignUpDoctor.routeName: (_) => const SignUpDoctor(),
         ProfileDoctor.routeName: (_) => const ProfileDoctor(),
         ProfileParent.routeName: (_) => const ProfileParent(),
-        ChatPage.routeName: (_) => const ChatPage(),
+        ChatPage.routeName: (context) => const ChatPage(),
         HomeParent.routeName: (_) => const HomeParent(),
         AiChat.routeName: (_) => const AiChat(),
         GatoTimer.routeName: (_) => const GatoTimer(),

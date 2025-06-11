@@ -13,7 +13,7 @@ class PatientQueueScreen extends StatefulWidget {
 }
 
 class _PatientQueueScreenState extends State<PatientQueueScreen> {
-  List<Map<String, String>> patients = [];
+  List<Map<String, dynamic>> patients = [];
   bool isLoading = true;
 
   @override
@@ -32,17 +32,34 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
           .where('doctorEmail', isEqualTo: doctorEmail)
           .get();
 
-      final List<Map<String, String>> loadedPatients = [];
+      final List<Map<String, dynamic>> loadedPatients = [];
 
-      for (var doc in snapshot.docs) {
-        final data = doc.data();
-        final name = data['fullName'] ?? 'No Name';
-        final image = data['image'] ?? 'assets/image/default.png';
+      for (var parentDoc in snapshot.docs) {
+        final parentData = parentDoc.data();
+        final parentName = parentData['fullName'] ?? 'No Name';
+        final parentImage = parentData['image'] ?? 'assets/image/default.png';
 
-        loadedPatients.add({
-          'fullName': name,
-          'image': image,
-        });
+        final childrenSnapshot = await FirebaseFirestore.instance
+            .collection('Parent')
+            .doc(parentDoc.id)
+            .collection('Children')
+            .get();
+
+        for (var childDoc in childrenSnapshot.docs) {
+          final childData = childDoc.data();
+
+          final childGender = childData['gender'] ?? 'Unknown';
+          final age = childData['age'] ?? 'No entry age';
+
+          loadedPatients.add({
+            'parentId': parentDoc.id,
+            'childId': childDoc.id,
+            'parentName': parentName,
+            'parentImage': parentImage,
+            'childGender': childGender,
+            'age': age
+          });
+        }
       }
 
       setState(() {
@@ -100,7 +117,8 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                             children: [
                               CircleAvatar(
                                 radius: 35,
-                                backgroundImage: AssetImage(patient['image']!),
+                                backgroundImage:
+                                    AssetImage(patient['image'] ?? ''),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -108,7 +126,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      patient['fullName']!,
+                                      patient['parentName']!,
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,
@@ -120,7 +138,16 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.pushNamed(
-                                      context, PatientCardScreen.routeName);
+                                      context, PatientCardScreen.routeName,
+                                      arguments: {
+                                        'parentId': patient['parentId'],
+                                        'childId': patient['childId'],
+                                        'parentName': patient['parentName'],
+                                        'parentImage': patient['parentImage'],
+                                        'childName': patient['childName'],
+                                        'childGender': patient['childGender'],
+                                        'age': patient['age'],
+                                      });
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFFF8C8C),

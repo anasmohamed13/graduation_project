@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, no_wildcard_variable_uses
+// ignore_for_file: avoid_print
 
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,9 +7,15 @@ import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatPage extends StatefulWidget {
-  final bool isDoctor;
+  final String? doctorEmail;
+  final String? parentEmail;
 
-  const ChatPage({super.key, this.isDoctor = false});
+  const ChatPage({
+    super.key,
+    this.doctorEmail,
+    this.parentEmail,
+  });
+
   static const String routeName = 'chatPage';
   static bool isTyping = false;
 
@@ -18,26 +24,85 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  String? otherUserName;
+  String? otherUserImage;
+  bool isLoadingOtherUser = true;
+  String? doctorEmail;
+  String? parentEmail;
+
   final TextEditingController messageController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  late bool isDoctor;
 
   @override
   void initState() {
     super.initState();
-    isDoctor = widget.isDoctor;
+    _initializeEmails();
+  }
+
+  void _initializeEmails() {
+    // إذا تم تمرير البيانات عبر Constructor
+    if (widget.doctorEmail != null && widget.parentEmail != null) {
+      doctorEmail = widget.doctorEmail;
+      parentEmail = widget.parentEmail;
+      fetchOtherUserData();
+    } else {
+      // إذا تم تمرير البيانات عبر arguments
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final args =
+            ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+        if (args != null) {
+          setState(() {
+            doctorEmail = args['doctorEmail'];
+            parentEmail = args['parentEmail'];
+          });
+          fetchOtherUserData();
+        }
+      });
+    }
+  }
+
+  void fetchOtherUserData() async {
+    if (doctorEmail == null || parentEmail == null) return;
+
+    bool isDoctor = auth.currentUser!.email == doctorEmail;
+    String otherUserEmail = isDoctor ? parentEmail! : doctorEmail!;
+    String collection = isDoctor ? 'Parent' : 'Doctor';
+
+    try {
+      final doc =
+          await firestore.collection(collection).doc(otherUserEmail).get();
+
+      if (doc.exists) {
+        final data = doc.data()!;
+        setState(() {
+          otherUserName = data['fullName'] ?? 'User';
+          otherUserImage = data['profileImage'];
+          isLoadingOtherUser = false;
+        });
+      } else {
+        setState(() => isLoadingOtherUser = false);
+      }
+    } catch (e) {
+      print('Error fetching other user data: $e');
+      setState(() => isLoadingOtherUser = false);
+    }
   }
 
   void sendMessage() {
-    if (messageController.text.trim().isEmpty) {
-      return;
-    }
-    String messageText = messageController.text.trim();
-    // String senderId = auth.currentUser?.uid ?? 'anonymous';
-    String senderType = isDoctor ? 'doctor' : 'parent';
+    if (messageController.text.trim().isEmpty ||
+        doctorEmail == null ||
+        parentEmail == null) return;
 
-    firestore.collection('messages').add({
+    String messageText = messageController.text.trim();
+    String senderType =
+        auth.currentUser!.email == doctorEmail ? 'Doctor' : 'Parent';
+
+    firestore
+        .collection('chats')
+        .doc('${doctorEmail}_${parentEmail}')
+        .collection('messages')
+        .add({
       'text': messageText,
       'timestamp': FieldValue.serverTimestamp(),
       'status': 'sent',
@@ -50,19 +115,20 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-
-    if (arguments != null && arguments.containsKey('isDoctor')) {
-      isDoctor = arguments['isDoctor'];
-    }
-
     return Scaffold(
       body: buildBodyChatPage(),
     );
   }
 
   SafeArea buildBodyChatPage() {
+    if (doctorEmail == null || parentEmail == null) {
+      return const SafeArea(
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    bool isDoctor = auth.currentUser!.email == doctorEmail;
+
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,9 +141,7 @@ class _ChatPageState extends State<ChatPage> {
                 backgroundColor: const Color(0xffeef5ff),
                 radius: 30,
                 child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back_ios_new_sharp),
                   color: const Color(0xff8aa1b5),
                 ),
@@ -86,14 +150,32 @@ class _ChatPageState extends State<ChatPage> {
               Image.asset(AppAssets.doctorChat),
             ],
           ),
-          Text(
-            isDoctor ? 'Patient Conversation' : 'Dr. Sam denis',
-            style: const TextStyle(
-                fontFamily: 'inter', fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 52),
+          const SizedBox(height: 10),
+          isLoadingOtherUser
+              ? const CircularProgressIndicator()
+              : Column(
+                  children: [
+                    if (otherUserImage != null && otherUserImage!.isNotEmpty)
+                      CircleAvatar(
+                        radius: 32,
+                        backgroundImage: NetworkImage(otherUserImage!),
+                      ),
+                    const SizedBox(height: 8),
+                    Text(
+                      otherUserName ?? 'User',
+                      style: const TextStyle(
+                        fontFamily: 'inter',
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+          const SizedBox(height: 20),
           StreamBuilder<QuerySnapshot>(
             stream: firestore
+                .collection('chats')
+                .doc('${doctorEmail}_${parentEmail}')
                 .collection('messages')
                 .orderBy('timestamp', descending: false)
                 .snapshots(),
@@ -101,6 +183,7 @@ class _ChatPageState extends State<ChatPage> {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
+
               List<QueryDocumentSnapshot<Object?>> messages =
                   snapshot.data!.docs;
               return SizedBox(
@@ -108,8 +191,7 @@ class _ChatPageState extends State<ChatPage> {
                 child: ListView.builder(
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
-                    QueryDocumentSnapshot<Object?> message = messages[index];
-
+                    var message = messages[index];
                     String senderType = 'parent';
                     try {
                       Map<String, dynamic> data =
@@ -121,8 +203,8 @@ class _ChatPageState extends State<ChatPage> {
                       print('Error accessing senderType: $e');
                     }
 
-                    bool isSender = (senderType == 'doctor' && isDoctor) ||
-                        (senderType == 'parent' && !isDoctor);
+                    bool isSender = (senderType == 'Doctor' && isDoctor) ||
+                        (senderType == 'Parent' && !isDoctor);
 
                     return BubbleSpecialThree(
                       text: message['text'],
@@ -132,20 +214,18 @@ class _ChatPageState extends State<ChatPage> {
                       tail: true,
                       isSender: isSender,
                       textStyle: TextStyle(
-                          color: isSender
-                              ? const Color(0xff55688b)
-                              : Colors.black87,
-                          fontSize: 20,
-                          fontFamily: 'inter'),
+                        color:
+                            isSender ? const Color(0xff55688b) : Colors.black87,
+                        fontSize: 20,
+                        fontFamily: 'inter',
+                      ),
                     );
                   },
                 ),
               );
             },
           ),
-          const Spacer(
-            flex: 10,
-          ),
+          const Spacer(flex: 10),
           messageBAR(context, messageController, (bool typing) {
             setState(() => ChatPage.isTyping = typing);
           }, ChatPage.isTyping),
@@ -157,6 +237,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Container messageBAR(BuildContext context, TextEditingController controller,
       Function(bool) onTyping, bool isTyping) {
+    bool isDoctor = auth.currentUser!.email == doctorEmail;
     return Container(
       height: MediaQuery.of(context).size.height * 0.073,
       width: MediaQuery.of(context).size.width * 0.9,
@@ -176,10 +257,7 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           const Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 20),
-            child: Icon(
-              Icons.attach_file,
-              color: Colors.grey,
-            ),
+            child: Icon(Icons.attach_file, color: Colors.grey),
           ),
           Expanded(
             child: TextField(
@@ -192,9 +270,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 border: InputBorder.none,
               ),
-              onChanged: (text) {
-                onTyping(text.trim().isNotEmpty);
-              },
+              onChanged: (text) => onTyping(text.trim().isNotEmpty),
             ),
           ),
           Container(
@@ -204,15 +280,11 @@ class _ChatPageState extends State<ChatPage> {
               color: Colors.blue[300],
             ),
             child: IconButton(
-              icon: Icon(
-                isTyping ? Icons.send : Icons.mic,
-                color: Colors.white,
-              ),
+              icon:
+                  Icon(isTyping ? Icons.send : Icons.mic, color: Colors.white),
               onPressed: () {
                 if (isTyping) {
                   sendMessage();
-                } else {
-                  // will add Voice message functionality
                 }
               },
             ),
