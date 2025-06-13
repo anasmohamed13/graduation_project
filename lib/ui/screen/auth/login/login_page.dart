@@ -176,20 +176,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Forget Password?',
-                          style: TextStyle(
-                            color: Color(0xffa7a6a6),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   TextButton(
                     onPressed: () {
                       if (widget.user == 'Doctor') {
@@ -227,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 86),
                   buildElevatedButton(
                     () {
                       signIn();
