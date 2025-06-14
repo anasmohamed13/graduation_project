@@ -45,10 +45,10 @@ class _CountWithAlienIntroState extends State<CountWithAlienIntro> {
           ),
           Positioned(
             top: 70,
-            left: 170,
+            left: 150,
             child: Image.asset(
               AppAssets.happyWhiteKittenCat,
-              width: 120,
+              width: 110,
             ),
           ),
           // Centered text
