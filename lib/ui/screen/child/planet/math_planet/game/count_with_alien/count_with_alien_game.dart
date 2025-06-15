@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garduationproject/bloc/game/count_with_alien/count_with_alien_cubit.dart';
@@ -7,9 +9,116 @@ import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/widget/alien_display.dart';
 import 'package:garduationproject/ui/widget/answer_options.dart';
 
-class CountWithAlienGame extends StatelessWidget {
+class CountWithAlienGame extends StatefulWidget {
   static const String routeName = 'count-with-alien-game';
   const CountWithAlienGame({super.key});
+
+  @override
+  State<CountWithAlienGame> createState() => _CountWithAlienGameState();
+}
+
+class _CountWithAlienGameState extends State<CountWithAlienGame> {
+  bool _scoreSaved = false;
+
+  Future<void> saveCountingScore(int score) async {
+    try {
+      print('🎮 Attempting to save counting score: $score');
+
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('❌ No user logged in');
+        return;
+      }
+
+      print('✅ User found: ${user.uid}');
+
+      // Try a more direct approach - get all parents and children
+      final parents =
+          await FirebaseFirestore.instance.collection('Parent').get();
+      print('📁 Found ${parents.docs.length} parents');
+
+      for (var parent in parents.docs) {
+        print('👨‍👩‍👧‍👦 Checking parent: ${parent.id}');
+
+        final children = await FirebaseFirestore.instance
+            .collection('Parent')
+            .doc(parent.id)
+            .collection('Children')
+            .get();
+
+        print(
+            '👶 Found ${children.docs.length} children for parent ${parent.id}');
+
+        for (var child in children.docs) {
+          final childData = child.data();
+          print('🔍 Child data: $childData');
+
+          // Check if this child belongs to current user or has firstName
+          if (childData.containsKey('firstName')) {
+            print('✅ Found child with firstName, updating score...');
+
+            await FirebaseFirestore.instance
+                .collection('Parent')
+                .doc(parent.id)
+                .collection('Children')
+                .doc(child.id)
+                .update({'countingScore': score});
+
+            print('🎯 Score saved successfully: $score');
+            return;
+          }
+        }
+      }
+
+      print('❌ No suitable child found');
+    } catch (e) {
+      print('💥 Error saving counting score: $e');
+    }
+  }
+
+  // Alternative approach - try this if the above doesn't work:
+  Future<void> saveCountingScoreAlternative(int score) async {
+    try {
+      print('🎮 Alternative: Attempting to save counting score: $score');
+
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('❌ No user logged in');
+        return;
+      }
+
+      // Get all children across all parents
+      final allParents =
+          await FirebaseFirestore.instance.collection('Parent').get();
+
+      for (var parentDoc in allParents.docs) {
+        final childrenSnapshot = await FirebaseFirestore.instance
+            .collection('Parent')
+            .doc(parentDoc.id)
+            .collection('Children')
+            .get();
+
+        if (childrenSnapshot.docs.isNotEmpty) {
+          final firstChild = childrenSnapshot.docs.first;
+
+          await FirebaseFirestore.instance
+              .collection('Parent')
+              .doc(parentDoc.id)
+              .collection('Children')
+              .doc(firstChild.id)
+              .set({
+            ...firstChild.data(),
+            'countingScore': score,
+          }, SetOptions(merge: true));
+
+          print('🎯 Alternative method: Score saved successfully: $score');
+          return;
+        }
+      }
+    } catch (e) {
+      print('💥 Alternative method error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +129,22 @@ class CountWithAlienGame extends StatelessWidget {
         body: SafeArea(
           child: BlocBuilder<CountWithAlienGameCubit, CountWithAlienGameState>(
             builder: (context, state) {
+              // Save score when game is over and score hasn't been saved yet
+              if (state.questionIndex ==
+                      CountWithAlienGameCubit.totalQuestions - 1 &&
+                  state.isAnswered &&
+                  !_scoreSaved) {
+                print('🎮 Game ended, saving score: ${state.points}');
+                _scoreSaved = true;
+
+                // Try both methods
+                Future.delayed(const Duration(milliseconds: 500), () async {
+                  await saveCountingScore(state.points);
+                  // If first method fails, try alternative
+                  await saveCountingScoreAlternative(state.points);
+                });
+              }
+
               return Stack(
                 children: [
                   Positioned.fill(child: Image.asset(AppAssets.gameBackground)),
@@ -156,7 +281,7 @@ class CountWithAlienGame extends StatelessWidget {
                         color: Colors.black54,
                         child: Center(
                           child: Text(
-                            'Game Over!\nYour Score: ${state.points}',
+                            'Game Over!\nYour Score:  ${state.points}',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,

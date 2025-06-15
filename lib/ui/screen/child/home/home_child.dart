@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
+import 'package:garduationproject/ui/screen/child/social_stories/social_stories.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer_service.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
@@ -24,95 +25,85 @@ class _HomeChildState extends State<HomeChild> {
   void initState() {
     super.initState();
     fetchChildName();
-      GatoTimerService().startTimer(context);
+    GatoTimerService().startTimer(context);
   }
 
   void fetchChildName() async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        print('No authenticated user found');
-        return;
-      }
-
-      print('Current user (child): ${user.uid}');
-
-      // Since children are stored under Parent/{parentEmail}/Children/{childName}
-      // We need to search through all parents to find this child
       final parentQuery =
-          await FirebaseFirestore.instance.collection('Parent').get();
+          await FirebaseFirestore.instance.collection('Parent').limit(1).get();
 
-      for (var parentDoc in parentQuery.docs) {
-        print('Searching in parent: ${parentDoc.id}');
+      if (parentQuery.docs.isNotEmpty) {
+        final parentDoc = parentQuery.docs.first;
 
         final childrenQuery = await FirebaseFirestore.instance
             .collection('Parent')
             .doc(parentDoc.id)
             .collection('Children')
+            .limit(1)
             .get();
 
-        for (var childDoc in childrenQuery.docs) {
-          print('Found child document: ${childDoc.id}');
-          final childData = childDoc.data();
-          print('Child data: $childData');
-
-          // For now, we'll get the first child we find
-          // You might want to add logic to match the specific child to the current user
-          if (childData.containsKey('firstName')) {
-            setState(() {
-              childName = childData['firstName'];
-            });
-            print('Child name found: $childName');
-            return;
-          }
+        if (childrenQuery.docs.isNotEmpty) {
+          final childData = childrenQuery.docs.first.data();
+          setState(() {
+            childName = childData['firstName'] ?? 'Child';
+          });
         }
       }
-
-      print('No child found in any parent document');
     } catch (e) {
-      print('Error fetching child name: $e');
+      print('Error: $e');
+      setState(() {
+        childName = 'Child';
+      });
     }
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
         children: [
-          Column(
+          Stack(
             children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 300,
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
+              Container(
+                height: height * 0.4,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AppAssets.homeChildBackground),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: height * 0.4,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: height * 0.9,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(50),
                     ),
                   ),
-                  buildLevelBar(),
-                  buildWelcomeBack(),
-                ],
+                ),
               ),
-              Stack(
-                children: [
-                  Container(
-                    height: 567.38,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(50),
-                        topLeft: Radius.circular(50),
-                      ),
-                    ),
-                  ),
-                  buildChallengeCard(),
-                  titleActivity(),
-                  buildActivitySection(),
-                  buildNavBar(),
-                ],
-              ),
+            ],
+          ),
+          Stack(
+            children: [
+              buildWelcomeBack(),
+              buildLevelBar(),
+              Positioned(
+                  top: height * 0.4,
+                  left: 30,
+                  right: 20,
+                  child: buildChallengeCard()),
+              Positioned(top: height * 0.62, left: 20, child: titleActivity()),
+              buildActivitySection(),
+              buildNavBar(),
             ],
           ),
         ],
@@ -121,17 +112,13 @@ class _HomeChildState extends State<HomeChild> {
   }
 
   Widget titleActivity() {
-    return const Positioned(
-      bottom: 335,
-      left: 50,
-      child: Text(
-        'Activities Section',
-        style: TextStyle(
-          fontSize: 20,
-          fontFamily: 'inter',
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
+    return const Text(
+      'Activities Section',
+      style: TextStyle(
+        fontSize: 20,
+        fontFamily: 'inter',
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
       ),
     );
   }
@@ -166,7 +153,7 @@ class _HomeChildState extends State<HomeChild> {
             const SizedBox(width: 15),
             buildIndicator(
               icon: SvgPicture.asset(AppAssets.blueCalendarIcon),
-              width: 111,
+              width: 125,
               height: 50,
               text: 'MyCalender',
             ),
@@ -187,7 +174,7 @@ class _HomeChildState extends State<HomeChild> {
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(60),
-        color: Colors.white12,
+        color: Colors.white70,
       ),
       child: Row(
         children: [
@@ -196,7 +183,7 @@ class _HomeChildState extends State<HomeChild> {
           const SizedBox(width: 5),
           Text(
             text,
-            style: const TextStyle(color: Colors.grey, fontSize: 15),
+            style: const TextStyle(color: Colors.black, fontSize: 15),
           ),
         ],
       ),
@@ -205,101 +192,93 @@ class _HomeChildState extends State<HomeChild> {
 
   Positioned buildWelcomeBack() {
     return Positioned(
-      top: 100,
-      left: 65,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              'Welcome back, ${childName ?? '..'}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+      top: 165,
+      left: 75,
+      child: Column(
+        children: [
+          Text(
+            'Welcome back, ${childName ?? '..'}',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            Image.asset(
-              AppAssets.happyCat,
-              width: 150,
-              height: 150,
-            ),
-          ],
-        ),
+          ),
+          Image.asset(
+            AppAssets.happyCat,
+            width: 135,
+            height: 135,
+          ),
+        ],
       ),
     );
   }
 
-  Positioned buildChallengeCard() {
-    return Positioned(
-      top: 0,
-      left: 30,
-      right: 20,
-      child: Material(
-        elevation: 6,
-        borderRadius: BorderRadius.circular(30),
-        child: Container(
-          height: 180,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  const SizedBox(width: 8),
-                  buildRowDailyChallenge(
-                    wordText: 'Daily Challenge',
-                    image: AppAssets.bookmarker,
-                    numText: '10 of 20',
-                    wordTextColor: Colors.grey,
+  Widget buildChallengeCard() {
+    return Material(
+      elevation: 6,
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        height: 180,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.white,
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const SizedBox(width: 8),
+                buildRowDailyChallenge(
+                  wordText: 'Daily Challenge',
+                  image: AppAssets.bookmarker,
+                  numText: '10 of 20',
+                  wordTextColor: Colors.grey,
+                ),
+                const SizedBox(width: 145),
+                const Icon(Icons.more_horiz_outlined, color: Colors.grey),
+              ],
+            ),
+            const SizedBox(height: 5),
+            const Divider(
+              thickness: 1,
+              color: Colors.grey,
+              indent: 50,
+              endIndent: 50,
+            ),
+            const Row(
+              children: [
+                SizedBox(width: 14),
+                Text(
+                  'So for today',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'inter',
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(width: 145),
-                  const Icon(Icons.more_horiz_outlined, color: Colors.grey),
-                ],
-              ),
-              const SizedBox(height: 5),
-              const Divider(
-                thickness: 1,
-                color: Colors.grey,
-                indent: 50,
-                endIndent: 50,
-              ),
-              const Row(
-                children: [
-                  SizedBox(width: 14),
-                  Text(
-                    'So for today',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'inter',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  buildRowDailyChallenge(
-                    image: AppAssets.cutecat,
-                    numText: '10',
-                    wordText: 'Activities',
-                    wordTextColor: Colors.blue,
-                  ),
-                  const SizedBox(width: 75),
-                  buildRowDailyChallenge(
-                    image: AppAssets.cutecat,
-                    numText: '40 mins',
-                    wordText: 'Learning Times',
-                    wordTextColor: Colors.red,
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                buildRowDailyChallenge(
+                  image: AppAssets.cutecat,
+                  numText: '10',
+                  wordText: 'Activities',
+                  wordTextColor: Colors.blue,
+                ),
+                const SizedBox(width: 75),
+                buildRowDailyChallenge(
+                  image: AppAssets.cutecat,
+                  numText: '40 mins',
+                  wordText: 'Learning Times',
+                  wordTextColor: Colors.red,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -348,7 +327,9 @@ class _HomeChildState extends State<HomeChild> {
               buildActivity(
                 image: AppAssets.catreadingbook,
                 text: 'Social Stories',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, SocialStoriesScreen.routeName);
+                },
               ),
               const SizedBox(width: 25),
               buildActivity(

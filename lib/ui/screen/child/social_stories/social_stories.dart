@@ -1,4 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:garduationproject/ui/screen/child/social_stories/result_stories_screen.dart';
+import 'package:http/http.dart' as http;
 
 class SocialStoriesScreen extends StatefulWidget {
   static const String routeName = 'social_stories';
@@ -27,6 +32,66 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
       setState(() {
         ageController.text = (age - 1).toString();
       });
+    }
+  }
+
+  Future<void> generateStory() async {
+    final String name = nameController.text.trim();
+    final String ageText = ageController.text.trim();
+    final String situation = situationController.text.trim();
+
+    if (name.isEmpty || ageText.isEmpty || situation.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    final int? age = int.tryParse(ageText);
+    if (age == null || age < 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Age must be a valid number')),
+      );
+      return;
+    }
+
+    final url = Uri.parse('http://192.168.1.7:5000/generate_story');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'child_name': name,
+          'age': age,
+          'gender': gender,
+          'situation': situation,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final story = data['story'];
+        final base64Image = data['image'];
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => StoryResultScreen(
+              story: story,
+              base64Image: base64Image,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${response.body}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error connecting to API: $e')),
+      );
     }
   }
 
@@ -91,7 +156,7 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    onPressed: () {},
+                    onPressed: generateStory,
                     child: const Text(
                       "Generate Story",
                       style: TextStyle(

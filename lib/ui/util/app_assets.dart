@@ -94,4 +94,6 @@ abstract class AppAssets {
   static const String scincePlanetBackGround =
       'assets/image/scince_Planet_backGround.jpg';
   static const String message = 'assets/image/Message.png';
+  static const String homeChildBackground =
+      'assets/image/background_homeChild.png';
 }
