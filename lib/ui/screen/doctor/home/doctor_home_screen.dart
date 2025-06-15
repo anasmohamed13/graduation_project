@@ -7,6 +7,7 @@ import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/doctor/home/calendar_screen.dart';
 import 'package:garduationproject/ui/screen/doctor/patient_queue/patient_queue.dart';
 import 'package:garduationproject/ui/util/app_assets.dart';
+import 'package:intl/intl.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
   static const String routeName = 'doctorHome';
@@ -82,6 +83,13 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
     }
   }
 
+  String _getFormattedDate(int daysToAdd) {
+    final date = DateTime.now().add(Duration(days: daysToAdd));
+    final day = date.day;
+    final weekday = DateFormat('E').format(date); // e.g., Mon, Tue
+    return '$day\n$weekday';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,9 +115,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
-                      const Text(
-                        '11 November 2024',
-                        style: TextStyle(color: Colors.grey),
+                      Text(
+                        DateFormat('d MMMM yyyy').format(DateTime.now()),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     ],
                   ),
@@ -132,6 +140,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               ),
             ),
 
+            // Stats Card
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(16),
@@ -179,6 +188,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
             const SizedBox(height: 16),
 
+            // Timetable Header
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -191,7 +201,6 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                   IconButton(
                     icon: const Icon(Icons.tune, size: 30),
                     onPressed: () {
-                      // Open calendar page
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -205,39 +214,31 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
             const SizedBox(height: 8),
 
-            // Horizontal Days Row
+            // Horizontal Day Scroll
             SizedBox(
               height: 40,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  for (final day in [
-                    '10\nSun',
-                    '11\nMon',
-                    '12\nTue',
-                    '13\nWed',
-                    '14\nThr',
-                    '15\nFri'
-                  ])
+                  for (int i = 0; i < 6; i++)
                     Container(
                       width: 48,
                       margin: const EdgeInsets.symmetric(horizontal: 6),
                       decoration: BoxDecoration(
-                        color: day.contains('Mon')
+                        color: i == 0
                             ? Colors.red
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        day,
+                        _getFormattedDate(i),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: day.contains('Mon')
-                              ? Colors.white
-                              : Colors.black87,
+                          fontWeight:
+                              i == 0 ? FontWeight.bold : FontWeight.normal,
+                          color: i == 0 ? Colors.white : Colors.black87,
                         ),
                       ),
                     )
@@ -246,6 +247,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
             ),
 
             const SizedBox(height: 16),
+
+            // Parent Info Card
             if (parentData != null)
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
