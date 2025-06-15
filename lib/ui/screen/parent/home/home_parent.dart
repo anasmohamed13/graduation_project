@@ -5,8 +5,7 @@ import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer_service.dart';
-// ignore: unused_import
-import 'package:garduationproject/ui/screen/parent/profile/profile_parent.dart';
+
 import 'package:garduationproject/ui/util/app_assets.dart';
 
 class HomeParent extends StatefulWidget {

@@ -41,13 +41,11 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _initializeEmails() {
-    // إذا تم تمرير البيانات عبر Constructor
     if (widget.doctorEmail != null && widget.parentEmail != null) {
       doctorEmail = widget.doctorEmail;
       parentEmail = widget.parentEmail;
       fetchOtherUserData();
     } else {
-      // إذا تم تمرير البيانات عبر arguments
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final args =
             ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
