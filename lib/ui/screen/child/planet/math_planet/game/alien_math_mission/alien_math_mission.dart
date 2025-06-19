@@ -233,6 +233,9 @@ class _AlienMathMissionViewState extends State<AlienMathMissionView> {
   }
 
   Widget buildAnswerRow(BuildContext context, MathState state) {
+    final correctAnswer = state.correctAnswer.toString().padLeft(2, '0');
+    final firstDigit = correctAnswer[0];
+
     return Positioned(
       bottom: 110,
       left: 0,
@@ -240,7 +243,7 @@ class _AlienMathMissionViewState extends State<AlienMathMissionView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          buildDigitBox(state.firstDigit),
+          buildDigitBox(firstDigit), // Show the first digit
           const SizedBox(width: 16),
           buildAnswerBox(context),
         ],

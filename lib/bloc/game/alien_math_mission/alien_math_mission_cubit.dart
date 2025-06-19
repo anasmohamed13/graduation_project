@@ -5,120 +5,93 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ------------------------ Math Cubit ------------------------
 
-enum AnswerPart { left, right }
-
 class MathCubit extends Cubit<MathState> {
-  Timer? _timer;
-  bool _isPaused = false;
-
   MathCubit()
       : super(MathState(
           leftOperand: 0,
           rightOperand: 0,
           operator: '+',
-          answer: 0,
-          answerPart: AnswerPart.left,
-          correctPart: 0,
+          correctAnswer: 0,
           userInput: '',
+          score: 0,
           isAnswered: false,
           isCorrect: null,
           remainingTime: 15,
-          score: 0,
-          questionCount: 0,
           paused: false,
-          quizFinished: false,
           firstDigit: '',
-          secondDigit: '',
-          prefillFirstDigit: true,
+          questionCount: 0,
+          isGameComplete: false,
         ));
 
-  void startNewQuiz() {
-    emit(state.copyWith(
-      score: 0,
-      questionCount: 0,
-      quizFinished: false,
-    ));
-    generateNewQuestion();
-  }
+  Timer? _timer;
 
   void generateNewQuestion() {
-    if (state.quizFinished) return;
-    _timer?.cancel();
-    _isPaused = false;
-    final rnd = Random();
-    int a = rnd.nextInt(90) + 10;
-    int b = rnd.nextInt(90) + 10;
-    List<String> ops = ['+', '-', '×', '÷'];
-    String op = ops[rnd.nextInt(ops.length)];
-    int ans = 0;
-
-    switch (op) {
-      case '+':
-        ans = a + b;
-        break;
-      case '-':
-        ans = a - b;
-        break;
-      case '×':
-        ans = a * b;
-        break;
-      case '÷':
-        int attempts = 0;
-        while (a % b != 0 && attempts < 100) {
-          a = rnd.nextInt(90) + 10;
-          b = rnd.nextInt(80) + 10;
-          attempts++;
-        }
-        if (a % b != 0) {
-          b = 10;
-          a = b * (rnd.nextInt(9) + 1);
-        }
-        ans = a ~/ b;
-        break;
+    if (state.questionCount >= 6) {
+      emit(state.copyWith(isGameComplete: true));
+      return;
     }
 
-    String ansStr = ans.abs().toString().padLeft(2, '0');
-    String firstDigit = ansStr[0];
-    String secondDigit = ansStr[1];
-    bool prefillFirstDigit = rnd.nextBool();
+    final random = Random();
+    int left, right, result;
+    String operator;
 
-    final part = rnd.nextBool() ? AnswerPart.left : AnswerPart.right;
-    final correctPart = part == AnswerPart.left ? a : b;
+    // تأكد أن الناتج مكوّن من رقمين فقط (10 إلى 99)
+    do {
+      left = random.nextInt(50) + 1;
+      right = random.nextInt(50) + 1;
+      operator = ['+', '-'][random.nextInt(2)];
+      result = operator == '+' ? left + right : left - right;
+    } while (result < 10 || result > 99);
 
     emit(state.copyWith(
-      leftOperand: a,
-      rightOperand: b,
-      operator: op,
-      answer: ans,
-      answerPart: part,
-      correctPart: correctPart,
+      leftOperand: left,
+      rightOperand: right,
+      operator: operator,
+      correctAnswer: result,
       userInput: '',
       isAnswered: false,
       isCorrect: null,
+      firstDigit: result.toString()[0],
       remainingTime: 15,
-      paused: false,
-      firstDigit: firstDigit,
-      secondDigit: secondDigit,
-      prefillFirstDigit: prefillFirstDigit,
+      questionCount: state.questionCount + 1,
     ));
 
     _startTimer();
   }
 
+  void updateUserInput(String input) {
+    emit(state.copyWith(userInput: input));
+  }
+
+  void checkAnswer() {
+    if (state.userInput.isEmpty || state.userInput.length > 1) return;
+
+    final fullAnswer = '${state.firstDigit}${state.userInput}';
+    final isCorrect = int.tryParse(fullAnswer) == state.correctAnswer;
+
+    emit(state.copyWith(
+      isCorrect: isCorrect,
+      isAnswered: true,
+      score: isCorrect ? state.score + 1 : state.score,
+    ));
+
+    _timer?.cancel();
+
+    Future.delayed(const Duration(seconds: 2), () {
+      generateNewQuestion();
+    });
+  }
+
   void _startTimer() {
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_isPaused) return;
+      if (state.paused) return;
+
       if (state.remainingTime <= 1) {
         timer.cancel();
         emit(state.copyWith(isAnswered: true, isCorrect: false));
         Future.delayed(const Duration(seconds: 2), () {
-          if (state.questionCount >= 4) {
-            emit(state.copyWith(quizFinished: true, paused: true));
-          } else {
-            final newCount = state.questionCount + 1;
-            emit(state.copyWith(questionCount: newCount));
-            generateNewQuestion();
-          }
+          generateNewQuestion();
         });
       } else {
         emit(state.copyWith(remainingTime: state.remainingTime - 1));
@@ -126,44 +99,11 @@ class MathCubit extends Cubit<MathState> {
     });
   }
 
-  void updateUserInput(String input) {
-    final sanitizedInput = input.replaceAll(RegExp(r'[^0-9]'), '');
-    if (sanitizedInput.length > 2) return;
-    emit(state.copyWith(userInput: sanitizedInput));
-  }
-
-  void checkAnswer() {
-    if (state.isAnswered || state.quizFinished) return;
-
-    String userInput = state.userInput.trim();
-
-    String answerToCheck = state.prefillFirstDigit
-        ? state.firstDigit + userInput
-        : userInput + state.secondDigit;
-
-    bool correct = answerToCheck == (state.firstDigit + state.secondDigit);
-    final newScore = correct ? state.score + 6 : state.score;
-
-    emit(state.copyWith(isAnswered: true, isCorrect: correct, score: newScore));
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (state.questionCount >= 4) {
-        emit(state.copyWith(quizFinished: true, paused: true));
-      } else {
-        final newCount = state.questionCount + 1;
-        emit(state.copyWith(questionCount: newCount));
-        generateNewQuestion();
-      }
-    });
-  }
-
   void pauseTimer() {
-    _isPaused = true;
     emit(state.copyWith(paused: true));
   }
 
   void resumeTimer() {
-    _isPaused = false;
     emit(state.copyWith(paused: false));
   }
 
@@ -180,78 +120,62 @@ class MathState {
   final int leftOperand;
   final int rightOperand;
   final String operator;
-  final int answer;
-  final AnswerPart answerPart;
-  final int correctPart;
+  final int correctAnswer;
   final String userInput;
+  final int score;
   final bool isAnswered;
   final bool? isCorrect;
   final int remainingTime;
-  final int score;
-  final int questionCount;
   final bool paused;
-  final bool quizFinished;
   final String firstDigit;
-  final String secondDigit;
-  final bool prefillFirstDigit;
+  final int questionCount;
+  final bool isGameComplete;
 
   MathState({
     required this.leftOperand,
     required this.rightOperand,
     required this.operator,
-    required this.answer,
-    required this.answerPart,
-    required this.correctPart,
+    required this.correctAnswer,
     required this.userInput,
+    required this.score,
     required this.isAnswered,
     required this.isCorrect,
     required this.remainingTime,
-    required this.score,
-    required this.questionCount,
     required this.paused,
-    required this.quizFinished,
     required this.firstDigit,
-    required this.secondDigit,
-    required this.prefillFirstDigit,
+    required this.questionCount,
+    required this.isGameComplete,
   });
 
   MathState copyWith({
     int? leftOperand,
     int? rightOperand,
     String? operator,
-    int? answer,
-    AnswerPart? answerPart,
-    int? correctPart,
+    int? correctAnswer,
     String? userInput,
+    int? score,
     bool? isAnswered,
     bool? isCorrect,
     int? remainingTime,
-    int? score,
-    int? questionCount,
     bool? paused,
-    bool? quizFinished,
     String? firstDigit,
-    String? secondDigit,
-    bool? prefillFirstDigit,
+    int? questionCount,
+    bool? isGameComplete,
   }) {
     return MathState(
       leftOperand: leftOperand ?? this.leftOperand,
       rightOperand: rightOperand ?? this.rightOperand,
       operator: operator ?? this.operator,
-      answer: answer ?? this.answer,
-      answerPart: answerPart ?? this.answerPart,
-      correctPart: correctPart ?? this.correctPart,
+      correctAnswer: correctAnswer ?? this.correctAnswer,
       userInput: userInput ?? this.userInput,
-      isAnswered: isAnswered ?? this.isAnswered,
-      isCorrect: isCorrect ?? this.isCorrect,
-      remainingTime: remainingTime ?? this.remainingTime,
       score: score ?? this.score,
-      questionCount: questionCount ?? this.questionCount,
+      isAnswered: isAnswered ?? this.isAnswered,
+      isCorrect: isCorrect,
+      remainingTime: remainingTime ?? this.remainingTime,
       paused: paused ?? this.paused,
-      quizFinished: quizFinished ?? this.quizFinished,
       firstDigit: firstDigit ?? this.firstDigit,
-      secondDigit: secondDigit ?? this.secondDigit,
-      prefillFirstDigit: prefillFirstDigit ?? this.prefillFirstDigit,
+      questionCount: questionCount ?? this.questionCount,
+      isGameComplete: isGameComplete ?? this.isGameComplete,
     );
   }
 }

@@ -63,13 +63,17 @@ class _ChatPageState extends State<ChatPage> {
   void fetchOtherUserData() async {
     if (doctorEmail == null || parentEmail == null) return;
 
-    bool isDoctor = auth.currentUser!.email == doctorEmail;
-    String otherUserEmail = isDoctor ? parentEmail! : doctorEmail!;
-    String collection = isDoctor ? 'Parent' : 'Doctor';
+    final currentUserEmail = auth.currentUser!.email;
+    final isCurrentUserDoctor = currentUserEmail == doctorEmail;
+
+    final otherUserEmail = isCurrentUserDoctor ? parentEmail! : doctorEmail!;
+    final otherUserCollection = isCurrentUserDoctor ? 'Parent' : 'Doctor';
 
     try {
-      final doc =
-          await firestore.collection(collection).doc(otherUserEmail).get();
+      final doc = await firestore
+          .collection(otherUserCollection)
+          .doc(otherUserEmail)
+          .get();
 
       if (doc.exists) {
         final data = doc.data()!;
@@ -82,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
         setState(() => isLoadingOtherUser = false);
       }
     } catch (e) {
-      print('Error fetching other user data: $e');
+      print('Error fetching user data: $e');
       setState(() => isLoadingOtherUser = false);
     }
   }
@@ -116,6 +120,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: buildBodyChatPage(),
     );
   }
@@ -128,109 +133,115 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     bool isDoctor = auth.currentUser!.email == doctorEmail;
+    final bannerImage = isDoctor ? AppAssets.parent : AppAssets.girlDoctor;
 
     return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 30),
-          Row(
-            children: [
-              const SizedBox(width: 20),
-              CircleAvatar(
-                backgroundColor: const Color(0xffeef5ff),
-                radius: 30,
-                child: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back_ios_new_sharp),
-                  color: const Color(0xff8aa1b5),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                const SizedBox(width: 20),
+                CircleAvatar(
+                  backgroundColor: const Color(0xffeef5ff),
+                  radius: 30,
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back_ios_new_sharp),
+                    color: const Color(0xff8aa1b5),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 70),
-              Image.asset(AppAssets.doctorChat),
-            ],
-          ),
-          const SizedBox(height: 10),
-          isLoadingOtherUser
-              ? const CircularProgressIndicator()
-              : Column(
+                const SizedBox(width: 70),
+                Column(
                   children: [
-                    if (otherUserImage != null && otherUserImage!.isNotEmpty)
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundImage: NetworkImage(otherUserImage!),
-                      ),
-                    const SizedBox(height: 8),
-                    Text(
-                      otherUserName ?? 'User',
-                      style: const TextStyle(
-                        fontFamily: 'inter',
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage:
+                          otherUserImage != null && otherUserImage!.isNotEmpty
+                              ? NetworkImage(otherUserImage!)
+                              : AssetImage(bannerImage) as ImageProvider,
                     ),
+                    const SizedBox(height: 8),
+                    isLoadingOtherUser
+                        ? const CircularProgressIndicator()
+                        : Text(
+                            otherUserName ?? 'User',
+                            style: const TextStyle(
+                              fontFamily: 'inter',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ],
                 ),
-          const SizedBox(height: 20),
-          StreamBuilder<QuerySnapshot>(
-            stream: firestore
-                .collection('chats')
-                .doc('${doctorEmail}_$parentEmail')
-                .collection('messages')
-                .orderBy('timestamp', descending: false)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              }
+              ],
+            ),
+            const SizedBox(height: 20),
+            StreamBuilder<QuerySnapshot>(
+              stream: firestore
+                  .collection('chats')
+                  .doc('${doctorEmail}_$parentEmail')
+                  .collection('messages')
+                  .orderBy('timestamp', descending: false)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              List<QueryDocumentSnapshot<Object?>> messages =
-                  snapshot.data!.docs;
-              return SizedBox(
-                height: 470,
-                child: ListView.builder(
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    var message = messages[index];
-                    String senderType = 'parent';
-                    try {
-                      Map<String, dynamic> data =
-                          message.data() as Map<String, dynamic>;
-                      if (data.containsKey('senderType')) {
-                        senderType = data['senderType'];
+                List<QueryDocumentSnapshot<Object?>> messages =
+                    snapshot.data!.docs;
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      var message = messages[index];
+                      String senderType = 'parent';
+                      try {
+                        Map<String, dynamic> data =
+                            message.data() as Map<String, dynamic>;
+                        if (data.containsKey('senderType')) {
+                          senderType = data['senderType'];
+                        }
+                      } catch (e) {
+                        print('Error accessing senderType: $e');
                       }
-                    } catch (e) {
-                      print('Error accessing senderType: $e');
-                    }
 
-                    bool isSender = (senderType == 'Doctor' && isDoctor) ||
-                        (senderType == 'Parent' && !isDoctor);
+                      bool isSender = (senderType == 'Doctor' && isDoctor) ||
+                          (senderType == 'Parent' && !isDoctor);
 
-                    return BubbleSpecialThree(
-                      text: message['text'],
-                      color: isSender
-                          ? const Color(0xFF8fb2eb)
-                          : const Color(0xFFE8E8EE),
-                      tail: true,
-                      isSender: isSender,
-                      textStyle: TextStyle(
-                        color:
-                            isSender ? const Color(0xff55688b) : Colors.black87,
-                        fontSize: 20,
-                        fontFamily: 'inter',
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-          const Spacer(flex: 10),
-          messageBAR(context, messageController, (bool typing) {
-            setState(() => ChatPage.isTyping = typing);
-          }, ChatPage.isTyping),
-          const Spacer(),
-        ],
+                      return BubbleSpecialThree(
+                        text: message['text'],
+                        color: isSender
+                            ? const Color(0xFF8fb2eb)
+                            : const Color(0xFFE8E8EE),
+                        tail: true,
+                        isSender: isSender,
+                        textStyle: TextStyle(
+                          color: isSender
+                              ? const Color(0xff55688b)
+                              : Colors.black87,
+                          fontSize: 20,
+                          fontFamily: 'inter',
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            messageBAR(context, messageController, (bool typing) {
+              setState(() => ChatPage.isTyping = typing);
+            }, ChatPage.isTyping),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -280,12 +291,9 @@ class _ChatPageState extends State<ChatPage> {
               color: Colors.blue[300],
             ),
             child: IconButton(
-              icon:
-                  Icon(isTyping ? Icons.send : Icons.mic, color: Colors.white),
+              icon: const Icon(Icons.send, color: Colors.white),
               onPressed: () {
-                if (isTyping) {
-                  sendMessage();
-                }
+                sendMessage();
               },
             ),
           )

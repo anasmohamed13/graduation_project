@@ -96,4 +96,6 @@ abstract class AppAssets {
   static const String message = 'assets/image/Message.png';
   static const String homeChildBackground =
       'assets/image/background_homeChild.png';
+  static const String gatoDetection = 'assets/image/smlimg-white-cat-face.png';
+  static const String girlDoctor = 'assets/image/girldoctor.jpg';
 }

@@ -173,8 +173,10 @@ class _HomeParentState extends State<HomeParent> {
         const Text('Notifications',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
-        notificationCard('🎉 Congratulation',
-            'Your son has achieved high marks in mathematics.', 'View More'),
+        notificationCard(
+            '👋 Welcome to Gato World',
+            'Let’s explore a new journey of learning and fun together.',
+            'Start Now'),
         const SizedBox(height: 10),
         notificationCard('⚠ Alert !!',
             'Your child has changed his daily routine.', 'Connect'),

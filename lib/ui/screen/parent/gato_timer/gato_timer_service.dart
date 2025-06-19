@@ -7,13 +7,15 @@ class GatoTimerService {
 
   factory GatoTimerService() => _instance;
 
-  GatoTimerService._internal();
+  GatoTimerService._internal() {
+    notifier = ValueNotifier<int>(_secondsRemaining);
+  }
 
   Timer? _timer;
-  int _secondsRemaining = 900;
+  int _secondsRemaining = 10800;
   bool _isRunning = false;
 
-  final ValueNotifier<int> notifier = ValueNotifier<int>(600);
+  late final ValueNotifier<int> notifier;
 
   int get secondsRemaining => _secondsRemaining;
   bool get isRunning => _isRunning;
@@ -54,7 +56,7 @@ class GatoTimerService {
     }
   }
 
-  void resetTimer({int seconds = 600}) {
+  void resetTimer({int seconds = 10800}) {
     _timer?.cancel();
     _secondsRemaining = seconds;
     notifier.value = _secondsRemaining;

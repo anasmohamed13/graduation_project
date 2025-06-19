@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:garduationproject/ui/screen/child/emotion_detection_screen/emotion_detection_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/learn_palent.dart';
 import 'package:garduationproject/ui/screen/child/social_stories/social_stories.dart';
 import 'package:garduationproject/ui/screen/child/traditional_stories/traditional_stories_intro/traditional_stories_intro.dart';
@@ -350,7 +351,6 @@ class _HomeChildState extends State<HomeChild> {
               ),
             ],
           ),
-          const SizedBox(height: 25),
         ],
       ),
     );
@@ -363,7 +363,11 @@ class _HomeChildState extends State<HomeChild> {
   }) {
     return Column(
       children: [
-        InkWell(onTap: onTap, child: Image.asset(image)),
+        InkWell(
+            onTap: onTap,
+            child: Image.asset(
+              image,
+            )),
         Text(
           text,
           style: const TextStyle(
@@ -380,8 +384,8 @@ class _HomeChildState extends State<HomeChild> {
   Positioned buildNavBar() {
     return Positioned(
       bottom: 20,
-      right: 80,
-      left: 80,
+      right: 100,
+      left: 100,
       child: Material(
         elevation: 7,
         borderRadius: BorderRadius.circular(40),
@@ -391,10 +395,19 @@ class _HomeChildState extends State<HomeChild> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // Add buttons here later
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, EmotionDetectionScreen.routeName);
+                },
+                child: Image.asset(
+                  AppAssets.gatoDetection,
+                  scale: 45,
+                ),
+              ),
             ],
           ),
         ),

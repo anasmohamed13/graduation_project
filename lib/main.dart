@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/firebase_options.dart';
 import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
+import 'package:garduationproject/ui/screen/child/emotion_detection_screen/emotion_detection_screen.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/game/alien_math_mission/alien_math_mission.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_game.dart';
 import 'package:garduationproject/ui/screen/child/planet/math_planet/game/count_with_alien/count_with_alien_intro.dart';
@@ -109,6 +110,7 @@ class GatoApp extends StatelessWidget {
         DoctorHomeScreen.routeName: (_) => const DoctorHomeScreen(),
         CalendarScreen.routeName: (_) => const CalendarScreen(),
         PatientCardScreen.routeName: (_) => const PatientCardScreen(),
+        EmotionDetectionScreen.routeName: (_) => const EmotionDetectionScreen(),
       },
     );
   }

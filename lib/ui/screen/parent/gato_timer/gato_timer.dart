@@ -20,7 +20,7 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     if (!gatoTimerService.isRunning) {
-      gatoTimerService.resetTimer(seconds: 900);
+      gatoTimerService.resetTimer(seconds: 10800);
       gatoTimerService.resumeTimer(context);
     }
   }
@@ -52,11 +52,10 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final currentRoute = ModalRoute.of(context)?.settings.name;
-
     return AnimatedBuilder(
       animation: gatoTimerService.notifier,
       builder: (context, _) {
-        double progress = gatoTimerService.secondsRemaining / 600;
+        double progress = gatoTimerService.secondsRemaining / 10800;
         return Scaffold(
           backgroundColor: const Color(0xffE1EEFF),
           body: Stack(
