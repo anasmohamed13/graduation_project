@@ -20,7 +20,7 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     if (!gatoTimerService.isRunning) {
-      gatoTimerService.resetTimer(seconds: 600); // مؤقت لـ 10 دقائق للتجربة
+      gatoTimerService.resetTimer(seconds: 600); 
       gatoTimerService.resumeTimer(context);
     }
   }

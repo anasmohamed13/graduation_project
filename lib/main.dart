@@ -49,7 +49,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   User? user = FirebaseAuth.instance.currentUser;
-
   runApp(
     GatoApp(isLoggedIn: user != null),
   );
@@ -63,7 +62,7 @@ class GatoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Splash.routeName,
+      initialRoute: HomeParent.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         HelloPage.routeName: (_) => const HelloPage(),
@@ -89,17 +88,13 @@ class GatoApp extends StatelessWidget {
         IntroChild.routeName: (_) => const IntroChild(),
         IntroBiology.routeName: (_) => const IntroBiology(),
         TraditionalStoriesPage.routeName: (_) => const TraditionalStoriesPage(),
-        TraditionalStoriesIntro.routeName: (_) =>
-            const TraditionalStoriesIntro(),
+        TraditionalStoriesIntro.routeName: (_) => const TraditionalStoriesIntro(),
         BodySystemScreen.routeName: (_) => const BodySystemScreen(),
-        CirculatorySystemScreen.routeName: (_) =>
-            const CirculatorySystemScreen(),
-        RespiratorySystemScreen.routeName: (_) =>
-            const RespiratorySystemScreen(),
+        CirculatorySystemScreen.routeName: (_) => const CirculatorySystemScreen(),
+        RespiratorySystemScreen.routeName: (_) => const RespiratorySystemScreen(),
         NervousSystemScreen.routeName: (_) => const NervousSystemScreen(),
         DigestiveSystemScreen.routeName: (_) => const DigestiveSystemScreen(),
-        YoutubeVideoPlayerScreen.routeName: (_) =>
-            const YoutubeVideoPlayerScreen(),
+        YoutubeVideoPlayerScreen.routeName: (_) => const YoutubeVideoPlayerScreen(),
         MathPlanet.routeName: (_) => const MathPlanet(),
         CountWithAlienIntro.routeName: (_) => const CountWithAlienIntro(),
         CountWithAlienGame.routeName: (_) => const CountWithAlienGame(),
