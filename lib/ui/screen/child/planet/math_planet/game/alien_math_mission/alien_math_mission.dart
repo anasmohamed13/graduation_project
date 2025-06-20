@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garduationproject/bloc/game/alien_math_mission/alien_math_mission_cubit.dart';
@@ -28,6 +30,33 @@ class AlienMathMissionView extends StatefulWidget {
 class _AlienMathMissionViewState extends State<AlienMathMissionView> {
   final TextEditingController answerController = TextEditingController();
 
+  Future<void> saveMathScore(int score) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final parents = await FirebaseFirestore.instance.collection('Parent').get();
+    for (var parent in parents.docs) {
+      final children = await FirebaseFirestore.instance
+          .collection('Parent')
+          .doc(parent.id)
+          .collection('Children')
+          .get();
+
+      for (var child in children.docs) {
+        final childData = child.data();
+        if (childData.containsKey('firstName')) {
+          await FirebaseFirestore.instance
+              .collection('Parent')
+              .doc(parent.id)
+              .collection('Children')
+              .doc(child.id)
+              .update({'mathScore': score});
+          return;
+        }
+      }
+    }
+  }
+
   @override
   void dispose() {
     answerController.dispose();
@@ -44,7 +73,13 @@ class _AlienMathMissionViewState extends State<AlienMathMissionView> {
             final cubit = context.read<MathCubit>();
 
             if (state.isAnswered) {
-              Future.microtask(() => answerController.clear());
+              Future.microtask(() async {
+                answerController.clear();
+
+                if (state.isCorrect == true) {
+                  await saveMathScore(state.score);
+                }
+              });
             }
 
             return Stack(
@@ -272,7 +307,9 @@ class _AlienMathMissionViewState extends State<AlienMathMissionView> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           padding: const EdgeInsets.symmetric(vertical: 18),
         ),
-        onPressed: () => cubit.checkAnswer(),
+        onPressed: () {
+          cubit.checkAnswer();
+        },
         child: const Text(
           'DONE',
           style: TextStyle(

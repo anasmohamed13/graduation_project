@@ -241,7 +241,7 @@ class _ChatPageState extends State<ChatPage> {
       Function(bool) onTyping, bool isTyping) {
     bool isDoctor = auth.currentUser!.email == doctorEmail;
     return Container(
-      height: MediaQuery.of(context).size.height * 0.073,
+      height: MediaQuery.of(context).size.height * 0.07,
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         gradient: const LinearGradient(

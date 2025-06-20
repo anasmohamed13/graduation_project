@@ -20,7 +20,7 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     if (!gatoTimerService.isRunning) {
-      gatoTimerService.resetTimer(seconds: 600); 
+      gatoTimerService.resetTimer(seconds: 900);
       gatoTimerService.resumeTimer(context);
     }
   }
@@ -34,7 +34,8 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       gatoTimerService.pauseTimer();
     } else if (state == AppLifecycleState.resumed) {
       gatoTimerService.resumeTimer(context);
@@ -113,7 +114,9 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
-                      boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+                      boxShadow: [
+                        BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
+                      ],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -121,13 +124,16 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
                         GestureDetector(
                           onTap: () {
                             if (currentRoute != HomeParent.routeName) {
-                              Navigator.pushNamed(context, HomeParent.routeName);
+                              Navigator.pushNamed(
+                                  context, HomeParent.routeName);
                             }
                           },
                           child: Icon(
                             Icons.home,
                             size: 30,
-                            color: currentRoute == HomeParent.routeName ? Colors.blue : Colors.black,
+                            color: currentRoute == HomeParent.routeName
+                                ? Colors.blue
+                                : Colors.black,
                           ),
                         ),
                         GestureDetector(
@@ -141,13 +147,16 @@ class _GatoTimerState extends State<GatoTimer> with WidgetsBindingObserver {
                         GestureDetector(
                           onTap: () {
                             if (currentRoute != ChildProgressScreen.routeName) {
-                              Navigator.pushNamed(context, ChildProgressScreen.routeName);
+                              Navigator.pushNamed(
+                                  context, ChildProgressScreen.routeName);
                             }
                           },
                           child: Icon(
                             Icons.settings,
                             size: 30,
-                            color: currentRoute == ChildProgressScreen.routeName ? Colors.blue : Colors.black,
+                            color: currentRoute == ChildProgressScreen.routeName
+                                ? Colors.blue
+                                : Colors.black,
                           ),
                         ),
                       ],

@@ -10,7 +10,7 @@ class GatoTimerService {
   GatoTimerService._internal();
 
   Timer? _timer;
-  int _secondsRemaining = 600;
+  int _secondsRemaining = 900;
   bool _isRunning = false;
 
   final ValueNotifier<int> notifier = ValueNotifier<int>(600);

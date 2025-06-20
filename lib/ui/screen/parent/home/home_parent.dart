@@ -18,13 +18,13 @@ class HomeParent extends StatefulWidget {
 }
 
 class _HomeParentState extends State<HomeParent> {
-
   bool isChildProgressSelected = false;
   @override
   void initState() {
     super.initState();
     GatoTimerService().startTimer(context);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
