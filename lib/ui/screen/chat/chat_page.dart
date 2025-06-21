@@ -133,7 +133,8 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     bool isDoctor = auth.currentUser!.email == doctorEmail;
-    final bannerImage = isDoctor ? AppAssets.parent : AppAssets.girlDoctor;
+    final bannerImage =
+        isDoctor ? AppAssets.parentWithChild : AppAssets.girlDoctor;
 
     return SafeArea(
       child: SingleChildScrollView(

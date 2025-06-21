@@ -5,7 +5,6 @@ import 'package:garduationproject/ui/screen/chat/ai_chat/ai_chat.dart';
 import 'package:garduationproject/ui/screen/chat/chat_page.dart';
 import 'package:garduationproject/ui/screen/parent/child_progress/child_progress.dart';
 import 'package:garduationproject/ui/screen/parent/gato_timer/gato_timer_service.dart';
-
 import 'package:garduationproject/ui/util/app_assets.dart';
 
 class HomeParent extends StatefulWidget {
@@ -18,10 +17,46 @@ class HomeParent extends StatefulWidget {
 
 class _HomeParentState extends State<HomeParent> {
   bool isChildProgressSelected = false;
+  String? parentName;
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
     GatoTimerService().startTimer(context);
+    fetchParentName();
+  }
+
+  Future<void> fetchParentName() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final parentEmail = user.email;
+
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('Parent')
+          .doc(parentEmail)
+          .get();
+
+      if (doc.exists) {
+        setState(() {
+          parentName = doc.data()?['fullName'] ?? 'Parent';
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          parentName = 'Parent';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        parentName = 'Parent';
+        isLoading = false;
+      });
+      debugPrint('Error fetching parent name: $e');
+    }
   }
 
   @override
@@ -61,10 +96,10 @@ class _HomeParentState extends State<HomeParent> {
   AppBar buildAppBarHomeParent() {
     return AppBar(
       toolbarHeight: 80,
-      title: const Column(
+      title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Good Morning!',
             style: TextStyle(
               fontSize: 30,
@@ -72,8 +107,8 @@ class _HomeParentState extends State<HomeParent> {
             ),
           ),
           Text(
-            'Alex Willson',
-            style: TextStyle(
+            isLoading ? 'Loading...' : (parentName ?? 'Parent'),
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
@@ -85,7 +120,7 @@ class _HomeParentState extends State<HomeParent> {
           padding: EdgeInsets.only(right: 20),
           child: CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage(AppAssets.girlMoji),
+            backgroundImage: AssetImage(AppAssets.parentWithChild),
           ),
         ),
       ],

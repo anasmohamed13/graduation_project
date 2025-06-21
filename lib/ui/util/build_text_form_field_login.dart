@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 buildTextFormFiledLogin(
     {Widget? suffixIcon,
+    required bool obscureText,
     String? hintText,
     BorderRadius? borderRadius,
     TextEditingController? controller,
@@ -9,6 +10,7 @@ buildTextFormFiledLogin(
     void Function(String)? onChanged}) {
   return TextFormField(
     onChanged: onChanged,
+    obscureText: obscureText,
     controller: controller,
     validator: validator,
     decoration: InputDecoration(

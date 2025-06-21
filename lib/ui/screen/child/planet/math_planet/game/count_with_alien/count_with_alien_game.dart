@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class CountWithAlienGame extends StatefulWidget {
 
 class _CountWithAlienGameState extends State<CountWithAlienGame> {
   bool _scoreSaved = false;
+  bool _gameEnded = false;
+  int _countdownSeconds = 5;
 
   Future<void> saveCountingScore(int score) async {
     try {
@@ -120,6 +123,26 @@ class _CountWithAlienGameState extends State<CountWithAlienGame> {
     }
   }
 
+  void _startCountdown() {
+    if (!_gameEnded) {
+      _gameEnded = true;
+      Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (mounted) {
+          setState(() {
+            _countdownSeconds--;
+          });
+
+          if (_countdownSeconds <= 0) {
+            timer.cancel();
+            Navigator.pop(context); // Return to math planet
+          }
+        } else {
+          timer.cancel();
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -142,6 +165,11 @@ class _CountWithAlienGameState extends State<CountWithAlienGame> {
                   await saveCountingScore(state.points);
                   // If first method fails, try alternative
                   await saveCountingScoreAlternative(state.points);
+                });
+
+                // Start countdown after game ends
+                Future.delayed(const Duration(milliseconds: 1000), () {
+                  _startCountdown();
                 });
               }
 
@@ -280,14 +308,37 @@ class _CountWithAlienGameState extends State<CountWithAlienGame> {
                       child: Container(
                         color: Colors.black54,
                         child: Center(
-                          child: Text(
-                            'Game Over!\nYour Score:  ${state.points}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32,
-                            ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Game Over!\nYour Score:',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 32,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                '${state.points}',
+                                style: const TextStyle(
+                                  color: Colors.yellow,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 48,
+                                ),
+                              ),
+                              const SizedBox(height: 40),
+                              Text(
+                                'Returning to Math Planet in $_countdownSeconds seconds...',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

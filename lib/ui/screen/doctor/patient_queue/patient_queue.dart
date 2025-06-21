@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/doctor/patient_card/patient_card_screen.dart';
+import 'package:garduationproject/ui/util/app_assets.dart';
 
 class PatientQueueScreen extends StatefulWidget {
   static const String routeName = 'patientQueue';
@@ -37,7 +38,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
       for (var parentDoc in snapshot.docs) {
         final parentData = parentDoc.data();
         final parentName = parentData['fullName'] ?? 'No Name';
-        final parentImage = parentData['image'] ?? 'assets/image/default.png';
+        final parentImage = parentData['image'];
 
         final childrenSnapshot = await FirebaseFirestore.instance
             .collection('Parent')
@@ -50,7 +51,7 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
 
           final childGender = childData['gender'] ?? 'Unknown';
           final age = childData['age'] ?? 'No entry age';
-          final childName = childData['fullName'] ?? 'Unknown';
+          final childName = childData['firstName'] ?? 'Unknown';
 
           loadedPatients.add({
             'parentId': parentDoc.id,
@@ -105,7 +106,8 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
               ),
             ),
             isLoading
-                ? const Expanded(child: Center(child: CircularProgressIndicator()))
+                ? const Expanded(
+                    child: Center(child: CircularProgressIndicator()))
                 : Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -118,8 +120,9 @@ class _PatientQueueScreenState extends State<PatientQueueScreen> {
                             children: [
                               CircleAvatar(
                                 radius: 35,
-                                backgroundImage:
-                                    AssetImage(patient['parentImage']),
+                                backgroundImage: AssetImage(
+                                    patient['parentImage'] ??
+                                        AppAssets.parentWithChild),
                               ),
                               const SizedBox(width: 12),
                               Expanded(

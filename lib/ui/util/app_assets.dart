@@ -83,8 +83,7 @@ abstract class AppAssets {
   static const String backgroundCountWithAlienIntro =
       'assets/image/backgroun_intro_countWithAlien.jpg';
   static const String humanAndAlien = 'assets/image/human_alien.png';
-  static const String happyWhiteKittenCat =
-      'assets/image/happy_white_kitten_cat.png';
+  static const String happyWhiteKittenCat = 'assets/image/happy_white.png';
   static const String planet = 'assets/image/planet.png';
   static const String timerCatFace = 'assets/image/timer_cat_face.png';
   static const String alienOnPlane = 'assets/image/alienOnPlane.png';
@@ -98,4 +97,6 @@ abstract class AppAssets {
       'assets/image/background_homeChild.png';
   static const String gatoDetection = 'assets/image/smlimg-white-cat-face.png';
   static const String girlDoctor = 'assets/image/girldoctor.jpg';
+  static const String parentWithChild = 'assets/image/parentwithchild.png';
+  static const String gatoAiChat = 'assets/image/GatoAiChat.png';
 }

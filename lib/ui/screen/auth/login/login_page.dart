@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-doctor/sign_up_doctor.dart';
 import 'package:garduationproject/ui/screen/auth/signup/signup-parent/sign_up_parent.dart';
 import 'package:garduationproject/ui/screen/doctor/home/doctor_home_screen.dart';
-
 import 'package:garduationproject/ui/screen/parent/home/home_parent.dart';
-
 import 'package:garduationproject/ui/util/app_assets.dart';
 import 'package:garduationproject/ui/util/build_elevated_button.dart';
 import 'package:garduationproject/ui/util/build_text_form_field_login.dart';
@@ -25,6 +23,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isLogin = true;
+  bool isPasswordVisible = false;
+
   void toggleLoginSignUp(bool isLoginSelected) {
     setState(() {
       isLogin = isLoginSelected;
@@ -108,16 +108,26 @@ class _LoginPageState extends State<LoginPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
+
+                  // Email Field
                   buildTextFormFiledLogin(
                     controller: emailController,
                     borderRadius: BorderRadius.circular(10),
                     hintText: 'enter your email',
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Image.asset(
-                        AppAssets.cancelIcon,
-                        width: 18,
-                        height: 18,
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        emailController.clear();
+                        setState(() {
+                          email = '';
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Image.asset(
+                          AppAssets.cancelIcon,
+                          width: 18,
+                          height: 18,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -133,12 +143,15 @@ class _LoginPageState extends State<LoginPage> {
                     onChanged: (text) {
                       email = text;
                     },
+                    obscureText: false,
                   ),
                   const SizedBox(height: 10),
+
                   buildTextFormFiledLogin(
                     controller: passwordController,
                     borderRadius: BorderRadius.circular(10),
                     hintText: 'enter password',
+                    obscureText: !isPasswordVisible,
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(8),
                       child: Container(
@@ -146,18 +159,31 @@ class _LoginPageState extends State<LoginPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Image.asset(
-                              AppAssets.eyelIcon,
-                              width: 22,
-                              height: 22,
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                              child: Image.asset(
+                                AppAssets.eyelIcon,
+                                width: 22,
+                                height: 22,
+                              ),
                             ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Image.asset(
-                              AppAssets.cancelIcon,
-                              width: 22,
-                              height: 22,
+                            const SizedBox(width: 8),
+                            GestureDetector(
+                              onTap: () {
+                                passwordController.clear();
+                                setState(() {
+                                  password = '';
+                                });
+                              },
+                              child: Image.asset(
+                                AppAssets.cancelIcon,
+                                width: 22,
+                                height: 22,
+                              ),
                             ),
                           ],
                         ),
@@ -175,6 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                       password = text;
                     },
                   ),
+
                   const SizedBox(height: 10),
                   TextButton(
                     onPressed: () {
@@ -239,22 +266,18 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacementNamed(context, DoctorHomeScreen.routeName,
           arguments: {'isDoctor': true});
     } else if (widget.user == 'parent') {
-      // Navigate to parent home
       Navigator.pushReplacementNamed(context, HomeParent.routeName);
     }
   }
 
   Future<void> signIn() async {
-    // to check validate aboute email or password before firebase auth--->(read this Gana)
     if (!formKey.currentState!.validate()) return;
 
     try {
       showLoading(context);
       UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email.trim(), password: password);
 
-      // comment to explain this part of code ----> (to Gana)
-      // to check the user in app & he not close app we use mounted
       if (context.mounted) {
         hideLoading(context);
         navigateToProfile();
@@ -262,22 +285,51 @@ class _LoginPageState extends State<LoginPage> {
     } on FirebaseAuthException catch (e) {
       hideLoading(context);
 
-      String message = '';
-      if (e.code == 'user-not-found') {
-        message = "No user found for that email.";
-      } else if (e.code == 'wrong-password') {
-        message = 'wrong pass';
+      String userMessage;
+
+      switch (e.code) {
+        case 'invalid-email':
+          userMessage = 'The email format is incorrect.';
+          break;
+
+        case 'user-not-found':
+          userMessage = 'No account found for this email.';
+          break;
+
+        case 'wrong-password':
+          userMessage = 'Incorrect password. Please try again.';
+          break;
+
+        case 'invalid-credential':
+          userMessage =
+              'Email or password is incorrect. Please double-check your credentials.';
+          break;
+
+        case 'user-disabled':
+          userMessage =
+              'This user account has been disabled. Please contact support.';
+          break;
+
+        case 'too-many-requests':
+          userMessage = 'Too many failed attempts. Please try again later.';
+          break;
+
+        case 'network-request-failed':
+          userMessage = 'Network error. Please check your internet connection.';
+          break;
+
+        default:
+          userMessage = 'An unexpected error occurred. Please try again.';
       }
+
       if (context.mounted) {
-        showMessage(context,
-            title: 'Error!',
-            body: 'youe error is =$message',
-            posButtonTitle: 'Ok');
+        showMessage(
+          context,
+          title: 'Login Error',
+          body: userMessage,
+          posButtonTitle: 'OK',
+        );
       }
-    } catch (e) {
-      hideLoading(context);
-      showMessage(context,
-          title: 'Error!', body: 'some thing is wrong try later..');
     }
   }
 }

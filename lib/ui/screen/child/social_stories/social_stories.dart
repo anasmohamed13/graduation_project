@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:garduationproject/ui/screen/child/social_stories/result_stories_screen.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +19,9 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
   final TextEditingController ageController = TextEditingController(text: '1');
   final TextEditingController situationController = TextEditingController();
   String gender = 'Boy';
+  bool _isLoading = false;
+
+  final String serverUrl = 'http://10.0.2.2:5000';
 
   void incrementAge() {
     int age = int.tryParse(ageController.text) ?? 1;
@@ -35,62 +39,153 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
     }
   }
 
+  Future<bool> testServerConnection() async {
+    try {
+      print('Testing server connection to: $serverUrl');
+      final response = await http.get(
+        Uri.parse('$serverUrl/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      print('Server test response status: ${response.statusCode}');
+      print('Server test response body: ${response.body}');
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Server connection test failed: $e');
+      return false;
+    }
+  }
+
   Future<void> generateStory() async {
     final String name = nameController.text.trim();
     final String ageText = ageController.text.trim();
     final String situation = situationController.text.trim();
 
     if (name.isEmpty || ageText.isEmpty || situation.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
-      );
+      showSnackBar('Please fill in all fields');
       return;
     }
 
     final int? age = int.tryParse(ageText);
     if (age == null || age < 1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Age must be a valid number')),
-      );
+      showSnackBar('Age must be a valid number');
       return;
     }
 
-    final url = Uri.parse('http://192.168.1.7:5000/generate_story');
+    setState(() {
+      _isLoading = true;
+    });
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'child_name': name,
-          'age': age,
-          'gender': gender,
-          'situation': situation,
-        }),
-      );
+      showSnackBar('Testing server connection...');
+      print('=== Starting generateStory function ===');
+
+      final bool isServerReachable = await testServerConnection();
+
+      if (!isServerReachable) {
+        showSnackBar(
+            'Cannot connect to server at $serverUrl. Please check if Flask app is running and IP is correct.');
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      showSnackBar('Server connected! Generating story...');
+
+      final url = Uri.parse('$serverUrl/generate_story');
+      final requestData = {
+        'child_name': name,
+        'age': age,
+        'gender': gender,
+        'situation': situation,
+      };
+
+      print('Sending request to: $url');
+      print('Request data: ${json.encode(requestData)}');
+
+      final response = await http
+          .post(
+            url,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: json.encode(requestData),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      print('Response status: ${response.statusCode}');
+      print('Response headers: ${response.headers}');
+      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final story = data['story'];
-        final base64Image = data['image'];
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => StoryResultScreen(
-              story: story,
-              base64Image: base64Image,
-            ),
-          ),
-        );
+        if (data['success'] == true && data['story'] != null) {
+          final story = data['story'] as String;
+
+          if (story.isNotEmpty) {
+            print('Story generated successfully');
+
+            if (!mounted) return;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => StoryResultScreen(story: story),
+              ),
+            );
+          } else {
+            showSnackBar('Generated story is empty');
+          }
+        } else {
+          showSnackBar('Server error: ${data['error'] ?? 'Unknown error'}');
+        }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${response.body}')),
-        );
+        String errorMessage = 'Server error (${response.statusCode})';
+        try {
+          final errorData = json.decode(response.body);
+          errorMessage = errorData['error'] ?? errorMessage;
+        } catch (e) {
+          errorMessage =
+              response.body.isNotEmpty ? response.body : errorMessage;
+        }
+        showSnackBar('Error: $errorMessage');
       }
+    } on SocketException catch (e) {
+      print('Socket Exception: $e');
+      showSnackBar(
+          'Network error: Cannot connect to server. Check your connection.');
+    } on HttpException catch (e) {
+      print('HTTP Exception: $e');
+      showSnackBar('HTTP error: $e');
+    } on FormatException catch (e) {
+      print('Format Exception: $e');
+      showSnackBar('Invalid response from server');
     } catch (e) {
+      print('General Exception: $e');
+      showSnackBar('Unexpected error: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  void showSnackBar(String message) {
+    if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error connecting to API: $e')),
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 3),
+        ),
       );
     }
   }
@@ -137,7 +232,7 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
                 ),
                 const SizedBox(height: 16),
                 buildLabel("Child's Gender:"),
-                _buildDropdown(),
+                buildDropdown(),
                 const SizedBox(height: 16),
                 buildLabel("Describe the situation the child faces:"),
                 buildTextField(situationController,
@@ -156,15 +251,38 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    onPressed: generateStory,
-                    child: const Text(
-                      "Generate Story",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
+                    onPressed: _isLoading ? null : generateStory,
+                    child: _isLoading
+                        ? const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.red,
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "Generating...",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          )
+                        : const Text(
+                            "Generate Story",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -176,9 +294,12 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
   }
 
   Widget buildLabel(String text) {
-    return Text(
-      text,
-      style: const TextStyle(color: Colors.white, fontSize: 16),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text,
+        style: const TextStyle(color: Colors.white, fontSize: 16),
+      ),
     );
   }
 
@@ -223,7 +344,7 @@ class SocialStoriesScreenState extends State<SocialStoriesScreen> {
     );
   }
 
-  Widget _buildDropdown() {
+  Widget buildDropdown() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(

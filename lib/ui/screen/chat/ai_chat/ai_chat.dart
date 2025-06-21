@@ -8,6 +8,7 @@ import 'package:garduationproject/model/Ai_models/child_data.dart';
 import 'package:garduationproject/model/Ai_models/mood_ranges.dart';
 import 'package:garduationproject/model/Ai_models/progress.dart';
 import 'package:garduationproject/model/Ai_models/support_recommendations.dart';
+import 'package:garduationproject/ui/util/app_assets.dart';
 
 class AiChat extends StatefulWidget {
   static const String routeName = 'Aichat';
@@ -119,11 +120,40 @@ class _AiChatState extends State<AiChat> {
 
         return Align(
           alignment: isUser ? Alignment.centerLeft : Alignment.centerRight,
-          child: BubbleSpecialThree(
-            text: messageData['message'],
-            color: isUser ? Colors.white : Colors.blue,
-            tail: true,
-            isSender: !isUser,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment:
+                  isUser ? MainAxisAlignment.start : MainAxisAlignment.end,
+              children: [
+                if (isUser)
+                  const CircleAvatar(
+                    radius: 18,
+                    backgroundImage:
+                        AssetImage(AppAssets.girlMoji), // user image
+                  ),
+                if (isUser) const SizedBox(width: 8),
+                Flexible(
+                  child: BubbleSpecialThree(
+                    text: messageData['message'],
+                    color: isUser ? Colors.white : Colors.blue,
+                    tail: true,
+                    isSender: !isUser,
+                    textStyle: TextStyle(
+                      color: isUser ? Colors.black : Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                if (!isUser) const SizedBox(width: 8),
+                if (!isUser)
+                  const CircleAvatar(
+                    radius: 18,
+                    backgroundImage: AssetImage(AppAssets.gatoAiChat),
+                  ),
+              ],
+            ),
           ),
         );
       },

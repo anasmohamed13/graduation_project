@@ -86,7 +86,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   String _getFormattedDate(int daysToAdd) {
     final date = DateTime.now().add(Duration(days: daysToAdd));
     final day = date.day;
-    final weekday = DateFormat('E').format(date); // e.g., Mon, Tue
+    final weekday = DateFormat('E').format(date);
     return '$day\n$weekday';
   }
 
@@ -104,7 +104,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 children: [
                   const CircleAvatar(
                     radius: 28,
-                    backgroundImage: AssetImage('assets/image/Ellipse 1.png'),
+                    backgroundImage: AssetImage(AppAssets.girlDoctor),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -266,7 +266,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                       radius: 26,
                       backgroundImage: parentImageUrl != null
                           ? NetworkImage(parentImageUrl!)
-                          : const AssetImage(AppAssets.girlMoji)
+                          : const AssetImage(AppAssets.parentWithChild)
                               as ImageProvider,
                     ),
                     const SizedBox(width: 12),
